@@ -18,6 +18,78 @@ from premetar.pws.repository import inventory, readings, rows, selected
 VERSION = "pws-estimator-1.0"
 
 
+def precise_reference_comparison(
+    connection: sqlite3.Connection, airport: str, station_id: str, config: QCConfig, at: datetime
+) -> dict[str, Any]:
+    """Separate conditional comparison to existing DWD 0.1C observations.
+
+    This does not establish METAR sensor parity or treat 0.1C as exact truth.
+    Calibration is evaluated chronologically, never used as METAR calibration.
+    """
+    references = rows(
+        connection,
+        """SELECT event_time,collector_receive_time,temperature_c,temperature_precision
+        FROM observations WHERE station_icao=? AND product_type='DWD_10MIN'
+        AND evidence_class='REALTIME_CAPTURED' AND temperature_c IS NOT NULL
+        AND julianday(collector_receive_time)<=julianday(?)""",
+        (airport, utc(at).isoformat()),
+    )
+    unique: dict[datetime, dict[str, Any]] = {}
+    conflicted: set[datetime] = set()
+    for ref in references:
+        if not ref["collector_receive_time"] or datetime.fromisoformat(
+            ref["collector_receive_time"]
+        ) > utc(at):
+            continue
+        event = datetime.fromisoformat(ref["event_time"])
+        if event in unique and ref["temperature_c"] != unique[event]["temperature_c"]:
+            conflicted.add(event)
+        if event not in unique or datetime.fromisoformat(
+            ref["collector_receive_time"]
+        ) < datetime.fromisoformat(unique[event]["collector_receive_time"]):
+            unique[event] = ref
+    pairs: list[dict[str, Any]] = []
+    calibrated_errors: list[float] = []
+    for event, ref in sorted(unique.items()):
+        if event in conflicted:
+            continue
+        snapshot = station_at(connection, station_id, airport, event)
+        if not snapshot:
+            continue
+        candidate = latest_station_reading(
+            connection, Station.model_validate_json(snapshot["data_json"]), event, config
+        )
+        if not candidate or not candidate.get("observation_time"):
+            continue
+        offset = (event - datetime.fromisoformat(candidate["observation_time"])).total_seconds()
+        if not 0 <= offset <= 300:
+            continue
+        error = candidate["temperature_c"] - ref["temperature_c"]
+        prior = [p for p in pairs if p["available"] < event][-config.calibration_window :]
+        if len(prior) >= config.calibration_minimum:
+            bias = (median if config.calibration_method == "median" else mean)(
+                p["error"] for p in prior
+            )
+            calibrated_errors.append(error - bias)
+        pairs.append(
+            {"error": error, "available": datetime.fromisoformat(ref["collector_receive_time"])}
+        )
+    enough = len(pairs) >= config.calibration_minimum
+    return {
+        "reference_kind": "DWD_10MIN_APPROXIMATE_0.1C",
+        "sensor_parity": "UNVERIFIED",
+        "sample_count": len(pairs),
+        "max_observation_offset_seconds": 300,
+        "raw_bias_estimate_c": mean(p["error"] for p in pairs) if enough else None,
+        "raw_mae_c": mean(abs(p["error"]) for p in pairs) if enough else None,
+        "calibrated_oos_sample_count": len(calibrated_errors),
+        "calibrated_oos_mae_c": mean(abs(e) for e in calibrated_errors)
+        if len(calibrated_errors) >= config.calibration_minimum
+        else None,
+        "conclusion": "CONDITIONAL_PRECISE_REFERENCE_COMPARISON" if enough else "INSUFFICIENT DATA",
+    }
+
+
 def interval_residual(value: float, metar_integer: int) -> float:
     """Signed distance to [integer-.5, integer+.5); infimum at open upper end.
 

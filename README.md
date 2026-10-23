@@ -122,3 +122,104 @@ uv run mypy
 Code is MIT licensed. Source data retains DWD/KNMI/NOAA terms and attribution;
 the code license does not relicense third-party data. Data, credentials, generated
 reports and virtual environments are ignored by Git.
+
+## Milestone 1.5 — open PWS discovery and QC
+
+The PWS subsystem discovers openSenseMap and Sensor.Community stations near
+EDDM, EHAM, EPWA and EGLL, retains original raw responses, separates stations
+from sensors and arrivals, and runs deterministic QC. Discovery is an inventory,
+not a claim that each record is a useful or independent weather station.
+Netatmo is explicitly blocked pending credential/runtime/terms verification;
+its optional OAuth refresh helper is implemented without logging tokens.
+
+PowerShell, from this repository:
+
+```powershell
+$env:UV_CACHE_DIR="$PWD/.uv-cache"
+uv sync --locked
+uv run premetar pws sources
+uv run premetar pws discover --all-airports --radius 20
+uv run premetar pws stations --airport EHAM
+uv run premetar pws qc --airport EHAM
+uv run premetar pws rank --airport EHAM
+# Auto-selection needs sufficient prior OOS evidence; new stations remain UNVERIFIED.
+uv run premetar pws select --airport EHAM --top 10
+# For initial monitoring, copy a real ID from stations and give an audit reason:
+uv run premetar pws select --airport EHAM --station-id "PROVIDER:REAL_ID" --reason "Initial prospective research monitoring"
+uv run premetar pws collect --airport EHAM --duration 300
+uv run premetar pws analyze --airport EHAM
+uv run premetar pws report --all-airports
+# To exclude a station:
+uv run premetar pws select --airport EHAM --station-id "PROVIDER:REAL_ID" --exclude --reason "Manual review: unsuitable siting"
+```
+
+`PROVIDER:REAL_ID` is a placeholder, not a discovered station. No automatic
+TRUSTED promotion occurs. Manual monitoring selection does not bypass physical,
+freshness, availability-time or indoor/mobile guards in the estimator.
+
+For concurrent METAR and PWS observations, use one process/database owner:
+
+```powershell
+uv run premetar collect --pws --stations EDDM,EHAM --pws-airports EDDM,EHAM,EPWA,EGLL --duration 3600
+```
+
+The existing METAR adapters remain EDDM/EHAM; this milestone does not invent
+EPWA/EGLL reference coverage. PWS-alone and combined modes are bounded (default
+PWS-only 300s; maximum 86400s). Re-run to append to the same database. Discovery
+is periodic, not per poll. Polling floors are 300s per station, one request/s per
+provider, slower for slower observed updates; no burst mode. Retry-After may
+defer an entire provider. An in-flight request/retry may finish after the duration
+cutoff so raw writes can drain. Ctrl+C stops the shared tasks gracefully.
+
+The existing `.lock` policy applies to every mutating PWS command. Do not start
+separate collectors against the same database. Run selection/report/prediction
+commands between bounded collection runs. Read-only `premetar status` remains
+available during collection. For a separate smoke database, pass
+`--database data/pws-smoke.sqlite3 --raw-path data/pws-smoke-raw` consistently.
+
+To create a prediction **now**, use an aware future target timestamp, ideally
+the next verified nominal routine report slot. Available readings must already
+be in the DB; an arbitrary future timestamp does not create a new METAR schedule:
+
+```powershell
+$target=uv run python -c "from premetar.model import utc_now; from premetar.sources import STATIONS,next_report; print(next_report(STATIONS['EHAM'], utc_now()).strftime('%Y-%m-%dT%H:%M:%SZ'))"
+uv run premetar pws predict $target --airport EHAM --method equal_weights
+```
+
+Methods: `equal_weights`, `inverse_distance`, `inverse_historical_error`,
+`quality_weighted`. The last two require earlier evaluation evidence. Insufficient
+data fails explicitly. Predictions are immutable; retrospective analysis never
+inserts a historical forecast. Recorded UTC receive differences alone do not
+certify information lead; capture coverage is not yet certified.
+
+Configuration is a JSON file accepted as `--config` by PWS commands or
+`--pws-config` by combined collection. Copy the packaged
+`src/premetar/pws/airports.json`, retaining its airport list, and add overrides:
+
+```json
+{
+  "poll_seconds": 600,
+  "discovery_seconds": 86400,
+  "radii_km": [1, 3, 5, 10, 20],
+  "qc": {
+    "stale_seconds": 1800,
+    "min_samples": 100,
+    "min_evaluation_days": 7,
+    "calibration_method": "median",
+    "calibration_window": 100
+  }
+}
+```
+
+The snippet shows override keys; an actual config must also contain `airports`.
+Environment variables do not silently change weather settings. Local Qwen is a
+development-only tool and is never called by collectors.
+
+Reports under `reports/pws/` include Markdown, full `quality.json`, and
+CSV/Parquet station inventory, rankings, provider ages, duplicate candidates,
+separate approximate DWD reference comparisons and prediction outcomes.
+Missing evidence is NULL/UNVERIFIED, not a fabricated score.
+Read [source verification](docs/PWS_DATA_SOURCES.md),
+[methodology and limitations](docs/PWS_METHODOLOGY.md),
+[local Qwen audit](docs/LOCAL_QWEN_WORKFLOW.md), and
+[milestone verification](docs/PWS_VERIFICATION.md).

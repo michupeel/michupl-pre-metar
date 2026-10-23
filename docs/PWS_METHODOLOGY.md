@@ -67,9 +67,13 @@ still fails. Both metrics are therefore reported separately.
 
 Rolling median/mean corrections fit signed interval-projection residuals, labelled
 QUANTIZED_INTERVAL_PROJECTION. They are estimates with quantization uncertainty,
-not exact thermometer bias or a guarantee of matching a boundary. Precise-reference
-calibration is not implemented; existing precise observations remain separately
-available in the original collector schema.
+not exact thermometer bias or a guarantee of matching a boundary. Existing
+DWD10min observations support a separate approximate0.1°C reference comparison:
+PWS measurement times must be known and within300s of the reference event.
+Past-only rolling mean/median point-bias correction is evaluated separately and
+never substituted for METAR interval calibration. Reported precision does not
+verify sensor parity or make DWD values exact continuous truth. Conflicting
+reference revisions are excluded; no second official collector is introduced.
 
 Exploratory retrospective pairs use a fixed ten-minute pre-target decision point,
 metadata known at that point and the latest available eligible reading from a

@@ -12,10 +12,12 @@ from rich.table import Table
 from premetar.analysis import analyze as generate_report
 from premetar.collector import collect as run_collector
 from premetar.model import utc_now
+from premetar.pws.cli import app as pws_app
 from premetar.sources import OPTIONAL_SOURCES, STATIONS, configured_sources
 
 app = typer.Typer(no_args_is_help=True, help="Prospective pre-METAR research; no trading.")
 console = Console()
+app.add_typer(pws_app, name="pws")
 DEFAULT_DB = Path("data/premetar.sqlite3")
 
 
@@ -37,6 +39,9 @@ def collect(
         float | None, typer.Option(min=1, help="Optional bounded smoke-test duration in seconds")
     ] = None,
     live: bool = True,
+    pws: bool = False,
+    pws_config: Path | None = None,
+    pws_airports: str = "EDDM,EHAM,EPWA,EGLL",
 ) -> None:
     """Run isolated public collectors until Ctrl+C (or --duration)."""
     try:
@@ -45,7 +50,27 @@ def collect(
     except ValueError as exc:
         raise typer.BadParameter(str(exc)) from exc
     try:
-        asyncio.run(run_collector(adapters, selected, database, raw_path, duration, live))
+        from premetar.pws.service import settings as load_pws_settings
+
+        pws_settings = load_pws_settings(pws_config) if pws else None
+        if pws and (duration is None or duration > 86400):
+            raise typer.BadParameter("--pws requires --duration between 1 and 86400 seconds")
+        if pws_settings and not comma_set(pws_airports).issubset(
+            {a.icao for a in pws_settings.airports}
+        ):
+            raise typer.BadParameter("Unknown PWS airport")
+        asyncio.run(
+            run_collector(
+                adapters,
+                selected,
+                database,
+                raw_path,
+                duration,
+                live,
+                pws_settings=pws_settings,
+                pws_airports=comma_set(pws_airports) if pws else None,
+            )
+        )
     except FileExistsError:
         console.print(
             "Collector lock exists. Confirm its process has stopped before removing the lock.",

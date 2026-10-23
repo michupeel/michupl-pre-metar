@@ -12,7 +12,7 @@ from datetime import datetime
 from email.utils import parsedate_to_datetime
 from importlib.resources import files
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 import httpx
@@ -25,6 +25,9 @@ from premetar import __version__
 from premetar.model import Observation, utc_now
 from premetar.sources import STATIONS, HttpSource, next_report
 from premetar.store import Store
+
+if TYPE_CHECKING:
+    from premetar.pws.models import Settings
 
 LOG = logging.getLogger("premetar")
 
@@ -205,7 +208,11 @@ async def collect(
     duration: float | None,
     live: bool = True,
     transport: httpx.AsyncBaseTransport | None = None,
+    pws_settings: "Settings | None" = None,
+    pws_airports: set[str] | None = None,
 ) -> str:
+    if pws_settings is not None and (duration is None or not 0 < duration <= 86400):
+        raise ValueError("Combined PWS collection requires a duration in (0,86400] seconds")
     run_id = utc_now().strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex[:8]
     stop = asyncio.Event()
     state: dict[str, Any] = {}
@@ -225,11 +232,21 @@ async def collect(
         "protocol": protocol,
         "protocol_sha256": hashlib.sha256(protocol.encode()).hexdigest(),
     }
+    if pws_settings is not None:
+        manifest["pws_settings"] = pws_settings.model_dump()
+        pws_protocol = files("premetar.pws").joinpath("protocol.md").read_text(encoding="utf-8")
+        manifest["pws_protocol"] = pws_protocol
+        manifest["pws_protocol_sha256"] = hashlib.sha256(pws_protocol.encode()).hexdigest()
     # One collector per DB, including across processes; a live lock is never stolen.
     await asyncio.to_thread(database.parent.mkdir, parents=True, exist_ok=True)
     lock = database.with_suffix(database.suffix + ".lock")
     lock_file = lock.open("x", encoding="utf-8")
-    store = Store(database, raw_path, run_id)
+    if pws_settings is not None:
+        from premetar.pws.repository import PWSStore
+
+        store: Store = PWSStore(database, raw_path, run_id)
+    else:
+        store = Store(database, raw_path, run_id)
     store_open = False
     tasks: list[asyncio.Task[None]] = []
     previous_handlers = {}
@@ -256,6 +273,31 @@ async def collect(
                 asyncio.create_task(poll_source(s, store, client, stop, state), name=s.name)
                 for s in sources
             ]
+            if pws_settings is not None:
+                from premetar.pws.providers import PROVIDERS, PWSProvider, Transport
+                from premetar.pws.repository import PWSStore
+                from premetar.pws.service import collect as collect_pws
+
+                assert isinstance(store, PWSStore)
+                pws_store = store
+                pws_http = Transport(client, pws_store)
+                pws_providers: list[PWSProvider] = [
+                    PROVIDERS[p](pws_http) for p in pws_settings.providers
+                ]
+                await pws_store._call(pws_store.register, pws_settings.airports, pws_providers)
+
+                async def pws_loop() -> None:
+                    assert pws_settings is not None and duration is not None
+                    await collect_pws(
+                        pws_store,
+                        pws_providers,
+                        pws_settings,
+                        pws_airports or {a.icao for a in pws_settings.airports},
+                        duration,
+                        stop,
+                    )
+
+                tasks.append(asyncio.create_task(pws_loop(), name="pws"))
             started = time.monotonic()
             with Live(
                 live_table(stations, state),

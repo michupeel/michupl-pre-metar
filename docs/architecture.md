@@ -42,3 +42,43 @@ without deleting earlier data. One DB/schema version is currently supported.
 Optional KNMI10min, METAR.ws and D-ATIS are explicit disabled capabilities. Their
 keys are not read, copied, logged or used by M1. No network activity reaches the
 existing weather bot or its files/processes. No trading code is present.
+
+## Milestone 1.5 extension points
+
+`pws/models.py` defines station/sensor/reading/capability/settings models;
+`airports.json` centralizes NOAA reference coordinates. `providers.py` owns the
+verified public request shapes and raw-first pooled transport. Optional
+`netatmo_auth.py` isolates credential handling from durable weather payloads;
+Netatmo weather access remains blocked.
+
+`pws/repository.py` subclasses Store to add a separately versioned extension
+schema. The original schema_version=1 and METAR tables remain compatible;
+`pws_schema_version=1` tracks the additive extension. Tables cover providers,
+airports, stations, sensors, airport associations, immutable discovery snapshots,
+observations, arrivals, selections, QC results, calibrations and predictions.
+Foreign keys and indexes enforce relationships; an observation-provenance view
+joins original raw hashes/clocks to each airport association. A provider location
+group is not asserted to be one independently verified physical station.
+
+`pws/service.py` uses the same Store disk executor, process lock and raw envelope
+infrastructure. The original collector gains opt-in `--pws` tasks sharing that
+Store/client; ordinary METAR operation is unchanged. Source loops are isolated;
+storage failures remain fatal. Finite duration and a shared stop event prevent
+an unbounded PWS loop or Ctrl+C waiting for an entire planned collection period.
+Combined reference coverage remains EDDM/EHAM; PWS discovery covers four airports.
+
+`temporal.py` and `quality.py` are pure deterministic diagnostics, with Astral for
+solar elevation. `pws/analysis.py` reads the existing METAR tables, runs fixed-lead
+availability-filtered exploratory walk-forward comparisons, persists prior-only
+calibrations, and builds immutable prospective estimates. Metadata and selection
+events are queried as of decision time; future quality/calibration snapshots are
+ineligible. JSON/CSV/Parquet/Markdown reports never award scores with missing
+support. Continuous capture coverage and a measured information edge remain
+unverified; see [methodology](PWS_METHODOLOGY.md).
+Existing DWD10min records also support a separate approximate0.1°C comparison
+and chronological point-bias evaluation, without asserting sensor parity or
+substituting it for interval-aware METAR calibration.
+
+The PWS protocol and settings are frozen into new collection manifests. The
+development Qwen client lives in `scripts/dev/`, outside collector imports and
+dependencies. It cannot change weather decisions or run autonomous patches.

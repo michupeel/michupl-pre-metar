@@ -1,5 +1,9 @@
 # Source register — verified 2026-10-21 UTC
 
+Milestone 1.5 PWS endpoints, capabilities, clock meanings, terms gaps and actual
+verification are recorded separately in [PWS_DATA_SOURCES.md](PWS_DATA_SOURCES.md).
+The existing METAR source definitions below remain the reference pipeline.
+
 Endpoint verification captures are local, ignored `data/verification/`. Runtime
 evidence is separately captured under `data/raw/`. Fixtures never establish latency.
 
