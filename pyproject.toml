@@ -5,7 +5,16 @@ description = "Raw-first prospective measurement of pre-METAR temperature inform
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
-dependencies = ["httpx>=0.28,<1", "pydantic>=2.10,<3", "typer>=0.15,<1", "rich>=13.9,<15", "polars>=1.20,<2", "truststore>=0.10,<1", "defusedxml>=0.7,<1"]
+dependencies = [
+    "httpx>=0.28,<1",
+    "pydantic>=2.10,<3",
+    "typer>=0.15,<1",
+    "rich>=13.9,<15",
+    "polars>=1.20,<2",
+    "truststore>=0.10,<1",
+    "defusedxml>=0.7,<1",
+    "astral>=3.2,<4",
+]
 
 [project.scripts]
 premetar = "premetar.cli:app"

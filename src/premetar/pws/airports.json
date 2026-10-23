@@ -1,0 +1,8 @@
+{
+  "airports": [
+    {"icao":"EDDM","name":"Munich Intl","latitude":48.348,"longitude":11.813,"elevation_m":445,"reference":"NOAA AWC stationinfo 2026-10-23"},
+    {"icao":"EHAM","name":"Amsterdam Schiphol","latitude":52.315,"longitude":4.790,"elevation_m":-2,"reference":"NOAA AWC stationinfo 2026-10-23"},
+    {"icao":"EPWA","name":"Warsaw Chopin","latitude":52.163,"longitude":20.961,"elevation_m":107,"reference":"NOAA AWC stationinfo 2026-10-23"},
+    {"icao":"EGLL","name":"London Heathrow","latitude":51.477,"longitude":-0.461,"elevation_m":26,"reference":"NOAA AWC stationinfo 2026-10-23"}
+  ]
+}
