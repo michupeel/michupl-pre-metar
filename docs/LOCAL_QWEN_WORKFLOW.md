@@ -1,0 +1,74 @@
+# Local Qwen development workflow
+
+## Actual milestone use
+
+The installed `local_worker` connector was discovered and reused. Its DPAPI-backed
+credential remained inside the connector. No credential file was opened, copied
+or committed by this task. An unauthenticated `/v1/models` request returned 401;
+the connector's authenticated health probe returned 17 models and identified the
+active `unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF` at
+`http://127.0.0.1:8888/v1`. A real generation returned READY.
+
+The server reports native non-thinking Instruct mode and no reasoning support.
+The connector verified its requested sampling fields against the API schema;
+most fields' effective values were **not** independently confirmed. The server's
+global configuration was not changed.
+
+Seven bounded tasks plus one health generation were actually invoked:
+
+| Task | Result accepted after review | Rejected/corrected |
+|---|---|---|
+| Geometry implementation | haversine scaffold | pole/antimeridian bounds; antipode numeric clamp |
+| Temporal QC implementation | diagnostic structure, median/p90 direction | age/span, duplicate conflicts, future samples, stuck logic |
+| Temporal repair | none as a complete patch | unresolved defects; Codex took over |
+| Geometry tests | useful edge-case list | invalid Python and incompatible tuple signatures |
+| Geometry test repair | several regression cases adapted | invalid antipodal coordinate and bbox expectations |
+| Analysis review | more explicit datetime comparisons | incorrect <= exclusion change, unsupported race/empty-list claims |
+| Methodology draft | clocks/QC outline adapted | invalid patch match and invented station/tie/provenance behavior |
+
+All accepted code was manually integrated and exercised by offline tests. No
+Qwen patch was automatically applied. Outputs are review material, never API or
+licensing authority. Invalid proposals were not counted as successful tests.
+The recorded calls returned 18,771 total tokens, including 31 for health, and
+about 90.3 seconds of reported generation time. These are local server-reported
+counts, not a cloud-token savings estimate. Sampling settings and connector
+overhead prevent a meaningful speed comparison. Local assistance helped produce
+bounded artifacts, but correctness review and repair were substantial.
+
+`reports/dev/qwen_delegation.jsonl` contains task IDs, audit timestamps, generation
+duration, status, model, returned token usage and acceptance decisions. Timestamps
+label audit-record creation, not reconstructed generation start times. Full prompts
+and source files are not logged. Generated proposals are saved locally under
+ignored `reports/dev/artifacts/`. Only the small sanitized JSONL audit is committed.
+
+## Reusable CLI fallback
+
+The connector remains the preferred interface on this workstation. The repository
+also provides `scripts/dev/qwen_worker.py` for ordinary OpenAI-compatible private
+servers without coupling collectors to a particular Codex installation:
+
+```powershell
+$env:LOCAL_LLM_ENABLED="true"
+$env:LOCAL_LLM_BASE_URL="http://127.0.0.1:8888/v1"
+$env:LOCAL_LLM_MODEL="auto"
+$env:LOCAL_LLM_TIMEOUT="120"
+$env:LOCAL_LLM_MAX_CONCURRENCY="1"
+# Set LOCAL_LLM_API_KEY through your credential manager if the server needs it.
+uv run python scripts/dev/qwen_worker.py health
+uv run python scripts/dev/qwen_worker.py ask --task "Review temperature validation" --file src/premetar/pws/quality.py --max-tokens 2048
+uv run python scripts/dev/qwen_worker.py ask --task-file tasks/review.md --json
+```
+
+No automatic .env loading. The client only accepts local/private destinations,
+does not follow redirects or expose a server, bounds context/output and timeouts,
+discovers a unique Qwen ID or requires an explicit model, retries transient
+transport/5xx failures and respects bounded Retry-After. JSON requests are opt-in;
+unsupported JSON mode fails visibly. A file lock enforces one CLI generation at
+a time. It supports selected repository source/docs/config inputs, not arbitrary
+data/credential directories. Review selected files for secrets before delegation.
+
+The fallback does not decrypt the connector's DPAPI key or assume an arbitrary
+model-specific thinking flag. Its localhost authentication failure is expected
+without an externally supplied key; actual milestone implementation used the
+authenticated connector. Logs contain safe classes/usage, not exception text,
+headers, credentials or full source. Artifacts are ignored and must be reviewed.
