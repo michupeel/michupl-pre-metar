@@ -241,7 +241,7 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
             dict(
                 airport=r["airport_icao"],
                 target=r["target_time"],
-                checkpoint=f.get("checkpoint", "manual"),
+                checkpoint=f.get("checkpoint") or "manual",
                 model=f["method"],
                 prediction_id=r["prediction_id"],
                 error=d["integer_error"],
@@ -260,6 +260,17 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
     metrics = []
     for (airport, checkpoint, model, experiment), items in groups.items():
         errors = [r["error"] for r in items]
+        day_values = [(datetime.fromisoformat(r["target"]).date().isoformat(), r) for r in items]
+        enough = len(items) >= 100 and len({day for day, _ in day_values}) >= 7
+        confidence = {
+            "integer_MAE": day_block_interval(
+                [(day, float(abs(row["error"]))) for day, row in day_values]
+            ),
+            "exact_integer_accuracy": day_block_interval(
+                [(day, float(row["error"] == 0)) for day, row in day_values]
+            ),
+            "bias": day_block_interval([(day, float(row["error"])) for day, row in day_values]),
+        }
         attempts = (
             conn.execute(
                 "SELECT count(*) FROM continuous_checkpoints WHERE airport=? AND model=? AND checkpoint=? AND reason IS NOT 'STARTUP_ELAPSED' AND julianday(target)<=julianday('now')",
@@ -289,8 +300,11 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
                 / attempts
                 if attempts and checkpoint.startswith("T-")
                 else None,
-                status="PRELIMINARY — INSUFFICIENT DATA",
-                uncertainty="BLOCK_CONFIDENCE_INTERVAL_NOT_ESTIMATED",
+                status="DESCRIPTIVE — NOT CONFIRMATORY"
+                if enough
+                else "PRELIMINARY — INSUFFICIENT DATA",
+                evaluation_days=len({day for day, _ in day_values}),
+                uncertainty=json.dumps(confidence),
             )
         )
     matched = []
@@ -434,15 +448,24 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
         ],
     )
     csv_write(output / "prediction_outcomes.csv", outcomes)
+    summary_status = (
+        "DESCRIPTIVE RESULTS — SEE PER-METHOD COVERAGE"
+        if any(m["status"] == "DESCRIPTIVE — NOT CONFIRMATORY" for m in metrics)
+        else "PRELIMINARY — INSUFFICIENT DATA"
+    )
     body = (
         "# Continuous observation experiment\n\nOBSERVED\n\n"
         + json.dumps(state, indent=2)
-        + "\n\nPRELIMINARY — INSUFFICIENT DATA\n\nNo validated information edge. Lead is relative to our configured reference collectors, with unverified clock offset. Sensor.Community server-ingest clocks are not measurement clocks. Post-observation signals are not enabled. Missing checkpoints are retained. Descriptive day-block bootstrap intervals require at least 100 matched targets across 7 UTC days. Dependence across days remains unmodelled; confirmatory inference is not claimed.\n"
+        + "\n\n"
+        + summary_status
+        + "\n\nNo validated information edge. Lead is relative to our configured reference collectors, with unverified clock offset. Sensor.Community server-ingest clocks are not measurement clocks. Post-observation signals are disabled. Missing checkpoints are retained. Descriptive day-block intervals require 100 targets across 7 UTC days. Dependence across days remains unmodelled.\n"
     )
     for name in ("collection_health.md", "experiment_summary.md"):
         (output / name).write_text(body, encoding="utf-8")
     (output / "prediction_accuracy.md").write_text(
-        "# Prediction accuracy\n\nPRELIMINARY — INSUFFICIENT DATA\n\n"
+        "# Prediction accuracy\n\n"
+        + summary_status
+        + "\n\n"
         + json.dumps(metrics, indent=2)
         + "\n\nCompare only matched_baseline_comparison.csv; coverage includes unresolved targets and is provisional.\n",
         encoding="utf-8",
