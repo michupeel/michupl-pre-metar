@@ -135,3 +135,19 @@ points, not an assertion of runway-centre coordinates or sensor parity.
 [CWOP](https://www.wxqa.com/) and [NOAA MADIS](https://madis.ncep.noaa.gov/)
 are future candidates. Access, redistribution, metadata, timestamp meanings and
 public discovery need a separate verified adapter. No CWOP endpoint is guessed.
+
+
+## Timestamp audit amendment — 2026-10-24 (Milestone 1.6.1)
+
+The official openSenseMap API documents createdAt as a measurement timestamp and
+UTC RFC3339 semantics. This verifies the API contract, not device-clock accuracy;
+missing/malformed timestamps remain ineligible. The upload API permits omitted
+createdAt, so hardware-origin attestation remains unavailable.
+
+The Sensor.Community official EN-APIs upload wiki explicitly assigns timestamps
+on the server and exposes no independently verified sensor measurement clock in
+the audited read response. Timestamp status: PROVIDER_INGEST_TIME only. The provider
+continues raw capture, but is **excluded from prediction, calibration, analytical
+quality samples and accuracy calculations**. Any earlier server-proxy freshness
+results are operational evidence only, superseded for analytical eligibility by
+strict-measurement-time-1.0. See STRICT_TIMESTAMPS.md and the timestamp audit.

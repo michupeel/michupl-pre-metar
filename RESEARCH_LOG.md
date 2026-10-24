@@ -279,3 +279,54 @@ Conclusion: INSUFFICIENT DATA; experiment remains OPEN.
 
 Next steps: collect days/weeks, inspect deterministic flags and temporal coverage,
 then freeze a new validation cohort without retrospective performance selection.
+
+
+## Milestone 1.6.1 — timestamp integrity amendment (2026-10-24)
+
+Question: how much trustworthy measurement-time evidence survives strict validation?
+
+Baseline: the running continuous-v1 collector retained raw-first PWS records and
+used a labelled Sensor.Community server-ingestion proxy in some analytical paths.
+A consistent SQLite backup at16:53:18Z contained3503 PWS rows and1105 predictions.
+
+Hypothesis: enforcing verified measurement semantics and300s freshness materially
+reduces samples but improves the interpretability of prospective experiments.
+
+Method: verified official API semantics, introduced an additive versioned ledger,
+rehearsed on a supported SQLite backup, preserved hashes of original observations,
+arrivals, predictions and settlements, and applied current policy in all analytical
+paths. No missing date/time was inferred from HTTP receipt. Append-only exclusions
+preserve original forecasts and settlements, including the four early-KNMI cases.
+
+Observed pre-hotfix snapshot under the new policy:1094 openSenseMap rows contained
+280 eligible-at-receipt measurements,3 stale and811 invalid/unknown rows;2409
+Sensor.Community rows had no verified measurement time.562 of1105 forecasts were
+excluded under stricter input/parameter/first-receipt checks. EPWA had114 eligible
+measurements from two instruments on one station13.902km away, spanning14:12 to
+18:47 CEST,9.12–12.78C. Neither instrument is an independent weather station.
+
+Controlled deployment: old run ended17:26:47.853799Z; new run began17:26:55.579161Z
+using the same task/database/cohort. The stopped-state backup migration assessed
+3917 rows and excluded625 forecasts without changing original row hashes. Integrity
+wasok and foreign_key_check empty. New forecasts subsequently used strict inputs.
+Final live-cycle outcomes and report snapshots are recorded in reports/daily and
+docs/TIMESTAMP_HOTFIX_VALIDATION.md; counts grow after those snapshots.
+
+Clock evidence: W32Time stopped; automatic synchronization/source/last sync UNKNOWN.
+Independent windows.com/cloudflare.com checks consistently reported about+1.05 to
++1.06s offset, outside our one-second research budget. No Windows settings/service
+changes or timestamp corrections were made. This is approximate network evidence.
+
+Interpretation: EXP-0006/0007/0008/0009 remain OPEN. Strict EPWA data comes from a
+small subset of candidates. A roughly1C same-station sensor difference warrants
+monitoring, not a permanent bias or solar-heating diagnosis. Historical proxy-based
+results are superseded for analytical eligibility, never erased.
+
+Limitations: API-level measurement semantics do not attest device clocks; no
+Sensor.Community measurement clock was verified; very few independent stations,
+short environmental coverage, quantized airport labels and uncertain UTC offset.
+
+Conclusion: integrity safeguards implemented; useful pre-METAR skill remains
+INSUFFICIENT DATA. No validated information advantage claimed. Next: retain the
+prospective stream, inspect valid coverage over days, and freeze any future cohort
+changes before evaluating them.

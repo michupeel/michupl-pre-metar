@@ -245,3 +245,14 @@ Read [source verification](docs/PWS_DATA_SOURCES.md),
 [methodology and limitations](docs/PWS_METHODOLOGY.md),
 [local Qwen audit](docs/LOCAL_QWEN_WORKFLOW.md), and
 [milestone verification](docs/PWS_VERIFICATION.md).
+
+
+### Strict timestamps and daily sensor inspection (1.6.1)
+
+Run `uv run premetar pws today --airport EPWA --date 2026-10-24 --limit 50` for
+actual local-day readings, inventory, measurement buckets, METAR comparisons and
+CSV/Markdown exports. Omit `--date` for the airport's current local date. Run
+`uv run premetar pws timestamp-audit` for quarantine/exclusion counts and
+`uv run premetar continuous clock-audit` for a read-only Windows/NTP check.
+[Strict timestamp policy and interpretation](docs/STRICT_TIMESTAMPS.md) describes
+the300s limit, Sensor.Community exclusion and immutable historical evidence.

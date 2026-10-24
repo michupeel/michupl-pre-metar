@@ -115,3 +115,24 @@ positives. Review cost was substantial; no measured workflow speedup is claimed.
 The audit appends to reports/dev/qwen_delegation.jsonl. Full proposals remain in
 ignored reports/dev/artifacts; credentials and unnecessary source context are not
 included in the committed audit.
+
+
+## Milestone 1.6.1 — actual bounded delegation
+
+Health/model discovery and a small READY inference succeeded on the existing
+authenticated local worker at http://127.0.0.1:8888/v1 (17 model entries). Actual
+model: unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF. Three substantive tasks:
+
+| ID | Task | Decision | Measured duration / tokens |
+|---|---|---|---|
+| H161-Q01 | Local calendar bounds and fold-preserving buckets | Partially adapted; corrected inclusive end to next midnight | 6.873s / 961 |
+| H161-Q02 | Isolated timestamp tests | Rejected; wrong imports/statuses and malformed test cases; rewritten by Codex | 8.718s / 1153 |
+| H161-Q03 | Independent timestamp policy review | Rejected; false path-traversal claim and unsafe absolute-age suggestion | 9.748s / 3735 |
+
+Total substantive inference: 25.339 seconds, 5849 server-reported tokens. The
+separate tiny health probe used 31 tokens/about0.627s. No token savings estimate
+is claimed. Review overhead again limited benefit; no repair loop was used. The
+accepted date helper was tested for Warsaw day bounds and both DST transitions.
+Proposal artifacts remain ignored, sanitized decisions/usage are appended to the
+existing audit JSONL. Audit timestamps identify recording time, not inferred
+inference-start times. Weather collection has no LLM dependency.

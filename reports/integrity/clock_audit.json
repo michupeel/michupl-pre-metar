@@ -1,0 +1,149 @@
+{
+  "verification_status": "FAILED",
+  "synchronization_status": "UNKNOWN",
+  "configured_clock_source": "UNKNOWN",
+  "comparison_sources": [
+    "time.windows.com",
+    "time.cloudflare.com"
+  ],
+  "measured_offset_seconds": 1.060691,
+  "verified_at": "2026-10-24T17:28:30.073063+00:00",
+  "tolerance_seconds": 1,
+  "evidence_kind": "APPROXIMATE_NTP_COMPARISON_NOT_MILLISECOND_CERTIFICATION",
+  "servers": [
+    {
+      "server": "time.windows.com",
+      "samples_seconds": [
+        1.0629055,
+        1.0640691,
+        1.0626785,
+        1.0627807,
+        1.0620803
+      ],
+      "median_offset_seconds": 1.0627807,
+      "spread_seconds": 0.0019887999999999018
+    },
+    {
+      "server": "time.cloudflare.com",
+      "samples_seconds": [
+        1.054761,
+        1.0586013,
+        1.0595644,
+        1.0590359,
+        1.0549366
+      ],
+      "median_offset_seconds": 1.0586013,
+      "spread_seconds": 0.004803399999999902
+    }
+  ],
+  "conclusion": "Automatic synchronization and last successful W32Time sync could not be verified; stopped service alone does not establish clock error. No settings changed.",
+  "evidence": [
+    {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "Get-Service W32Time | Select-Object Name,Status,StartType | ConvertTo-Json -Compress"
+      ],
+      "at": "2026-10-24T17:28:12.876816+00:00",
+      "returncode": 0,
+      "stdout": "{\"Name\":\"W32Time\",\"Status\":1,\"StartType\":3}\r\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "w32tm",
+        "/query",
+        "/status"
+      ],
+      "at": "2026-10-24T17:28:13.092641+00:00",
+      "returncode": 2147943462,
+      "stdout": "The following error occurred: Us\ufffduga nie zosta\ufffda uruchomiona. (0x80070426)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "w32tm",
+        "/query",
+        "/source"
+      ],
+      "at": "2026-10-24T17:28:13.105155+00:00",
+      "returncode": 2147943462,
+      "stdout": "The following error occurred: Us\ufffduga nie zosta\ufffda uruchomiona. (0x80070426)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "w32tm",
+        "/query",
+        "/configuration"
+      ],
+      "at": "2026-10-24T17:28:13.115666+00:00",
+      "returncode": 2147943462,
+      "stdout": "The following error occurred: Us\ufffduga nie zosta\ufffda uruchomiona. (0x80070426)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "Get-TimeZone | Select-Object Id,BaseUtcOffset | ConvertTo-Json -Compress"
+      ],
+      "at": "2026-10-24T17:28:13.126679+00:00",
+      "returncode": 0,
+      "stdout": "{\"Id\":\"Central European Standard Time\",\"BaseUtcOffset\":{\"Ticks\":36000000000,\"Days\":0,\"Hours\":1,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.041666666666666664,\"TotalHours\":1,\"TotalMilliseconds\":3600000,\"TotalMinutes\":60,\"TotalSeconds\":3600}}\r\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "sc.exe",
+        "qtriggerinfo",
+        "W32Time"
+      ],
+      "at": "2026-10-24T17:28:13.331499+00:00",
+      "returncode": 0,
+      "stdout": "[SC] QueryServiceConfig2 SUCCESS\r\n\r\nSERVICE_NAME: W32Time\r\n\r\n        START SERVICE \r\n          DOMAIN JOINED STATUS         : 1ce20aba-9851-4421-9430-1ddeb766e809 [DOMAIN JOINED]\r\n        START SERVICE \r\n          CUSTOM SYSTEM STATE CHANGE EVENT   : 2d7a2816-0c5e-45fc-9ce7-570e5ecde9c9 \r\n            DATA                       : 75 10 bc a3 39 07 8b 04\r\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "sc.exe",
+        "qc",
+        "W32Time"
+      ],
+      "at": "2026-10-24T17:28:13.341500+00:00",
+      "returncode": 0,
+      "stdout": "[SC] QueryServiceConfig SUCCESS\r\n\r\nSERVICE_NAME: W32Time\r\n        TYPE               : 20  WIN32_SHARE_PROCESS \r\n        START_TYPE         : 3   DEMAND_START\r\n        ERROR_CONTROL      : 1   NORMAL\r\n        BINARY_PATH_NAME   : C:\\WINDOWS\\system32\\svchost.exe -k LocalService\r\n        LOAD_ORDER_GROUP   : \r\n        TAG                : 0\r\n        DISPLAY_NAME       : Windows Time\r\n        DEPENDENCIES       : \r\n        SERVICE_START_NAME : NT AUTHORITY\\LocalService\r\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "w32tm",
+        "/stripchart",
+        "/computer:time.windows.com",
+        "/samples:5",
+        "/dataonly"
+      ],
+      "at": "2026-10-24T17:28:13.351014+00:00",
+      "returncode": 0,
+      "stdout": "Tracking time.windows.com [104.40.149.189:123].\nCollecting 5 samples.\nThe current time is 24.10.2026 19:28:13.\n19:28:13, +01.0629055s\n19:28:15, +01.0640691s\n19:28:17, +01.0626785s\n19:28:19, +01.0627807s\n19:28:21, +01.0620803s\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "w32tm",
+        "/stripchart",
+        "/computer:time.cloudflare.com",
+        "/samples:5",
+        "/dataonly"
+      ],
+      "at": "2026-10-24T17:28:21.723211+00:00",
+      "returncode": 0,
+      "stdout": "Tracking time.cloudflare.com [162.159.200.1:123].\nCollecting 5 samples.\nThe current time is 24.10.2026 19:28:21.\n19:28:21, +01.0547610s\n19:28:23, +01.0586013s\n19:28:25, +01.0595644s\n19:28:27, +01.0590359s\n19:28:30, +01.0549366s\n",
+      "stderr": ""
+    }
+  ]
+}

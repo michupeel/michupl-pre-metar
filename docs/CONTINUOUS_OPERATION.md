@@ -212,3 +212,17 @@ See CONTINUOUS_VALIDATION.md for actual run/verification evidence. Unit fixtures
 are synthetic and run without unrestricted external access. The live smoke/soak
 is a separate genuine network capture. Long-duration reliability, calibrated
 station skill, source independence and a useful information edge remain unverified.
+
+
+## Timestamp hotfix 1.6.1
+
+The existing task, database, raw storage and cohort remain in place. The strict
+policy is separately frozen in each run and rejects unverified measurement clocks
+and age>300s. Sensor.Community continues raw capture but cannot supply analytical
+measurements. EHAM may therefore have zero live-eligible PWS; this is a data
+limitation, not permission to use its months-old readings or ingestion proxies.
+Use `uv run premetar pws today --airport EPWA` for on-demand read-only inspection
+and `uv run premetar pws timestamp-audit` for current exclusions.
+Clock audit is on-demand and read-only; its cached evidence expires after1hour.
+No daily-report task was installed. See STRICT_TIMESTAMPS.md and
+TIMESTAMP_HOTFIX_VALIDATION.md for evidence and deployment details.

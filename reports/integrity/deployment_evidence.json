@@ -1,0 +1,81 @@
+{
+  "at": "2026-10-24T17:34:05.580500+00:00",
+  "run": {
+    "id": "20261024T172654624697Z-01316762",
+    "started_at": "2026-10-24T17:26:55.579161+00:00",
+    "ended_at": null,
+    "heartbeat": "2026-10-24T17:34:05.411049+00:00",
+    "exit_reason": null,
+    "heartbeat_age_seconds": 0.096331,
+    "state": "RUNNING"
+  },
+  "pid": 39904,
+  "raw": [
+    [
+      "awc",
+      7,
+      "2026-10-24T17:26:57.230128+00:00",
+      "2026-10-24T17:33:12.034412+00:00"
+    ],
+    [
+      "dwd_10min",
+      8,
+      "2026-10-24T17:26:57.059809+00:00",
+      "2026-10-24T17:34:03.940671+00:00"
+    ],
+    [
+      "knmi_metar",
+      8,
+      "2026-10-24T17:26:56.938060+00:00",
+      "2026-10-24T17:34:03.783240+00:00"
+    ],
+    [
+      "pws_opensensemap",
+      32,
+      "2026-10-24T17:26:57.790032+00:00",
+      "2026-10-24T17:32:33.143567+00:00"
+    ],
+    [
+      "pws_sensor_community",
+      46,
+      "2026-10-24T17:26:58.040430+00:00",
+      "2026-10-24T17:32:26.379406+00:00"
+    ]
+  ],
+  "normalized_new": [
+    [
+      "opensensemap",
+      "UNKNOWN_TIMESTAMP_PROVENANCE",
+      28
+    ],
+    [
+      "opensensemap",
+      "VALID",
+      10
+    ],
+    [
+      "sensor_community",
+      "UNKNOWN_TIMESTAMP_PROVENANCE",
+      54
+    ]
+  ],
+  "polls": [
+    [
+      "opensensemap",
+      32,
+      0
+    ],
+    [
+      "sensor_community",
+      31,
+      0
+    ]
+  ],
+  "new_predictions": 18,
+  "new_settlements": 30,
+  "errors": [],
+  "integrity": "ok",
+  "foreign_key_check": [],
+  "source_hashes_match": true,
+  "free_disk_bytes": 76466929664
+}
