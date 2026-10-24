@@ -102,23 +102,67 @@ def owned(xml: str, python: str, root: str, config: str) -> bool:
     )
 
 
-def verified(xml: str, python: str, root: str, config: str, sid: str) -> bool:
+def verified(
+    xml: str,
+    python: str,
+    root: str,
+    config: str,
+    sid: str,
+    *,
+    account_name: str | None = None,
+    effective_run_level: str | None = None,
+) -> bool:
     tree = fromstring(xml)
     if not owned(xml, python, root, config):
         return False
     expected = {
         "t:Principals/t:Principal/t:UserId": sid,
         "t:Principals/t:Principal/t:LogonType": "InteractiveToken",
-        "t:Principals/t:Principal/t:RunLevel": "LeastPrivilege",
-        "t:Triggers/t:LogonTrigger/t:UserId": sid,
         "t:Settings/t:MultipleInstancesPolicy": "IgnoreNew",
         "t:Settings/t:ExecutionTimeLimit": "PT0S",
         "t:Settings/t:RestartOnFailure/t:Interval": "PT1M",
         "t:Settings/t:RestartOnFailure/t:Count": "3",
     }
-    return all(
+    level = tree.findtext("t:Principals/t:Principal/t:RunLevel", namespaces={"t": NS})
+    if level != "LeastPrivilege" and not (level is None and effective_run_level == "Limited"):
+        return False
+    trigger = tree.findtext("t:Triggers/t:LogonTrigger/t:UserId", namespaces={"t": NS})
+    allowed = {sid.casefold()}
+    if account_name:
+        allowed.add(account_name.casefold())
+    return bool(trigger and trigger.casefold() in allowed) and all(
         tree.findtext(path, namespaces={"t": NS}) == value for path, value in expected.items()
     )
+
+
+def verify_registered(xml: str, python: str, root: str, config: str, sid: str) -> bool:
+    import json
+
+    identity = run(["whoami", "/user", "/fo", "csv", "/nh"])
+    import csv
+
+    if identity.returncode:
+        return False
+    account, actual_sid = next(csv.reader([identity.stdout.strip()]))
+    if actual_sid != sid:
+        return False
+    # Task Scheduler canonicalizes trigger names and can omit default RunLevel.
+    # Require independently read native Limited value before accepting omitted XML.
+    native = run(
+        [
+            "powershell",
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            "$t=Get-ScheduledTask -TaskName '"
+            + NAME
+            + "' -TaskPath ([string][char]92) -ErrorAction Stop; @{run_level=[string]$t.Principal.RunLevel} | ConvertTo-Json -Compress",
+        ]
+    )
+    if native.returncode:
+        return False
+    level = json.loads(native.stdout)["run_level"]
+    return verified(xml, python, root, config, sid, account_name=account, effective_run_level=level)
 
 
 def definition(root: Path, config: Path) -> tuple[str, str, str, str]:
@@ -160,7 +204,7 @@ def install(root: Path, config: Path, preview: bool = True) -> str:
             "Task registration failed; no administrator or password workaround attempted"
         )
     actual = query()
-    if not actual or not verified(actual, python, working, configuration, sid):
+    if not actual or not verify_registered(actual, python, working, configuration, sid):
         raise RuntimeError("Task registration could not be verified")
     return actual
 

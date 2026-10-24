@@ -556,3 +556,65 @@ async def test_nearest_precedes_cluster_deduplication(store):
     p = await store._call(forecast)
     assert p["estimate_c"] == 18
     assert p["contributions"][0]["station_id"] == "opensensemap:z-near"
+
+
+def test_windows_canonical_xml_requires_independent_limited_evidence():
+    from premetar.continuous.windows import verified
+
+    xml = task_xml("pythonw.exe", "root", "config", "sid")
+    tree = ET.fromstring(xml)
+    principal = tree.find("t:Principals/t:Principal", {"t": NS})
+    principal.remove(principal.find("t:RunLevel", {"t": NS}))
+    tree.find("t:Triggers/t:LogonTrigger/t:UserId", {"t": NS}).text = "DOMAIN\\User"
+    canonical = ET.tostring(tree, encoding="unicode")
+    assert not verified(canonical, "pythonw.exe", "root", "config", "sid")
+    assert verified(
+        canonical,
+        "pythonw.exe",
+        "root",
+        "config",
+        "sid",
+        account_name="domain\\user",
+        effective_run_level="Limited",
+    )
+    assert not verified(
+        canonical,
+        "pythonw.exe",
+        "root",
+        "config",
+        "sid",
+        account_name="other\\user",
+        effective_run_level="Limited",
+    )
+    assert not verified(
+        canonical,
+        "pythonw.exe",
+        "root",
+        "config",
+        "sid",
+        account_name="domain\\user",
+        effective_run_level="Highest",
+    )
+
+
+def test_registered_task_verification_queries_root_folder(monkeypatch):
+    import subprocess
+
+    from premetar.continuous import windows
+
+    sid = "S-1-5-21-123"
+    tree = ET.fromstring(task_xml("pythonw.exe", "root", "config", sid))
+    principal = tree.find("t:Principals/t:Principal", {"t": NS})
+    principal.remove(principal.find("t:RunLevel", {"t": NS}))
+    tree.find("t:Triggers/t:LogonTrigger/t:UserId", {"t": NS}).text = "DOMAIN\\User"
+
+    def respond(args):
+        if args[0] == "whoami":
+            return subprocess.CompletedProcess(args, 0, '"domain\\user","' + sid + '"\n', "")
+        assert "-TaskPath ([string][char]92)" in args[-1]
+        return subprocess.CompletedProcess(args, 0, '{"run_level":"Limited"}', "")
+
+    monkeypatch.setattr(windows, "run", respond)
+    assert windows.verify_registered(
+        ET.tostring(tree, encoding="unicode"), "pythonw.exe", "root", "config", sid
+    )

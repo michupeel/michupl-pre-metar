@@ -372,7 +372,52 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
     csv_write(output / "matched_baseline_comparison.csv", matched)
     csv_write(output / "prediction_stability.csv", stability)
     csv_write(output / "provider_freshness.csv", state["providers"])
-    csv_write(output / "station_coverage.csv", state["stations"])
+    station_rows = []
+    for station in state["stations"]:
+        qc_rows = rows(
+            conn,
+            "SELECT created_at,data_json FROM pws_quality_results WHERE station_id=? AND airport_icao=? ORDER BY created_at DESC,id DESC LIMIT 1",
+            (station["station_id"], station["airport"]),
+        )
+        qc = json.loads(qc_rows[0]["data_json"]) if qc_rows else {}
+        sensors = list(qc.get("sensors", {}).values())
+        metadata = rows(
+            conn,
+            "SELECT distance_km FROM pws_airport_stations WHERE station_id=? AND airport_icao=?",
+            (station["station_id"], station["airport"]),
+        )
+        station_rows.append(
+            {
+                **station,
+                "distance_km": metadata[0]["distance_km"] if metadata else None,
+                "qc_created_at": qc_rows[0]["created_at"] if qc_rows else None,
+                "median_update_interval": qc.get("median_update_interval"),
+                "availability": qc.get("availability"),
+                "p90_update_interval": max(
+                    (
+                        r["p90_update_interval"]
+                        for r in sensors
+                        if r.get("p90_update_interval") is not None
+                    ),
+                    default=None,
+                ),
+                "longest_gap": max(
+                    (r["longest_gap"] for r in sensors if r.get("longest_gap") is not None),
+                    default=None,
+                ),
+                "missing_intervals": sum(
+                    r["missing_intervals"]
+                    for r in sensors
+                    if r.get("missing_intervals") is not None
+                )
+                if any(r.get("missing_intervals") is not None for r in sensors)
+                else None,
+                "quality_flags": json.dumps(qc.get("flags", [])),
+                "score": qc.get("score"),
+                "status": qc.get("status", "UNVERIFIED"),
+            }
+        )
+    csv_write(output / "station_coverage.csv", station_rows)
     csv_write(output / "airport_coverage.csv", state["airports"])
     csv_write(
         output / "metar_latency.csv",
@@ -407,6 +452,25 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
         for r in outcomes
         if r["lead_seconds"] is not None and not r["reference_censored"]
     ]
+    lead_metrics = []
+    for (airport, checkpoint, model, experiment), items in groups.items():
+        eligible = [
+            r for r in items if r["lead_seconds"] is not None and not r["reference_censored"]
+        ]
+        correct_leads = [float(r["lead_seconds"]) for r in eligible if r["error"] == 0]
+        lead_metrics.append(
+            dict(
+                airport=airport,
+                checkpoint=checkpoint,
+                model=model,
+                experiment=experiment,
+                distinct_targets=len({r["target"] for r in eligible}),
+                correct_prediction_lead=json.dumps(lead_summary(correct_leads)),
+                status="CLOCK_UNVERIFIED_RELATIVE_TO_CONFIGURED_COLLECTORS",
+                **lead_summary([r["lead_seconds"] for r in eligible]),
+            )
+        )
+    csv_write(output / "information_lead.csv", lead_metrics)
     (output / "information_lead.md").write_text(
         "# Information availability\n\nUNVERIFIED CLOCK — NOT A MEASURED GLOBAL INFORMATION EDGE\n\n"
         + f"Local-clock positive lead summary: {lead_summary(leads)}.\n\nPRE_OBSERVATION only. EXP-B post-observation signals are disabled. First receipt is our collector's first receipt, not proof of global publication.\n",
