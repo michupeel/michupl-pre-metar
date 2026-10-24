@@ -158,3 +158,124 @@ HTTP response establishes an actionable pre-METAR edge.
 
 Next steps: collect repeated bounded prospective runs, audit coverage and clock
 continuity, then assess accuracy and receive-order lead separately.
+
+## EXP-0006 — Continuous PWS Availability (OPEN)
+
+Question: Can selected open PWS sources deliver fresh, usable observations continuously?
+
+Hypothesis: a provider-balanced DISCOVERY_CANDIDATE cohort can supply useful
+temperature readings without requiring unavailable historical accuracy scores.
+
+Data: genuine public AWC/KNMI/DWD and PWS requests, raw envelopes, normalized
+observations, distinct arrivals, poll events and heartbeat records in the ignored
+continuous-v1 database. Synthetic fault tests are separate from this dataset.
+
+Method: daily discovery; frozen candidates, up to4 per provider/airport; conservative
+adaptive>=300s PWS polling, receive clocks, deduplication and minute health snapshots.
+Measure usable availability, event-age distribution, intervals, gaps and provider errors.
+Sensor.Community server-ingest age is explicitly not measurement age.
+
+Results: an actual660-second run completed2026-10-24T12:23:55Z, followed by a
+scheduled restart using the same database. Real repeated requests, raw capture,
+normalization, predictions and settlement succeeded. Exact measured counts and
+verification evidence are maintained in docs/CONTINUOUS_VALIDATION.md and generated
+reports/continuous/. No multi-day availability claim has been measured.
+
+Limitations: short soak; many openSenseMap records are stale or unsuitable; public
+provider restrictions are not unlimited quotas; machine sleep/network/logon affect
+coverage. Absolute clock offset was unverified (Windows Time Service stopped).
+
+Conclusion: IMPLEMENTED and initial live operation OBSERVED; long-duration
+availability remains INSUFFICIENT DATA.
+
+Next steps: retain prospective collection for multiple days, audit gaps and
+observed sensor cadence, then review candidate replacements prospectively.
+
+## EXP-0007 — Next METAR Prediction (OPEN)
+
+Question: Can quality-filtered PWS measurements improve predictions of the next
+routine METAR temperature?
+
+Hypothesis: selected PWS add out-of-sample value beyond recent official-report
+persistence and a simple recent-report trend.
+
+Data: immutable forecasts at configured pre-observation checkpoints, input IDs,
+receive cutoffs, prior QC/calibration IDs, and append-only real METAR settlements.
+
+Method: compare previous METAR, its explicit persistence alias, two-report trend,
+nearest PWS, median ensemble, inverse distance and quality weighting. Unavailable
+methods remain unavailable. Compare matched airport/target/checkpoint samples.
+Integer errors and continuous interval-distance errors remain separate.
+Confidence intervals use whole UTC-day blocks only after100 matched targets over
+7 days; they do not assume independent consecutive reports.
+
+Results: automatic creation and actual settlement were observed. Initial forecasts
+span only a handful of nominal targets. No model advantage is established.
+
+Limitations: insufficient history for reliable station scores/calibration; quantized
+reference; correlated reports; frozen initial candidate selection; incomplete
+checkpoint coverage during startup.
+
+Conclusion: INSUFFICIENT DATA. No positive predictive finding declared.
+
+Next steps: accumulate a frozen prospective cohort and evaluate an untouched future
+period, including persistence on identical eligible targets.
+
+## EXP-0008 — Information Availability Lead (OPEN)
+
+Question: How long before our fastest configured reference receipt can an
+accurate prediction exist?
+
+Hypothesis: some genuinely prospective PWS forecasts precede our monitored full
+reference receipt. This is not equivalent to global publication or market advantage.
+
+Data: real completion, receive and request clocks, run IDs and monotonic markers.
+Historical event-only observations and retrospective forecasts cannot establish lead.
+
+Method: EXP-A (before nominal observation) only in continuous-v1; EXP-B
+(post-observation/pre-receipt) remains disabled. Exclude forecasts created after
+first receipt and startup/gap-censored timing claims. Retain separate UTC and
+same-run monotonic differences where available; never compare monotonic clocks
+across restarts.
+
+Results: direct KNMI's nominal12:25 EHAM report was received at approximately
+12:21:58Z on2026-10-24. This demonstrated the need to block already-known targets
+even before nominal time. The first soak exposed a baseline gate defect; affected
+forecasts remain immutable and are excluded by settlement validity. The gate is
+fixed and covered by a deterministic early-nominal-future regression test.
+
+Limitations: unverified UTC offset, polling cadence, source coverage gaps, shared
+upstreams and short measurement period. First receipt is our collector's receipt,
+not proof of worldwide publication time.
+
+Conclusion: INSUFFICIENT DATA. No validated actionable information lead claimed.
+
+Next steps: monitor clock diagnostics and collect many uncensored target cycles;
+evaluate EXP-B under a separate future protocol if implemented.
+
+## EXP-0009 — Station Stability (OPEN)
+
+Question: Which PWS retain useful predictive performance under changing conditions?
+
+Hypothesis: only some candidates remain fresh and consistent across day/night
+and changing environmental conditions; disagreement may reflect microclimate.
+
+Data: frozen discovery cohort, repeated sensor observations, metadata history,
+hourly deterministic QC and future matched-target results.
+
+Method: existing temporal/spatial/solar suspicion checks, prior-only calibration,
+minimum samples and evaluation days. Forecast trajectories preserve first correct,
+last incorrect, observed stable-correct checkpoint and revision count. Missing
+checkpoints do not demonstrate stability. Inspect day/night and changing conditions
+before any prospective selection revision.
+
+Results: pipeline and descriptive reports implemented. Environmental coverage is
+too short to identify stable predictive stations.
+
+Limitations: unknown exposure/hardware, server-only event semantics, genuine
+microclimates and insufficient seasonal/weather diversity.
+
+Conclusion: INSUFFICIENT DATA; experiment remains OPEN.
+
+Next steps: collect days/weeks, inspect deterministic flags and temporal coverage,
+then freeze a new validation cohort without retrospective performance selection.

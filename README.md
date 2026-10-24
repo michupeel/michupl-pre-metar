@@ -10,6 +10,28 @@ This is not conventional weather forecasting. We do not assume an information
 edge exists. A reproducible negative result is useful; insufficient data is a
 different result. There is no trading functionality.
 
+## Continuous experiment (Milestone 1.6)
+
+The prospective collector now supports all four airports, automatic UTC prediction
+checkpoints, append-only outcome settlement, health reporting and a least-privilege
+Windows logon task. It reuses the METAR/PWS collectors and immutable prediction
+storage. Start from the project root:
+
+~~~powershell
+uv sync --locked
+uv run premetar continuous start
+uv run premetar continuous status
+uv run premetar predictions list
+uv run premetar continuous report
+~~~
+
+Use separate terminals for status/reporting; collection does not require a dashboard.
+[Operation and exact PowerShell commands](docs/CONTINUOUS_OPERATION.md) cover
+candidate selection, polling, graceful stop and autostart.
+[Validation evidence](docs/CONTINUOUS_VALIDATION.md) distinguishes observed results
+from implementation and remaining limitations. There is insufficient prospective
+history to establish an information edge.
+
 ## Quick start
 
 Python3.12+ and [uv](https://docs.astral.sh/uv/) are required. PowerShell:

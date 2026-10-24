@@ -72,3 +72,46 @@ model-specific thinking flag. Its localhost authentication failure is expected
 without an externally supplied key; actual milestone implementation used the
 authenticated connector. Logs contain safe classes/usage, not exception text,
 headers, credentials or full source. Artifacts are ignored and must be reviewed.
+
+## Milestone 1.6 — actual local delegation (2026-10-24)
+
+Health/model discovery and a genuine inference probe succeeded through the existing
+authenticated local-worker connector at http://127.0.0.1:8888/v1. Actual model:
+unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF. The /models response exposed17 model
+entries; the connector identified the active Qwen rather than assuming its ID.
+The small generation health probe returned READY (2 output tokens, about0.634s).
+No credential was read, copied into the repository or exposed. No server/global
+sampling setting changed. Accepted sampling parameters do not prove effectiveness;
+the connector's sampling efficacy checks remain partly unverified.
+
+The existing scripts/dev/qwen_worker.py remains the reusable CLI fallback; no
+second wrapper was introduced. Development used its already documented authenticated
+connector route. The weather collector has no inference dependency.
+
+Six substantive calls were made, including one narrowed test retry:
+
+| Task | Scope | Decision | Measured generation |
+|---|---|---|---|
+| M16-Q01 | Median cadence, bounded backoff, provider-state helper | Partially adapted; added finite-bound validation and naive-clock rejection | 9.740s,1348 tokens |
+| M16-Q02 | Windows task XML proposal | Rejected: invalid patch anchor and incorrect Task Scheduler schema elements | 7.004s,958 tokens |
+| M16-Q03 | Polling unit tests | Rejected: truncated4096-output-token response | Duration unavailable,4474 tokens |
+| M16-Q04 | Narrowed polling tests | Rejected: misspelled imports, wrong timestamp types and incorrect sample-count expectations | 6.211s,848 tokens |
+| M16-Q05 | Descriptive lead percentiles | Partially adapted; fixed positive infinity passing validation | 5.657s,780 tokens |
+| M16-Q06 | Independent Windows ownership review | Partially accepted SID verification issue; rejected unsupported path-injection claim and false return-code finding | 7.043s,2809 tokens |
+
+Returned total usage:11217 tokens including prompt/output and cached prompt tokens
+as reported by the server. Known generation durations sum to35.655s, excluding the
+truncated response whose duration was unavailable. These are local usage metrics,
+not cloud-token savings or end-to-end speedup measurements.
+
+All proposals were reviewed. No unrestricted file edits or autonomous agent loop
+was allowed. Two unsuccessful test outputs ended local repair; Codex wrote the
+tests. Accepted helpers/settings changes have deterministic tests and strict typing.
+The final suite and live validation are recorded in CONTINUOUS_VALIDATION.md.
+
+Net assessment: small helper proposals supplied useful starting points. Tests and
+Windows schema generation were unreliable, and the review included confident false
+positives. Review cost was substantial; no measured workflow speedup is claimed.
+The audit appends to reports/dev/qwen_delegation.jsonl. Full proposals remain in
+ignored reports/dev/artifacts; credentials and unnecessary source context are not
+included in the committed audit.
