@@ -35,6 +35,11 @@ def station(key="x", lat=52, lon=4, **kwargs):
 def row(temp=18, event=None, receive=None, **kwargs):
     return {
         "temperature_c": temp,
+        "station_id": "opensensemap:fixture",
+        "provider": "opensensemap",
+        "raw_unit": "C",
+        "timestamp_provenance": "SENSOR_MEASUREMENT_TIME",
+        "timestamp_semantics_verified": True,
         "relative_humidity": 60,
         "quality_flags": [],
         "observation_time": (event or NOW - timedelta(seconds=60)).isoformat(),

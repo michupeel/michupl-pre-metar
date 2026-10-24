@@ -5,6 +5,7 @@ import math
 import sqlite3
 import statistics
 import time
+from collections.abc import Callable
 from datetime import datetime, timedelta
 from statistics import mean, median
 from typing import Any
@@ -12,11 +13,13 @@ from uuid import uuid4
 
 from premetar.model import icao_round_temperature, utc_now
 from premetar.pws.geometry import haversine_km
+from premetar.pws.integrity import first_target_receive, prediction_issues
 from premetar.pws.models import QCConfig, Station, utc
 from premetar.pws.quality import effective_time, eligible
 from premetar.pws.repository import inventory, readings, rows, selected
+from premetar.pws.timestamps import policy
 
-VERSION = "pws-estimator-1.1"
+VERSION = "pws-estimator-1.2-strict-time"
 
 
 def precise_reference_comparison(
@@ -305,6 +308,7 @@ def calibrate(
     data = {
         "bias": bias,
         "label": "QUANTIZED_INTERVAL_PROJECTION",
+        "timestamp_policy_version": policy().version,
         "config": config.model_dump(),
         "pair_count": len(prior),
         "algorithm_version": VERSION,
@@ -330,6 +334,7 @@ def predict(
     created: datetime | None = None,
     run_id: str | None = None,
     checkpoint: str | None = None,
+    reference_guard: Callable[[], None] | None = None,
 ) -> dict[str, Any]:
     at, target = utc(created or utc_now()), utc(target)
     if target <= at:
@@ -372,15 +377,16 @@ def predict(
         calibration = rows(
             connection,
             """SELECT * FROM pws_calibrations WHERE station_id=? AND airport_icao=?
+            AND json_extract(data_json,'$.timestamp_policy_version')=?
             AND created_at<=? AND trained_through<? ORDER BY created_at DESC,id DESC LIMIT 1""",
-            (station_id, airport, at.isoformat(), at.isoformat()),
+            (station_id, airport, policy().version, at.isoformat(), at.isoformat()),
         )
         bias = json.loads(calibration[0]["data_json"])["bias"] if calibration else 0
         quality = rows(
             connection,
             """SELECT * FROM pws_quality_results WHERE station_id=? AND airport_icao=?
-            AND created_at<=? ORDER BY created_at DESC,id DESC LIMIT 1""",
-            (station_id, airport, at.isoformat()),
+            AND json_extract(data_json,'$.timestamp_policy_version')=? AND created_at<=? ORDER BY created_at DESC,id DESC LIMIT 1""",
+            (station_id, airport, policy().version, at.isoformat()),
         )
         q = json.loads(quality[0]["data_json"]) if quality else {}
         if "STUCK_SENSOR" in q.get("flags", []):
@@ -463,10 +469,16 @@ def predict(
         ),
         "config": config.model_dump(),
         "algorithm_version": VERSION,
+        "timestamp_policy_version": policy().version,
         "evidence_class": "REALTIME_CAPTURED",
         "clock_synchronization": "UNVERIFIED",
         "capture_coverage_verified": False,
     }
+    first_received = first_target_receive(connection, airport, target)
+    if first_received is not None and first_received <= completed:
+        raise ValueError("TARGET_ALREADY_RECEIVED")
+    if reference_guard is not None:
+        reference_guard()
     connection.execute(
         "INSERT INTO pws_predictions VALUES(?,?,?,?,?,?,?)",
         (
@@ -493,6 +505,8 @@ def evaluate_predictions(
         (airport, utc(at).isoformat()),
     ):
         forecast = json.loads(item["data_json"])
+        if prediction_issues(connection, forecast):
+            continue
         references = rows(
             connection,
             """SELECT o.identity,o.temperature_c,o.startup_censored,o.coverage_gap,

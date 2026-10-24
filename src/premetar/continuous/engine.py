@@ -14,6 +14,7 @@ from premetar.collector import wait_or_stop
 from premetar.continuous.config import Config
 from premetar.continuous.data import freeze_experiment, migrate, schedule, settle
 from premetar.continuous.polling import next_interval
+from premetar.continuous.reference_gate import ReferenceGate
 from premetar.model import utc_now
 from premetar.pws.models import Station
 from premetar.pws.providers import PROVIDERS, ProviderError, PWSProvider, Transport
@@ -210,6 +211,8 @@ async def provider_loop(
                                 {
                                     **r.model_dump(mode="json"),
                                     "first_receive_time": p["received_at"],
+                                    "provider": station.provider,
+                                    "station_id": station.station_id,
                                     "evidence_class": "REALTIME_CAPTURED",
                                 },
                                 utc_now(),
@@ -335,7 +338,11 @@ def refresh_quality(store: PWSStore, airport: str, config: Config) -> None:
 
 
 async def run_jobs(
-    store: PWSStore, client: httpx.AsyncClient, stop: asyncio.Event, config: Config
+    store: PWSStore,
+    client: httpx.AsyncClient,
+    stop: asyncio.Event,
+    config: Config,
+    reference_gate: ReferenceGate | None = None,
 ) -> None:
     await store._call(migrate, store.connection)
     await store._call(freeze_experiment, store.connection, config)
@@ -370,7 +377,9 @@ async def run_jobs(
                 if task.done():
                     task.result()  # infrastructure failure must stop the process for restart
                     raise RuntimeError("Provider loop unexpectedly stopped")
-            await store._call(schedule, store.connection, config, store.run_id)
+            await store._call(
+                schedule, store.connection, config, store.run_id, None, reference_gate
+            )
             reference_id = await store._call(
                 lambda: store.connection.execute(
                     "SELECT COALESCE(max(id),0) FROM observations WHERE product_type='METAR'"

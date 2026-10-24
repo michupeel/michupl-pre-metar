@@ -13,6 +13,7 @@ from typing import Any
 from premetar.continuous.polling import provider_state
 from premetar.continuous.statistics import day_block_interval, lead_summary
 from premetar.model import utc_now
+from premetar.pws.integrity import prediction_issues
 from premetar.pws.repository import rows, selected
 
 
@@ -31,6 +32,9 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
     run = run_rows[0] if run_rows else None
     manifest = json.loads(run["manifest_json"]) if run else {}
     clock = manifest.get("clock", {})
+    from premetar.clock_audit import cached_clock
+
+    clock["current_verification"] = cached_clock()
     qc = QCConfig.model_validate(manifest.get("continuous_config", {}).get("qc", {}))
     if run:
         run = {k: v for k, v in run.items() if k != "manifest_json"}
@@ -52,7 +56,15 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
             WHERE s.station_id=? ORDER BY o.first_receive_time DESC LIMIT 64""",
             (item["station_id"],),
         )
-        candidates = [{**r, **json.loads(r["data_json"])} for r in latest]
+        candidates = [
+            {
+                **r,
+                **json.loads(r["data_json"]),
+                "station_id": item["station_id"],
+                "provider": item["station_id"].split(":", 1)[0],
+            }
+            for r in latest
+        ]
         good = [r for r in candidates if eligible(r, at, qc)]
         monitoring = selected(conn, item["station_id"], item["airport"], at)
         if good and monitoring:
@@ -174,6 +186,17 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
                 else None,
             )
         )
+    eligibility = []
+    if conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE name='pws_observation_integrity'"
+    ).fetchone():
+        eligibility = rows(
+            conn,
+            """SELECT st.provider,i.status,count(*) records FROM pws_observation_integrity i
+            JOIN pws_observations o ON o.id=i.observation_id JOIN pws_sensors s USING(sensor_id)
+            JOIN pws_stations st USING(station_id) WHERE i.policy_version=? GROUP BY st.provider,i.status""",
+            (manifest.get("timestamp_policy", {}).get("version", "strict-measurement-time-1.0"),),
+        )
     official = rows(conn, "SELECT * FROM source_health ORDER BY source")
     if run:
         official = [r for r in official if r["run_id"] == run["id"]]
@@ -181,6 +204,7 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
         utc=at.isoformat(),
         run=run,
         clock_synchronization="VERIFIED" if clock.get("synchronization_confirmed") else "UNKNOWN",
+        clock_verification=clock["current_verification"],
         clock=clock,
         health={**health_rows[0], "data": json.loads(health_rows[0]["data_json"])}
         if health_rows
@@ -189,6 +213,8 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
         stations=inventory,
         providers=providers,
         official_providers=official,
+        observation_count_definition="NORMALIZED_RECORDS_INCLUDING_QUARANTINED_NOT_VALID_MEASUREMENTS",
+        measurement_eligibility_at_receipt=eligibility,
         observations=conn.execute("SELECT count(*) FROM pws_observations").fetchone()[0],
         predictions=conn.execute("SELECT count(*) FROM pws_predictions").fetchone()[0],
         settled=conn.execute(
@@ -235,7 +261,7 @@ def report(conn: sqlite3.Connection, output: Path) -> dict[str, Any]:
     for r in initial.values():
         f = json.loads(r["forecast"])
         d = json.loads(r["data_json"])
-        if not d["valid_prospective"]:
+        if not d["valid_prospective"] or prediction_issues(conn, f):
             continue
         outcomes.append(
             dict(

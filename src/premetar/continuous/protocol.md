@@ -28,3 +28,16 @@ Information lead is first receive among our configured sources minus actual pred
 creation, not global publication lead. Use run-scoped monotonic clocks only within a run.
 Retain UTC offset uncertainty and reference startup/gap censoring. EXP-B disabled.
 No paid sources, unauthorized scraping, trading or runtime LLM dependency.
+
+
+## Timestamp integrity amendment 1.6.1 (2026-10-24)
+
+Freeze strict-measurement-time-1.0 separately in the run manifest. Maximum age300s
+at receipt and decision; verified sensor measurement provenance only. No ingestion,
+publication or receive-time fallback. Sensor.Community remains raw research data
+and is excluded from analytical samples. Keep additive quarantine/exclusion ledgers
+and original forecasts/settlements. Legacy parameter snapshots without this policy
+are ineligible. Final first-receipt checks plus an HTTP-receipt-to-durable-parse
+barrier protect against early nominal-future METARs and queued writes. No global
+clock correction is made; independent approximate evidence and expiry are reported.
+See docs/STRICT_TIMESTAMPS.md; earlier manifests preserve the previous protocol.

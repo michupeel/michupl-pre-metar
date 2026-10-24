@@ -178,6 +178,8 @@ def reading(
     return Reading(
         provider_sensor_id=sensor_id,
         observation_time=event,
+        timestamp_provenance="SENSOR_MEASUREMENT_TIME" if event else "UNKNOWN_TIME",
+        timestamp_semantics_verified=event is not None,
         source_publish_time=publish,
         temperature_c=temp,
         relative_humidity=rh,
@@ -431,6 +433,8 @@ class SensorCommunity:
                             update={
                                 "provider_timestamp": publish,
                                 "provider_timestamp_kind": "server_ingest",
+                                "timestamp_provenance": "PROVIDER_INGEST_TIME",
+                                "timestamp_semantics_verified": False,
                             }
                         ),
                         packet,

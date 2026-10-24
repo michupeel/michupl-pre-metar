@@ -156,3 +156,12 @@ def task_status() -> None:
 def remove(config: Path = DEFAULT) -> None:
     windows.remove(Path.cwd(), config)
     console.print("Project logon task removed (collector stop is separate)")
+
+
+@app.command(name="clock-audit")
+def clock_audit_command(output: Path = Path("reports/integrity")) -> None:
+    """Read Windows time settings and compare two trusted NTP servers; no configuration changes."""
+    from premetar.clock_audit import run_audit
+
+    result = run_audit(output)
+    console.print_json(json.dumps(result))

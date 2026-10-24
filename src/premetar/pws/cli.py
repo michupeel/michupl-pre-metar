@@ -271,3 +271,111 @@ def report_command(
     config: Path | None = None,
 ) -> None:
     run("report", airport, all_airports, database, raw_path, config, output=output)
+
+
+@app.command(name="today")
+def today_command(
+    airport: str = "EPWA",
+    date: str | None = None,
+    limit: Annotated[int, typer.Option(min=1, max=10000)] = 50,
+    bucket_minutes: int = 5,
+    database: Path = Path("data/continuous-v1.sqlite3"),
+    output: Path = Path("reports/daily"),
+) -> None:
+    """Read-only local-day measurements, timestamp quarantine and METAR comparison."""
+    from contextlib import closing
+    from datetime import date as CalendarDate
+
+    from premetar.continuous.reporting import connect
+    from premetar.pws.daily import make_report
+
+    try:
+        day = CalendarDate.fromisoformat(date) if date else None
+        with closing(connect(database)) as conn:
+            conn.execute("BEGIN")
+            result = make_report(conn, airport, day, output, bucket_minutes)
+            conn.rollback()
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from None
+    console.print(
+        f"{result['airport']} {result['date']} [{result['timezone']}] - {result['total_valid_observations']} valid observations, {result['usable_stations']} usable stations"
+    )
+    table = Table(
+        "Sensor",
+        "Provider",
+        "Distance km",
+        "Last valid measurement",
+        "Last received",
+        "Age at receipt s",
+        "QC",
+        "Eligible now",
+    )
+    for r in result["stations"]:
+        table.add_row(
+            r["sensor_id"],
+            r["provider"],
+            f"{r['distance_km']:.2f}",
+            r["last_valid_measurement_local"] or "UNKNOWN",
+            r["last_received_local"] or "UNKNOWN",
+            str(r["observation_age_at_last_receipt"]),
+            r["qc_status"],
+            str(r["eligible_now"]),
+        )
+    console.print(table)
+    timeline = Table("Measurement local", "Received local", "Sensor", "Celsius", "Age s", "QC")
+    for r in result["observations"][-limit:]:
+        timeline.add_row(
+            r["measurement_time_local"],
+            r["received_time_local"],
+            r["sensor_id"],
+            str(r["temperature_c"]),
+            f"{r['observation_age_seconds']:.3f}",
+            r["qc"],
+        )
+    console.print(timeline)
+    buckets = Table(
+        "Bucket local",
+        "Provider stations",
+        "Conservative groups",
+        "Median C",
+        "Min C",
+        "Max C",
+        "MAD C",
+    )
+    for r in result["buckets"][-12:]:
+        buckets.add_row(
+            r["start_local"],
+            str(r["provider_stations"]),
+            str(r["conservative_spatial_groups"]),
+            f"{r['median_c']:.2f}",
+            f"{r['min_c']:.2f}",
+            f"{r['max_c']:.2f}",
+            f"{r['median_absolute_deviation_c']:.2f}",
+        )
+    console.print(buckets)
+    console.print(
+        "Physical independence UNVERIFIED; no forward-fill; one vote per station/200m group."
+    )
+    if not result["observations"]:
+        console.print("INSUFFICIENT DATA: no timestamp-verified observations for this local day")
+    console.print(
+        f"Immutable predictions: {result['valid_predictions']} eligible, {result['excluded_predictions']} excluded; {result['matched_outcomes']} valid matched outcomes across {result['distinct_metar_cycles']} actual METAR cycles."
+    )
+    console.print(str((output / f"{result['airport']}_{result['date']}.md").resolve()))
+
+
+@app.command(name="timestamp-audit")
+def timestamp_audit_command(
+    database: Path = Path("data/continuous-v1.sqlite3"), output: Path = Path("reports/integrity")
+) -> None:
+    """Read-only audit; never mutates raw observations or prediction history."""
+    from contextlib import closing
+
+    from premetar.continuous.reporting import connect
+    from premetar.pws.integrity_report import timestamp_audit
+
+    with closing(connect(database)) as conn:
+        conn.execute("BEGIN")
+        result = timestamp_audit(conn, output)
+        conn.rollback()
+    console.print_json(json.dumps(result))

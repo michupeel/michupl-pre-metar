@@ -534,6 +534,8 @@ async def test_nearest_precedes_cluster_deduplication(store):
                 temperature_c=temp,
                 raw_unit="C",
                 raw_temperature=str(temp),
+                timestamp_provenance="SENSOR_MEASUREMENT_TIME",
+                timestamp_semantics_verified=True,
             ),
             packet,
         )

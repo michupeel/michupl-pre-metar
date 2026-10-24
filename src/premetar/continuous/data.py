@@ -4,12 +4,15 @@ import json
 import sqlite3
 import time
 from datetime import datetime, timedelta
+from functools import partial
 from typing import Any
 from uuid import uuid4
 
 from premetar.continuous.config import Config
+from premetar.continuous.reference_gate import ReferenceGate
 from premetar.model import icao_round_temperature, utc_now
 from premetar.pws.analysis import predict
+from premetar.pws.integrity import exclude_prediction, first_target_receive
 from premetar.pws.models import utc
 from premetar.pws.repository import rows
 from premetar.sources import STATIONS
@@ -128,6 +131,7 @@ def baseline(
     method: str,
     run_id: str,
     checkpoint: str,
+    reference_gate: ReferenceGate | None = None,
 ) -> dict[str, Any]:
     at = utc_now()
     known = rows(
@@ -191,6 +195,11 @@ def baseline(
         quality_flags=["QUANTIZED_METAR_REFERENCE"],
         clock_synchronization="UNVERIFIED",
     )
+    first_received = first_target_receive(conn, airport, target)
+    if first_received is not None and first_received <= completed:
+        raise ValueError("TARGET_ALREADY_RECEIVED")
+    if reference_gate is not None:
+        reference_gate.check(airport)
     conn.execute(
         "INSERT INTO pws_predictions VALUES(?,?,?,?,?,?,?)",
         (
@@ -207,7 +216,11 @@ def baseline(
 
 
 def schedule(
-    conn: sqlite3.Connection, config: Config, run_id: str, now: datetime | None = None
+    conn: sqlite3.Connection,
+    config: Config,
+    run_id: str,
+    now: datetime | None = None,
+    reference_gate: ReferenceGate | None = None,
 ) -> None:
     at = utc(now or utc_now())
     hour = at.replace(minute=0, second=0, microsecond=0)
@@ -256,9 +269,17 @@ def schedule(
                         ):
                             # Never inject 'now' as creation time: actual completion clock is persisted.
                             try:
+                                if reference_gate:
+                                    reference_gate.check(airport)
                                 if method in METHODS[:3]:
                                     result = baseline(
-                                        conn, airport, target, method, run_id, f"T-{seconds}s"
+                                        conn,
+                                        airport,
+                                        target,
+                                        method,
+                                        run_id,
+                                        f"T-{seconds}s",
+                                        reference_gate,
                                     )
                                 else:
                                     result = predict(
@@ -269,6 +290,9 @@ def schedule(
                                         method,
                                         run_id=run_id,
                                         checkpoint=f"T-{seconds}s",
+                                        reference_guard=partial(reference_gate.check, airport)
+                                        if reference_gate
+                                        else None,
                                     )
                                 status, reason, pid = "GENERATED", None, result["id"]
                             except ValueError:
@@ -299,6 +323,7 @@ def settle(
             (after_observation_id, at.isoformat()),
         ):
             forecast = json.loads(item["data_json"])
+            strict_issues = exclude_prediction(conn, forecast)
             target = datetime.fromisoformat(item["target_time"])
             if item["airport_icao"] not in reference_cache:
                 reference_cache[item["airport_icao"]] = routine_reports(
@@ -357,7 +382,11 @@ def settle(
                     startup_censored=bool(first_copy["startup_censored"]),
                     coverage_gap=bool(first_copy["coverage_gap"]),
                     experiment_class="PRE_OBSERVATION" if created < target else "POST_OBSERVATION",
-                    valid_prospective=created < first and created < target and not ambiguous,
+                    valid_prospective=created < first
+                    and created < target
+                    and not ambiguous
+                    and not strict_issues,
+                    timestamp_integrity_rejections=strict_issues,
                     ambiguous_initial_reports=ambiguous,
                     report_version_first_seen=report_first.isoformat(),
                     correction=correction,

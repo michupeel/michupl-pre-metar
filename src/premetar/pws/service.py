@@ -43,6 +43,7 @@ from premetar.pws.quality import (
     solar_suspicion,
 )
 from premetar.pws.repository import PWSStore, inventory, readings, rows, selected
+from premetar.pws.timestamps import policy
 
 
 def settings(path: Path | None = None) -> Settings:
@@ -373,6 +374,7 @@ def quality_snapshot(
                 config.qc,
             )
             row = {
+                "timestamp_policy_version": policy().version,
                 "station_id": station.station_id,
                 "airport_icao": airport,
                 "provider": station.provider,

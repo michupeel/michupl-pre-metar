@@ -22,6 +22,7 @@ from rich.live import Live
 from rich.table import Table
 
 from premetar import __version__
+from premetar.continuous.reference_gate import ReferenceGate
 from premetar.model import Observation, utc_now
 from premetar.sources import STATIONS, HttpSource, next_report
 from premetar.store import Store
@@ -56,6 +57,16 @@ def clock_status() -> dict[str, Any]:
     result["warning"] = (
         "Absolute clock offset not independently verified; use within-run monotonic latency"
     )
+    from premetar.clock_audit import cached_clock
+
+    evidence = cached_clock()
+    result["verification_status"] = evidence["verification_status"]
+    result["clock_audit"] = evidence
+    result["offset_sec"] = evidence.get("measured_offset_seconds")
+    if result["offset_sec"] is not None:
+        result["warning"] = (
+            f"Approximate NTP offset {result['offset_sec']:+.3f}s; clock verification {evidence['verification_status']}. Automatic synchronization remains unverified."
+        )
     return result
 
 
@@ -84,6 +95,7 @@ async def poll_source(
     client: httpx.AsyncClient,
     stop: asyncio.Event,
     state: dict[str, Any],
+    reference_gate: ReferenceGate | None = None,
 ) -> None:
     initialized, failures, last_success = False, 0, None
     while not stop.is_set():
@@ -95,6 +107,8 @@ async def poll_source(
             response = await client.get(source.url)
             # httpx.get has buffered the complete payload before returning.
             end_mono, end_wall = time.perf_counter_ns(), utc_now()
+            if reference_gate and source.name in {"awc", "knmi_metar"}:
+                reference_gate.begin(source.name, set(source.stations), end_wall)
             packet = await store.capture(
                 {
                     "source": source.name,
@@ -174,6 +188,9 @@ async def poll_source(
             delay = max(
                 delay, min(3600, source.interval_sec * 2 ** min(failures, 6)) + random.uniform(0, 5)
             )
+        finally:
+            if reference_gate:
+                reference_gate.end(source.name)
         await wait_or_stop(stop, delay)
 
 
@@ -218,6 +235,7 @@ async def collect(
     run_id = utc_now().strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex[:8]
     stop = asyncio.Event()
     state: dict[str, Any] = {}
+    reference_gate = ReferenceGate() if continuous_config is not None else None
     console = Console()
     clock = await asyncio.to_thread(clock_status)
     console.print("Clock warning: " + clock["warning"], style="yellow")
@@ -246,6 +264,13 @@ async def collect(
 
     if continuous_config is not None:
         manifest["continuous_config"] = continuous_config.model_dump(mode="json")
+        from dataclasses import asdict
+
+        from premetar.pws.timestamps import policy
+
+        manifest["timestamp_policy"] = asdict(policy())
+        manifest["reference_receipt_barrier"] = "HTTP_COMPLETE_UNTIL_DURABLE_PARSE"
+
         continuous_protocol = (
             files("premetar.continuous").joinpath("protocol.md").read_text(encoding="utf-8")
         )
@@ -258,6 +283,9 @@ async def collect(
             "parsers.py",
             "pws/analysis.py",
             "pws/quality.py",
+            "pws/timestamps.py",
+            "pws/integrity.py",
+            "continuous/reference_gate.py",
             "pws/providers.py",
             "continuous/config.py",
             "continuous/data.py",
@@ -299,7 +327,9 @@ async def collect(
             transport=transport,
         ) as client:
             tasks = [
-                asyncio.create_task(poll_source(s, store, client, stop, state), name=s.name)
+                asyncio.create_task(
+                    poll_source(s, store, client, stop, state, reference_gate), name=s.name
+                )
                 for s in sources
             ]
             if pws_settings is not None:
@@ -334,7 +364,8 @@ async def collect(
                 assert isinstance(store, PWSStore)
                 tasks.append(
                     asyncio.create_task(
-                        run_jobs(store, client, stop, continuous_config), name="continuous"
+                        run_jobs(store, client, stop, continuous_config, reference_gate),
+                        name="continuous",
                     )
                 )
             started = time.monotonic()

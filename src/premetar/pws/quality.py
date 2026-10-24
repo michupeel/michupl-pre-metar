@@ -11,8 +11,9 @@ from astral.sun import elevation
 from premetar.pws.geometry import haversine_km
 from premetar.pws.models import QCConfig, Station, utc
 from premetar.pws.temporal import temporal_metrics
+from premetar.pws.timestamps import MEASUREMENT, assess_time, parse_utc, provenance
 
-VERSION = "pws-qc-1.0"
+VERSION = "pws-qc-1.1-strict-time"
 HARD_FLAGS = {
     "STUCK_SENSOR",
     "INVALID_TEMPERATURE",
@@ -56,27 +57,23 @@ def physical_flags(row: dict[str, Any], now: datetime, config: QCConfig) -> set[
 
 
 def effective_time(row: dict[str, Any]) -> datetime | None:
-    value = (
-        row.get("observation_time")
-        or row.get("provider_timestamp")
-        or row.get("source_publish_time")
-    )
-    return utc(datetime.fromisoformat(value)) if value else None
+    if provenance(row)[0] != MEASUREMENT:
+        return None
+    try:
+        return parse_utc(row.get("observation_time"))
+    except (ValueError, TypeError, OverflowError):
+        return None
 
 
 def eligible(row: dict[str, Any], at: datetime, config: QCConfig) -> bool:
-    at = utc(at)
-    clock = effective_time(row)
-    receive = row.get("first_receive_time")
-    return bool(
-        receive
-        and utc(datetime.fromisoformat(receive)) <= at
-        and row.get("evidence_class") == "REALTIME_CAPTURED"
-        and clock
-        and clock <= at
-        and (at - clock).total_seconds() <= config.stale_seconds
-        and not physical_flags(row, at, config).intersection(HARD_FLAGS)
+    check = assess_time(
+        row,
+        at,
+        maximum_age=config.stale_seconds,
+        minimum_temperature=config.min_temperature_c,
+        maximum_temperature=config.max_temperature_c,
     )
+    return check.eligible and not physical_flags(row, at, config).intersection(HARD_FLAGS)
 
 
 def peer_comparison(
@@ -193,7 +190,14 @@ def assess(
             row_flags = physical_flags(row, at, config)
             flags.update(row_flags)
             clock = effective_time(row)
-            if clock and not row_flags.intersection(HARD_FLAGS) and clock <= at:
+            check = assess_time(
+                row,
+                maximum_age=config.stale_seconds,
+                minimum_temperature=config.min_temperature_c,
+                maximum_temperature=config.max_temperature_c,
+            )
+            flags.update(check.reasons)
+            if check.eligible and clock and not row_flags.intersection(HARD_FLAGS) and clock <= at:
                 samples.append((clock, row["temperature_c"]))
         ordered_clocks = sorted({t for t, _ in samples})
         gaps = [

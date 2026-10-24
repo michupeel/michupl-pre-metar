@@ -89,6 +89,9 @@ class PWSStore(Store):
             != 1
         ):
             raise RuntimeError("Unsupported PWS extension version")
+        from premetar.pws.integrity import backfill
+
+        backfill(self.connection)
 
     def register(self, airports: list[Airport], providers: list[Any]) -> None:
         with self.connection:
@@ -149,7 +152,16 @@ class PWSStore(Store):
             if reading.observation_time or reading.source_publish_time or reading.provider_timestamp
             else packet["id"]
         )
-        ident = hashlib.sha256((key + data + clock_key + str(historical)).encode()).hexdigest()
+        ident = hashlib.sha256(
+            (
+                key
+                + reading.model_dump_json(
+                    exclude={"timestamp_provenance", "timestamp_semantics_verified"}
+                )
+                + clock_key
+                + str(historical)
+            ).encode()
+        ).hexdigest()
         with self.connection:
             self.connection.execute(
                 "INSERT OR IGNORE INTO pws_observations VALUES(?,?,?,?,?,?,?,?)",
@@ -177,6 +189,9 @@ class PWSStore(Store):
                     startup,
                 ),
             )
+            from premetar.pws.integrity import record_observation
+
+            record_observation(self.connection, ident)
 
 
 def rows(
@@ -201,8 +216,8 @@ def inventory(connection: sqlite3.Connection, airport: str) -> list[dict[str, An
 def readings(connection: sqlite3.Connection, station_id: str, at: datetime) -> list[dict[str, Any]]:
     data = rows(
         connection,
-        """SELECT o.*,s.station_id,s.provider_sensor_id FROM pws_observations o
-        JOIN pws_sensors s USING(sensor_id) WHERE s.station_id=? AND o.first_receive_time<=?
+        """SELECT o.*,s.station_id,s.provider_sensor_id,st.provider FROM pws_observations o
+        JOIN pws_sensors s USING(sensor_id) JOIN pws_stations st USING(station_id) WHERE s.station_id=? AND o.first_receive_time<=?
         AND o.evidence_class='REALTIME_CAPTURED' ORDER BY o.first_receive_time,o.id""",
         (station_id, at.isoformat()),
     )

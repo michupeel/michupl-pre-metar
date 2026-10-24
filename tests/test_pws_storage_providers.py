@@ -18,6 +18,7 @@ from premetar.pws.netatmo_auth import NetatmoAuth
 from premetar.pws.providers import Netatmo, OpenSenseMap, ProviderError, SensorCommunity, Transport
 from premetar.pws.repository import PWSStore, inventory, readings
 from premetar.pws.service import settings, write_reports
+from premetar.pws.timestamps import VERSION as TIME_POLICY_VERSION
 
 NOW = datetime(2026, 10, 24, 12, tzinfo=UTC)
 AIRPORT = Airport(
@@ -89,6 +90,8 @@ def make_reading(value=18, event=NOW - timedelta(minutes=1)):
         temperature_c=value,
         raw_unit="°C",
         raw_temperature=str(value),
+        timestamp_provenance="SENSOR_MEASUREMENT_TIME",
+        timestamp_semantics_verified=True,
     )
 
 
@@ -223,7 +226,8 @@ async def test_sensor_community_server_timestamp_not_observation(store):
 
 
 async def test_delayed_historical_conflict_and_prediction_immutable(store):
-    p = await captured(store, NOW - timedelta(minutes=2))
+    # Receipt follows measurement; a future-at-receipt fixture is now correctly invalid.
+    p = await captured(store, NOW)
     await store._call(store.discover, AIRPORT, STATION, p)
     delayed = await captured(store, NOW + timedelta(minutes=1))
     await store._call(store.ingest, STATION, make_reading(19), delayed, False)
@@ -373,6 +377,7 @@ async def test_prediction_weights_only_prior_quality_and_calibration(store, meth
                         json.dumps(
                             {
                                 "score": quality,
+                                "timestamp_policy_version": TIME_POLICY_VERSION,
                                 "predictive": {
                                     "interval_aware_error": error,
                                     "sample_count": 200,
@@ -393,6 +398,7 @@ async def test_prediction_weights_only_prior_quality_and_calibration(store, meth
                         json.dumps(
                             {
                                 "score": 100 - quality,
+                                "timestamp_policy_version": TIME_POLICY_VERSION,
                                 "predictive": {
                                     "interval_aware_error": 1 / error,
                                     "sample_count": 200,
@@ -409,7 +415,7 @@ async def test_prediction_weights_only_prior_quality_and_calibration(store, meth
                         "EDDM",
                         (NOW + timedelta(seconds=1)).isoformat(),
                         (NOW - timedelta(hours=1)).isoformat(),
-                        '{"bias":100}',
+                        json.dumps({"bias": 100, "timestamp_policy_version": TIME_POLICY_VERSION}),
                     ),
                 )
             result = predict(

@@ -66,6 +66,14 @@ class Reading(Model):
     source_precision: float | None = None
     quality_flags: list[str] = Field(default_factory=list)
     evidence_class: Literal["REALTIME_CAPTURED", "HISTORICAL_EVENT_ONLY"] = "REALTIME_CAPTURED"
+    timestamp_provenance: Literal[
+        "SENSOR_MEASUREMENT_TIME",
+        "PROVIDER_INGEST_TIME",
+        "PROVIDER_PUBLICATION_TIME",
+        "COLLECTOR_RECEIVE_TIME",
+        "UNKNOWN_TIME",
+    ] = "UNKNOWN_TIME"
+    timestamp_semantics_verified: bool = False
 
     @field_validator("observation_time", "source_publish_time", "provider_timestamp")
     @classmethod
