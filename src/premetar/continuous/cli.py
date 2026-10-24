@@ -164,4 +164,6 @@ def clock_audit_command(output: Path = Path("reports/integrity")) -> None:
     from premetar.clock_audit import run_audit
 
     result = run_audit(output)
-    console.print_json(json.dumps(result))
+    # Native localized command output may contain characters unavailable in cp1250.
+    # Full evidence stays in UTF-8 files; the terminal receives a portable summary.
+    console.print_json(json.dumps({k: v for k, v in result.items() if k != "evidence"}))

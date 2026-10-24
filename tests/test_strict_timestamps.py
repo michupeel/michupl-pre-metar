@@ -287,3 +287,20 @@ async def test_reference_gate_blocks_while_raw_capture_is_delayed(monkeypatch):
         release.set()
         await asyncio.wait_for(task, 2)
     gate.check("EDDM")
+
+
+def test_clock_cli_keeps_native_unicode_evidence_in_files(monkeypatch):
+    from typer.testing import CliRunner
+
+    from premetar.cli import app
+
+    monkeypatch.setattr(
+        "premetar.clock_audit.run_audit",
+        lambda _: dict(
+            verification_status="UNKNOWN", evidence=[{"stdout": "\ufffd native localized output"}]
+        ),
+    )
+    result = CliRunner().invoke(app, ["continuous", "clock-audit"])
+    assert result.exit_code == 0
+    assert "UNKNOWN" in result.stdout
+    assert "native localized" not in result.stdout
