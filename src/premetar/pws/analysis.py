@@ -3,6 +3,7 @@
 import json
 import math
 import sqlite3
+import statistics
 import time
 from datetime import datetime, timedelta
 from statistics import mean, median
@@ -15,7 +16,7 @@ from premetar.pws.models import QCConfig, Station, utc
 from premetar.pws.quality import effective_time, eligible
 from premetar.pws.repository import inventory, readings, rows, selected
 
-VERSION = "pws-estimator-1.0"
+VERSION = "pws-estimator-1.1"
 
 
 def precise_reference_comparison(
@@ -328,6 +329,7 @@ def predict(
     method: str = "equal_weights",
     created: datetime | None = None,
     run_id: str | None = None,
+    checkpoint: str | None = None,
 ) -> dict[str, Any]:
     at, target = utc(created or utc_now()), utc(target)
     if target <= at:
@@ -345,13 +347,18 @@ def predict(
         raise ValueError("Target already received")
     if method not in {
         "equal_weights",
+        "nearest",
+        "median",
         "inverse_distance",
         "inverse_historical_error",
         "quality_weighted",
     }:
         raise ValueError("Unknown weighting method")
     contributions: list[dict[str, Any]] = []
-    for item in sorted(inventory(connection, airport), key=lambda row: row["station_id"]):
+    for item in sorted(
+        inventory(connection, airport),
+        key=lambda row: (row["distance_km"] if method == "nearest" else 0, row["station_id"]),
+    ):
         station_id = item["station_id"]
         if not selected(connection, station_id, airport, at):
             continue
@@ -413,15 +420,24 @@ def predict(
                 "discovery_id": snapshot["id"],
                 "latitude": station.latitude,
                 "longitude": station.longitude,
+                "distance_km": snapshot["distance_km"],
+                "source_event_time": candidate.get("observation_time"),
+                "provider_timestamp": candidate.get("provider_timestamp"),
+                "provider_timestamp_kind": candidate.get("provider_timestamp_kind"),
+                "quality_flags": candidate.get("quality_flags", []),
             }
         )
     if not contributions:
         raise ValueError(
             "INSUFFICIENT DATA: no eligible selected observations for weighting method"
         )
+    if method == "nearest":
+        contributions = [min(contributions, key=lambda c: (c["distance_km"], c["station_id"]))]
     estimate = sum(
         (c["temperature_c"] - c["correction_c"]) * c["weight"] for c in contributions
     ) / sum(c["weight"] for c in contributions)
+    if method == "median":
+        estimate = statistics.median(c["temperature_c"] - c["correction_c"] for c in contributions)
     completed = at if created is not None else utc_now()
     if target <= completed:
         raise ValueError("Target elapsed before prediction construction completed")
@@ -436,7 +452,15 @@ def predict(
         "estimate_c": estimate,
         "integer_temperature": icao_round_temperature(estimate),
         "method": method,
+        "checkpoint": checkpoint,
+        "experiment_class": "PRE_OBSERVATION",
+        "input_cutoff_time": at.isoformat(),
+        "input_observation_ids": [c["observation_id"] for c in contributions],
         "contributions": contributions,
+        "station_count": len(contributions),
+        "quality_flags": sorted(
+            {flag for c in contributions for flag in c.get("quality_flags", [])}
+        ),
         "config": config.model_dump(),
         "algorithm_version": VERSION,
         "evidence_class": "REALTIME_CAPTURED",

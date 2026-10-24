@@ -25,7 +25,27 @@ class ProviderError(Exception):
 
 
 class Transport:
-    def __init__(self, client: httpx.AsyncClient, store: Store) -> None:
+    def __init__(
+        self,
+        client: httpx.AsyncClient,
+        store: Store,
+        *,
+        request_spacing: float = 1,
+        timeout_seconds: float = 20,
+        max_attempts: int = 3,
+    ) -> None:
+        if (
+            not math.isfinite(request_spacing)
+            or request_spacing < 1
+            or not 1 <= timeout_seconds <= 60
+            or not 1 <= max_attempts <= 3
+        ):
+            raise ValueError("Unsafe provider transport policy")
+        self.request_spacing, self.timeout_seconds, self.max_attempts = (
+            request_spacing,
+            timeout_seconds,
+            max_attempts,
+        )
         self.client, self.store = client, store
         self.next_request: dict[str, float] = {}
         self.locks: dict[str, asyncio.Lock] = {}
@@ -37,17 +57,19 @@ class Transport:
         async with self.locks.setdefault(provider, asyncio.Lock()):
             if provider in self.disabled:
                 raise ProviderError("PROVIDER_DISABLED")
-            for attempt in range(3):
+            for attempt in range(self.max_attempts):
                 delay = max(0, self.next_request.get(provider, 0) - time.monotonic())
                 if delay > 30:
                     raise ProviderError("PROVIDER_COOLDOWN", delay)
                 await asyncio.sleep(delay)
                 start, mono = utc_now(), time.perf_counter_ns()
-                self.next_request[provider] = time.monotonic() + 1
+                self.next_request[provider] = time.monotonic() + self.request_spacing
                 try:
-                    response = await self.client.get(url, headers=headers)
+                    response = await self.client.get(
+                        url, headers=headers, timeout=self.timeout_seconds
+                    )
                 except (httpx.TimeoutException, httpx.NetworkError):
-                    if attempt == 2:
+                    if attempt == self.max_attempts - 1:
                         raise ProviderError("TRANSPORT_FAILURE") from None
                     self.next_request[provider] = time.monotonic() + 2**attempt
                     continue
@@ -73,7 +95,7 @@ class Transport:
                     delay = max(300, retry_after(response.headers.get("Retry-After"), end))
                     self.next_request[provider] = time.monotonic() + delay
                     raise ProviderError("RATE_LIMITED", delay)
-                if response.status_code >= 500 and attempt < 2:
+                if response.status_code >= 500 and attempt < self.max_attempts - 1:
                     self.next_request[provider] = time.monotonic() + 2**attempt
                     continue
                 if response.status_code != 200:

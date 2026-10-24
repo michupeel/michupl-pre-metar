@@ -1,0 +1,46 @@
+{
+  "experiment": "continuous-v1",
+  "airports": [
+    "EDDM",
+    "EHAM",
+    "EPWA",
+    "EGLL"
+  ],
+  "providers": [
+    "opensensemap",
+    "sensor_community"
+  ],
+  "max_stations_per_provider_airport": 4,
+  "minimum_poll_interval": 300,
+  "maximum_poll_interval": 1800,
+  "discovery_seconds": 86400,
+  "checkpoints": [
+    600,
+    300,
+    180,
+    120,
+    60
+  ],
+  "checkpoint_tolerance": 5,
+  "database_path": "data/continuous-v1.sqlite3",
+  "raw_storage_path": "data/continuous-v1-raw",
+  "log_path": "logs/continuous",
+  "storage_warning_bytes": 10000000000,
+  "quality_seconds": 3600,
+  "polling_limits": {
+    "opensensemap": {
+      "minimum_poll_interval": 300,
+      "maximum_poll_interval": 1800,
+      "request_spacing": 1,
+      "timeout_seconds": 20,
+      "max_attempts": 3
+    },
+    "sensor_community": {
+      "minimum_poll_interval": 300,
+      "maximum_poll_interval": 1800,
+      "request_spacing": 1,
+      "timeout_seconds": 20,
+      "max_attempts": 3
+    }
+  }
+}

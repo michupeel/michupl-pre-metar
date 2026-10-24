@@ -19,6 +19,8 @@ class Station:
 STATIONS = {
     "EDDM": Station("EDDM", "Europe/Berlin", (20, 50), "01262", "10870"),
     "EHAM": Station("EHAM", "Europe/Amsterdam", (25, 55), "240", "06240"),
+    "EPWA": Station("EPWA", "Europe/Warsaw", (0, 30), "", "12375"),
+    "EGLL": Station("EGLL", "Europe/London", (20, 50), "", "03772"),
 }
 
 
@@ -61,7 +63,7 @@ class MetarWsAtisSource(AtisSource, Protocol):
 def configured_sources(stations: set[str], names: set[str], interval: float) -> list[HttpSource]:
     unknown = stations - STATIONS.keys()
     if unknown:
-        raise ValueError("Only EDDM and EHAM are enabled in Milestone 1")
+        raise ValueError("Unknown configured airport")
     available = {"awc", "dwd_10min", "knmi_metar"}
     if names - available:
         raise ValueError("Requested source disabled or unknown; run premetar sources")

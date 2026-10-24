@@ -27,6 +27,7 @@ from premetar.sources import STATIONS, HttpSource, next_report
 from premetar.store import Store
 
 if TYPE_CHECKING:
+    from premetar.continuous.config import Config
     from premetar.pws.models import Settings
 
 LOG = logging.getLogger("premetar")
@@ -210,6 +211,7 @@ async def collect(
     transport: httpx.AsyncBaseTransport | None = None,
     pws_settings: "Settings | None" = None,
     pws_airports: set[str] | None = None,
+    continuous_config: "Config | None" = None,
 ) -> str:
     if pws_settings is not None and (duration is None or not 0 < duration <= 86400):
         raise ValueError("Combined PWS collection requires a duration in (0,86400] seconds")
@@ -240,8 +242,35 @@ async def collect(
     # One collector per DB, including across processes; a live lock is never stolen.
     await asyncio.to_thread(database.parent.mkdir, parents=True, exist_ok=True)
     lock = database.with_suffix(database.suffix + ".lock")
-    lock_file = lock.open("x", encoding="utf-8")
-    if pws_settings is not None:
+    from premetar.continuous.locking import acquire
+
+    if continuous_config is not None:
+        manifest["continuous_config"] = continuous_config.model_dump(mode="json")
+        continuous_protocol = (
+            files("premetar.continuous").joinpath("protocol.md").read_text(encoding="utf-8")
+        )
+        manifest["continuous_protocol"] = continuous_protocol
+        manifest["continuous_protocol_sha256"] = hashlib.sha256(
+            continuous_protocol.encode()
+        ).hexdigest()
+        source_names = [
+            "collector.py",
+            "parsers.py",
+            "pws/analysis.py",
+            "pws/quality.py",
+            "pws/providers.py",
+            "continuous/config.py",
+            "continuous/data.py",
+            "continuous/engine.py",
+            "continuous/polling.py",
+        ]
+        manifest["algorithm_source_sha256"] = {
+            name: hashlib.sha256(files("premetar").joinpath(name).read_bytes()).hexdigest()
+            for name in source_names
+        }
+
+    lock_file = acquire(lock, run_id, recover=continuous_config is not None)
+    if pws_settings is not None or continuous_config is not None:
         from premetar.pws.repository import PWSStore
 
         store: Store = PWSStore(database, raw_path, run_id)
@@ -252,8 +281,8 @@ async def collect(
     previous_handlers = {}
     reason = "graceful_shutdown"
     try:
-        lock_file.write(f"{run_id}\n")
-        lock_file.flush()
+        if continuous_config is not None and continuous_config.stop_path.exists():
+            continuous_config.stop_path.unlink()
         await store.open(manifest, {s.name: s.interval_sec for s in sources})
         store_open = True
         for sig in (signal.SIGINT, signal.SIGTERM):
@@ -298,6 +327,16 @@ async def collect(
                     )
 
                 tasks.append(asyncio.create_task(pws_loop(), name="pws"))
+            if continuous_config is not None:
+                from premetar.continuous.engine import run_jobs
+                from premetar.pws.repository import PWSStore
+
+                assert isinstance(store, PWSStore)
+                tasks.append(
+                    asyncio.create_task(
+                        run_jobs(store, client, stop, continuous_config), name="continuous"
+                    )
+                )
             started = time.monotonic()
             with Live(
                 live_table(stations, state),
@@ -318,6 +357,9 @@ async def collect(
                         ].exception()
                     if all(t.done() for t in tasks):
                         reason = "all_sources_disabled"
+                        break
+                    if continuous_config is not None and continuous_config.stop_path.exists():
+                        reason = "stop_requested"
                         break
                     await store.heartbeat()
                     if live:
