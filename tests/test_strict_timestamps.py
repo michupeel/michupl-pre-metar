@@ -304,3 +304,22 @@ def test_clock_cli_keeps_native_unicode_evidence_in_files(monkeypatch):
     assert result.exit_code == 0
     assert "UNKNOWN" in result.stdout
     assert "native localized" not in result.stdout
+
+
+def test_status_cli_escapes_native_unicode(monkeypatch):
+    from contextlib import nullcontext
+
+    from typer.testing import CliRunner
+
+    from premetar.cli import app
+    from premetar.continuous.config import Config
+
+    monkeypatch.setattr("premetar.continuous.cli.load", lambda _: Config())
+    monkeypatch.setattr("premetar.continuous.cli.connect", lambda _: nullcontext(None))
+    monkeypatch.setattr(
+        "premetar.continuous.cli.snapshot", lambda _: dict(clock={"ntp_status": "\ufffd"})
+    )
+    result = CliRunner().invoke(app, ["continuous", "status"])
+    assert result.exit_code == 0
+    assert r"\ufffd" in result.stdout
+    assert "\ufffd" not in result.stdout

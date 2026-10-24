@@ -82,7 +82,12 @@ def status(config: Path = DEFAULT) -> None:
     """Read persistent heartbeat, coverage and errors without a collector dependency."""
     cfg = load(config)
     with connect(cfg.database_path) as conn:
-        console.print_json(json.dumps(snapshot(conn), default=str))
+        # Preserve all evidence as escaped JSON on legacy Windows code pages.
+        console.print(
+            json.dumps(snapshot(conn), default=str, ensure_ascii=True, indent=2),
+            markup=False,
+            highlight=False,
+        )
 
 
 @app.command()
