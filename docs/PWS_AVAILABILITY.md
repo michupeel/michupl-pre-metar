@@ -51,7 +51,7 @@ ID tie-breaks; future prediction outcomes never enter ranking.
 
 ## Polling and recovery
 
-At least2s global OSM request spacing, one in-flight request, existing bounded
+Target2s global OSM request spacing (observed minimum1.976s under Windows timer granularity), one in-flight request, existing bounded
 retry/timeouts and Retry-After constraints. No numeric public quota is asserted;
 these are conservative local limits, not a provider allowance. Selected cadence
 uses prior unique strict-eligible event clocks, bounded300–1800s; failures back

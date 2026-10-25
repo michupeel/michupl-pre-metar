@@ -330,3 +330,41 @@ Conclusion: integrity safeguards implemented; useful pre-METAR skill remains
 INSUFFICIENT DATA. No validated information advantage claimed. Next: retain the
 prospective stream, inspect valid coverage over days, and freeze any future cohort
 changes before evaluating them.
+
+
+## 2026-10-25 — Milestone1.6.2 active sensor recovery
+
+Baseline: read-only root-cause investigation established empty latest responses,
+not parser failures or relaxed timestamp semantics. At controlled stop5464 OSM
+normalized records included4036 empty polls. Hypothesis: actual latest-reading
+preflight and versioned operational cohorts increase usable coverage without
+weakening integrity. No future prediction outcomes enter selection.
+
+Method: separate poll outcomes from source measurements; raw-first per-box latest
+preflight over the four existing20km airport regions; strict300s measurement
+clocks/physical/exposure checks; cap4 distinct provider station records with
+one sensor each; bounded inactivity/recovery hysteresis. Repeatable additive
+migration was rehearsed on a consistent backup and verified after graceful stop.
+
+Observed12:42:26Z:216 sensor poll attempts,103 NO_MEASUREMENT outcomes,0 new empty
+normalized records,109 new timestamped numeric measurements,72 fresh outdoor
+measurements. Selected station/sensor counts EDDM4,EHAM3,EPWA4,EGLL3. Warsaw
+preflight checked107 temperature instruments across104 temperature boxes;27
+passed a latest check, versus the old cohort's single useful provider station.
+Freshness expires: only4 Warsaw instruments remained currently eligible at the
+snapshot; this is not evidence all27 remained live simultaneously. Forecasts use
+only the selected sensors and as-of eligible receipts.14 old station records
+were deselected,12 added,2 retained; all historical rows and forecasts preserved.
+
+Operational validation:199 tests, Ruff/format and strict mypy passed. Task running
+with new code; actual T−10 forecasts record selection versions;18 settlements
+appended after restart. SQLite integrity/foreign keys and historical-row
+preservation pass. Existing hourly QC blocked the writer for about164s; one AWC
+timeout was isolated while other providers continued. These are limitations, not
+hidden successful continuous coverage. See docs/PWS_RECOVERY_VALIDATION.md.
+
+Decision: operational recovery deployed. EXP-0006/0007/0008/0009 remain OPEN;
+INSUFFICIENT DATA for improved prediction accuracy or an information edge. Next:
+collect prospective data, assess cohort freshness/coverage over days, separately
+address shared-writer QC scalability, and review clock uncertainty before latency
+claims. Qwen usage and rejected proposals recorded in the existing audit.

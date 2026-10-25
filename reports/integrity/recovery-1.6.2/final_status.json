@@ -1,0 +1,874 @@
+{
+  "health": {
+    "utc": "2026-10-25T12:45:43.852553+00:00",
+    "run": {
+      "id": "20261025T122608622365Z-3dec2c3c",
+      "started_at": "2026-10-25T12:26:09.588745+00:00",
+      "ended_at": null,
+      "heartbeat": "2026-10-25T12:45:43.359558+00:00",
+      "exit_reason": null,
+      "heartbeat_age_seconds": 0.492995,
+      "state": "RUNNING"
+    },
+    "clock_synchronization": "UNKNOWN",
+    "clock_verification": {
+      "verification_status": "UNKNOWN",
+      "verified_at": "2026-10-24T17:28:30.073063+00:00",
+      "reason": "CLOCK_AUDIT_EXPIRED"
+    },
+    "clock": {
+      "system_time": "2026-10-25T12:26:08.622864+00:00",
+      "local_timezone": "\u015arodkowoeuropejski czas stand.",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "monotonic_clock": "perf_counter_ns",
+      "monotonic_resolution_sec": 1e-07,
+      "synchronization_confirmed": false,
+      "offset_sec": null,
+      "ntp_query_exit_code": 2147943462,
+      "ntp_status": "The following error occurred: Us\ufffduga nie zosta\ufffda uruchomiona. (0x80070426)\n",
+      "warning": "Absolute clock offset not independently verified; use within-run monotonic latency",
+      "verification_status": "UNKNOWN",
+      "clock_audit": {
+        "verification_status": "UNKNOWN",
+        "verified_at": "2026-10-24T17:28:30.073063+00:00",
+        "reason": "CLOCK_AUDIT_EXPIRED"
+      },
+      "current_verification": {
+        "verification_status": "UNKNOWN",
+        "verified_at": "2026-10-24T17:28:30.073063+00:00",
+        "reason": "CLOCK_AUDIT_EXPIRED"
+      }
+    },
+    "health": {
+      "run_id": "20261025T122608622365Z-3dec2c3c",
+      "pid": 51776,
+      "updated_at": "2026-10-25T12:45:26.348609+00:00",
+      "data_json": "{\"uptime_seconds\": 1131.125, \"raw_bytes\": 48895893, \"raw_size_checked_at\": \"2026-10-25T12:27:06.347076+00:00\", \"database_bytes\": 116178658, \"storage_warning\": false}",
+      "data": {
+        "uptime_seconds": 1131.125,
+        "raw_bytes": 48895893,
+        "raw_size_checked_at": "2026-10-25T12:27:06.347076+00:00",
+        "database_bytes": 116178658,
+        "storage_warning": false
+      }
+    },
+    "airports": [
+      {
+        "airport": "EDDM",
+        "next_metar": "2026-10-25T12:50:00+00:00",
+        "countdown_seconds": 256.147447,
+        "selected": 8,
+        "active": 4,
+        "latest_measurement_time": "2026-10-25T12:44:14.700000+00:00",
+        "latest_provider_ingest_time": "2026-10-25T12:43:34Z",
+        "last_metar": "2026-10-25T12:20:00Z",
+        "pending_predictions": 12
+      },
+      {
+        "airport": "EHAM",
+        "next_metar": "2026-10-25T12:55:00+00:00",
+        "countdown_seconds": 556.147447,
+        "selected": 7,
+        "active": 3,
+        "latest_measurement_time": "2026-10-25T12:44:04.295000+00:00",
+        "latest_provider_ingest_time": "2026-10-25T12:43:55Z",
+        "last_metar": "2026-10-25T12:25:00Z",
+        "pending_predictions": 21
+      },
+      {
+        "airport": "EPWA",
+        "next_metar": "2026-10-25T13:00:00+00:00",
+        "countdown_seconds": 856.147447,
+        "selected": 8,
+        "active": 3,
+        "latest_measurement_time": "2026-10-25T12:43:26.901000+00:00",
+        "latest_provider_ingest_time": "2026-10-25T12:42:12Z",
+        "last_metar": "2026-10-25T12:30:00Z",
+        "pending_predictions": 0
+      },
+      {
+        "airport": "EGLL",
+        "next_metar": "2026-10-25T12:50:00+00:00",
+        "countdown_seconds": 256.147447,
+        "selected": 7,
+        "active": 0,
+        "latest_measurement_time": "2026-10-25T12:40:24.306000+00:00",
+        "latest_provider_ingest_time": "2026-10-25T12:43:44Z",
+        "last_metar": "2026-10-25T12:20:00Z",
+        "pending_predictions": 12
+      }
+    ],
+    "stations": [
+      {
+        "airport": "EDDM",
+        "station_id": "sensor_community:7517",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:41:12Z",
+        "latest_receive_time": "2026-10-25T12:44:25.019393+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "sensor_community:47203",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:54Z",
+        "latest_receive_time": "2026-10-25T12:44:29.038575+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "sensor_community:21126",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:16Z",
+        "latest_receive_time": "2026-10-25T12:44:21.244694+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "sensor_community:6305",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:34Z",
+        "latest_receive_time": "2026-10-25T12:44:25.967099+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "sensor_community:40071",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:53Z",
+        "latest_receive_time": "2026-10-25T12:44:34.284082+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "sensor_community:33268",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:55Z",
+        "latest_receive_time": "2026-10-25T12:44:30.020580+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "sensor_community:56300",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:53Z",
+        "latest_receive_time": "2026-10-25T12:44:31.113330+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "sensor_community:39076",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:16Z",
+        "latest_receive_time": "2026-10-25T12:44:32.190269+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:5c755e5d7dea1400190366e8",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:42:44.738000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:25.559456+00:00",
+        "median_observation_age": 40.904379,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:5a7c5992398b82001135528e",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:20.787959+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:5e27609c4b0ac1001a52ad9d",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:08.743183+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:64d0ef0506a22e0007860fa0",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": "2026-07-25T09:10:17.304000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-24T12:13:09.165236+00:00",
+        "median_observation_age": 7873371.861236,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "sensor_community:10739",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:41:41Z",
+        "latest_receive_time": "2026-10-25T12:44:36.221160+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "sensor_community:54931",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:12Z",
+        "latest_receive_time": "2026-10-25T12:44:38.361205+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "sensor_community:80936",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:12Z",
+        "latest_receive_time": "2026-10-25T12:44:41.155139+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "sensor_community:58706",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:40:02Z",
+        "latest_receive_time": "2026-10-25T12:44:43.115341+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "sensor_community:55953",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:06Z",
+        "latest_receive_time": "2026-10-25T12:44:48.161316+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "sensor_community:25631",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:51Z",
+        "latest_receive_time": "2026-10-25T12:44:44.174183+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "sensor_community:53047",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:43:44Z",
+        "latest_receive_time": "2026-10-25T12:44:45.087303+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "sensor_community:46665",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": "2026-10-25T12:42:48Z",
+        "latest_receive_time": "2026-10-25T12:44:46.187632+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN_MEASUREMENT_SERVER_INGEST_PROXY",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:59aef08fd67eb50011d0697a",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:25.180979+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:63834b24f408c4001bf6d650",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": "2026-07-05T12:35:02.284000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-24T12:13:22.183397+00:00",
+        "median_observation_age": 9589099.899397,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:60a4ff6212680d001b16bd71",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:22.942341+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:66f705224372ea00073cec93",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": "2026-04-06T15:28:33.494000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-24T12:13:24.209490+00:00",
+        "median_observation_age": 17354690.71549,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5cda79cdff898b001a93b4b5",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:27.125933+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5d15cb0830bde6001aeb0f24",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:28.142072+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5dbdbe79a68df4001a7aca4c",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": "2026-10-25T12:34:28.996000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:36:20.178504+00:00",
+        "median_observation_age": 109.6475935,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5c5e8e08c6ca9000190a0572",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:26.115714+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:5f4e23fc327264001b7a397e",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:30.169209+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:623f6e24c4de74001c66f4cb",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": "2026-10-25T12:37:39.316000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:41:54.432400+00:00",
+        "median_observation_age": 146.126966,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:5a21be8664434b0010b67bf8",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:31.180420+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:61f5562f25d800001b95af35",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": false,
+        "usable_now": false,
+        "latest_measurement_time": null,
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:23:32.189579+00:00",
+        "median_observation_age": null,
+        "event_time_semantics": "UNKNOWN",
+        "reason": "DISCOVERY_CANDIDATE continuous-v1: provider-balanced; recent discovery metadata, exposure, sensor metadata, distance; no predictive selection"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:5bce161fbb15b700196e256d",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:41:35.320000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:21.708824+00:00",
+        "median_observation_age": 61.80883250000001,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=1"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:5beb063756a15500193139f0",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:43:45.850000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:23.580030+00:00",
+        "median_observation_age": 36.1068955,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=1"
+      },
+      {
+        "airport": "EDDM",
+        "station_id": "opensensemap:65c13f99e9153000077c4d83",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:44:14.700000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:27.577573+00:00",
+        "median_observation_age": 10.2288915,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=1"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:640b68626b84850007762702",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:43:41.910000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:33.791562+00:00",
+        "median_observation_age": 50.049040500000004,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=2"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:6137877084c610001cae82e1",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:42:32.567000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:31.704933+00:00",
+        "median_observation_age": 74.244853,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=2"
+      },
+      {
+        "airport": "EHAM",
+        "station_id": "opensensemap:5fa3fc2867d8a1001b5f9d6d",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:44:04.295000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:44:29.572592+00:00",
+        "median_observation_age": 63.0306885,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=2"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5d6145ec953683001a6b7fdb",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:41:07.245000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:41:18.419880+00:00",
+        "median_observation_age": 11.17488,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=3"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:61c1f4ff80a739001cda08bb",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:43:00.784000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:45:13.468921+00:00",
+        "median_observation_age": 132.684921,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=3"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:6941429cfdfe0700083492f4",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": true,
+        "latest_measurement_time": "2026-10-25T12:43:26.901000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:45:41.690997+00:00",
+        "median_observation_age": 33.951131,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=3"
+      },
+      {
+        "airport": "EPWA",
+        "station_id": "opensensemap:5c6e9151154515001982e4da",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": "2026-10-25T12:38:34.240000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:41:15.193787+00:00",
+        "median_observation_age": 34.030686,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=3"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:5e61c1cc6cc61f001c6e4086",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": "2026-10-25T12:40:19.224000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:41:40.437684+00:00",
+        "median_observation_age": 52.9787585,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=4"
+      },
+      {
+        "airport": "EGLL",
+        "station_id": "opensensemap:626030a418aca4001ca27240",
+        "tier": "DISCOVERY_CANDIDATE",
+        "monitoring_selected": true,
+        "usable_now": false,
+        "latest_measurement_time": "2026-10-25T12:40:24.306000+00:00",
+        "latest_provider_ingest_time": null,
+        "latest_receive_time": "2026-10-25T12:41:50.511462+00:00",
+        "median_observation_age": 99.232872,
+        "event_time_semantics": "SENSOR_MEASUREMENT",
+        "reason": "AUTO_AVAILABILITY version=4"
+      }
+    ],
+    "providers": [
+      {
+        "provider": "opensensemap",
+        "state": "HEALTHY",
+        "polls": 4826,
+        "sensor_poll_outcomes": [
+          {
+            "outcome": "INVALID_MEASUREMENT",
+            "sensor_poll_attempts": 8
+          },
+          {
+            "outcome": "NO_MEASUREMENT",
+            "sensor_poll_attempts": 103
+          },
+          {
+            "outcome": "STALE_MEASUREMENT",
+            "sensor_poll_attempts": 33
+          },
+          {
+            "outcome": "SUCCESS_NEW_MEASUREMENT",
+            "sensor_poll_attempts": 81
+          }
+        ],
+        "requests": 4838,
+        "new": 1546,
+        "normalized_records_including_quarantined": 5582,
+        "actual_measurements": 1546,
+        "legacy_empty_records": 4036,
+        "measurement_count_definition": "TIMESTAMPED_TEMPERATURE_RECORDS_NOT_NECESSARILY_STRICT_ELIGIBLE",
+        "duplicates": 874,
+        "failures": 3,
+        "median_observation_age": 62.4197605
+      },
+      {
+        "provider": "sensor_community",
+        "state": "STALE",
+        "polls": 4540,
+        "sensor_poll_outcomes": [],
+        "requests": 6780,
+        "new": 0,
+        "normalized_records_including_quarantined": 12199,
+        "actual_measurements": 0,
+        "legacy_empty_records": 0,
+        "measurement_count_definition": "TIMESTAMPED_TEMPERATURE_RECORDS_NOT_NECESSARILY_STRICT_ELIGIBLE",
+        "duplicates": 410,
+        "failures": 3,
+        "median_observation_age": null
+      }
+    ],
+    "official_providers": [
+      {
+        "run_id": "20261025T122608622365Z-3dec2c3c",
+        "source": "awc",
+        "last_attempt": "2026-10-25T12:44:44.065484+00:00",
+        "last_success": "2026-10-25T12:44:44.657349+00:00",
+        "last_event": "2026-10-25T12:30:00+00:00",
+        "last_error": null,
+        "consecutive_errors": 0,
+        "interval_sec": 60.0
+      },
+      {
+        "run_id": "20261025T122608622365Z-3dec2c3c",
+        "source": "dwd_10min",
+        "last_attempt": "2026-10-25T12:45:14.329239+00:00",
+        "last_success": "2026-10-25T12:45:14.693706+00:00",
+        "last_event": "2026-10-25T11:50:00+00:00",
+        "last_error": null,
+        "consecutive_errors": 0,
+        "interval_sec": 60.0
+      },
+      {
+        "run_id": "20261025T122608622365Z-3dec2c3c",
+        "source": "knmi_metar",
+        "last_attempt": "2026-10-25T12:45:14.297567+00:00",
+        "last_success": "2026-10-25T12:45:14.539861+00:00",
+        "last_event": "2026-10-25T12:25:00+00:00",
+        "last_error": null,
+        "consecutive_errors": 0,
+        "interval_sec": 60.0
+      }
+    ],
+    "observation_count_definition": "NORMALIZED_RECORDS_INCLUDING_QUARANTINED_NOT_VALID_MEASUREMENTS",
+    "measurement_eligibility_at_receipt": [
+      {
+        "provider": "opensensemap",
+        "status": "INVALID_TIMESTAMP",
+        "records": 4
+      },
+      {
+        "provider": "opensensemap",
+        "status": "STALE",
+        "records": 38
+      },
+      {
+        "provider": "opensensemap",
+        "status": "UNKNOWN_TIMESTAMP_PROVENANCE",
+        "records": 4036
+      },
+      {
+        "provider": "opensensemap",
+        "status": "VALID",
+        "records": 1504
+      },
+      {
+        "provider": "sensor_community",
+        "status": "UNKNOWN_TIMESTAMP_PROVENANCE",
+        "records": 12199
+      }
+    ],
+    "observations": 17781,
+    "actual_measurements": 1546,
+    "legacy_empty_records": 4036,
+    "predictions": 4544,
+    "settled": 4499,
+    "recent_errors": [
+      {
+        "source": "awc",
+        "at": "2026-10-25T12:41:42.226471+00:00",
+        "error_class": "ReadTimeout"
+      },
+      {
+        "source": "pws_sensor_community",
+        "at": "2026-10-25T12:00:29.318032+00:00",
+        "error_class": "TRANSPORT_FAILURE"
+      },
+      {
+        "source": "pws_sensor_community",
+        "at": "2026-10-25T11:59:27.366086+00:00",
+        "error_class": "TRANSPORT_FAILURE"
+      },
+      {
+        "source": "awc",
+        "at": "2026-10-25T11:03:12.160534+00:00",
+        "error_class": "ReadTimeout"
+      },
+      {
+        "source": "awc",
+        "at": "2026-10-25T10:55:43.254701+00:00",
+        "error_class": "ReadTimeout"
+      },
+      {
+        "source": "pws_opensensemap",
+        "at": "2026-10-25T09:55:16.186812+00:00",
+        "error_class": "HTTP_502"
+      },
+      {
+        "source": "pws_opensensemap",
+        "at": "2026-10-25T09:48:51.685147+00:00",
+        "error_class": "TRANSPORT_FAILURE"
+      },
+      {
+        "source": "awc",
+        "at": "2026-10-25T09:33:53.219352+00:00",
+        "error_class": "ReadTimeout"
+      },
+      {
+        "source": "awc",
+        "at": "2026-10-25T08:32:51.366755+00:00",
+        "error_class": "ReadTimeout"
+      },
+      {
+        "source": "pws_sensor_community",
+        "at": "2026-10-25T06:00:56.589362+00:00",
+        "error_class": "RemoteProtocolError"
+      }
+    ]
+  },
+  "awc_recovery": [
+    {
+      "received_at": "2026-10-25T12:44:44.657349+00:00",
+      "http_status": 200
+    },
+    {
+      "received_at": "2026-10-25T12:43:44.051065+00:00",
+      "http_status": 200
+    }
+  ],
+  "monitored": [
+    {
+      "airport_icao": "EDDM",
+      "sensors": 4,
+      "latest": "2026-10-25T12:44:27.582585+00:00"
+    },
+    {
+      "airport_icao": "EGLL",
+      "sensors": 3,
+      "latest": "2026-10-25T12:41:54.493678+00:00"
+    },
+    {
+      "airport_icao": "EHAM",
+      "sensors": 3,
+      "latest": "2026-10-25T12:44:33.811108+00:00"
+    },
+    {
+      "airport_icao": "EPWA",
+      "sensors": 4,
+      "latest": "2026-10-25T12:45:41.695999+00:00"
+    }
+  ]
+}
