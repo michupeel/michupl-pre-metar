@@ -1,7 +1,9 @@
 """Deterministic flags: geographic disagreement is not proof of bad hardware."""
 
 import math
-from datetime import datetime
+from bisect import bisect_left, bisect_right
+from collections.abc import Callable
+from datetime import datetime, timedelta
 from statistics import median
 from typing import Any
 
@@ -243,24 +245,55 @@ def assess(
     }
 
 
+def prepare_peer_history(
+    histories: list[tuple[Station, list[dict[str, Any]]]], config: QCConfig
+) -> dict[str, tuple[list[datetime], list[dict[str, Any]]]]:
+    result = {}
+    for station, data in histories:
+        entries = []
+        for row in data:
+            # Anything invalid at original receipt can never become time-eligible later.
+            check = assess_time(
+                row,
+                maximum_age=config.stale_seconds,
+                minimum_temperature=config.min_temperature_c,
+                maximum_temperature=config.max_temperature_c,
+            )
+            if check.eligible and check.measurement_time:
+                entries.append((check.measurement_time, row))
+        entries.sort(key=lambda pair: pair[0])
+        result[station.station_id] = ([t for t, _ in entries], [r for _, r in entries])
+    return result
+
+
 def historical_peer_differences(
     station: Station,
     data: list[dict[str, Any]],
     histories: list[tuple[Station, list[dict[str, Any]]]],
     config: QCConfig,
+    prepared: dict[str, tuple[list[datetime], list[dict[str, Any]]]] | None = None,
+    cancelled: Callable[[], bool] | None = None,
 ) -> list[tuple[datetime, float]]:
     differences = []
     seen = set()
+    index = prepared if prepared is not None else prepare_peer_history(histories, config)
     # Bounded deterministic recent sample window; samples are checked as of their own receipts.
     for row in sorted(data, key=lambda r: r["first_receive_time"])[-1000:]:
+        if cancelled and cancelled():
+            raise InterruptedError("QC cancelled")
         at = utc(datetime.fromisoformat(row["first_receive_time"]))
         clock = effective_time(row)
         if not clock or clock in seen or not eligible(row, at, config):
             continue
         seen.add(clock)
         peers = []
-        for other, other_data in histories:
-            candidates = [p for p in other_data if eligible(p, at, config)]
+        for other, _other_data in histories:
+            if cancelled and cancelled():
+                raise InterruptedError("QC cancelled")
+            clocks, records = index[other.station_id]
+            lower = bisect_left(clocks, at - timedelta(seconds=config.stale_seconds))
+            upper = bisect_right(clocks, at)
+            candidates = [p for p in records[lower:upper] if eligible(p, at, config)]
             if candidates:
                 peers.append((other, max(candidates, key=lambda r: str(effective_time(r)))))
         comparison = peer_comparison(station, row["temperature_c"], at, peers, config)

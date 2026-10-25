@@ -6,16 +6,18 @@ import hashlib
 import json
 import os
 import sqlite3
+import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from functools import partial
 from pathlib import Path
 from typing import Any, TypeVar
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from uuid import uuid4
 
 from premetar.model import Observation, utc_now
+from premetar.performance import LOCAL, TimedConnection, Timings
+from premetar.performance import policy as timing_policy
 
 T = TypeVar("T")
 SAFE_HEADERS = {
@@ -83,6 +85,7 @@ CREATE TABLE IF NOT EXISTS report_receipts(
  run_id TEXT NOT NULL, source TEXT NOT NULL, collector_receive_time TEXT NOT NULL,
  receive_monotonic_ns INTEGER NOT NULL, source_receipt_time TEXT,
  UNIQUE(raw_id,observation_id));
+CREATE INDEX IF NOT EXISTS receipt_observation_clock ON report_receipts(observation_id,collector_receive_time);
 CREATE TABLE IF NOT EXISTS source_health(
  run_id TEXT NOT NULL REFERENCES runs(id), source TEXT NOT NULL, last_attempt TEXT,
  last_success TEXT, last_event TEXT, last_error TEXT, consecutive_errors INTEGER NOT NULL DEFAULT 0,
@@ -98,16 +101,89 @@ class Store:
         self.database, self.raw_path, self.run_id = database, raw_path, run_id
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="premetar-disk")
         self.connection: sqlite3.Connection
+        self.timings = Timings()
+        self.pending = asyncio.Semaphore(timing_policy().max_pending)
 
     async def _call(self, fn: Callable[..., T], *args: Any) -> T:
-        return await asyncio.get_running_loop().run_in_executor(self.executor, partial(fn, *args))
+        queued = time.perf_counter_ns()
+        queued_utc = utc_now().isoformat()
+        names = {
+            "ingest": "PWS_INGEST",
+            "_parse_and_save": "METAR_INGEST",
+            "schedule": "PREDICTION_CREATE",
+            "settle": "PREDICTION_SETTLE",
+            "publish_quality": "QC_DATABASE_WRITE",
+            "_heartbeat": "COLLECTOR_HEARTBEAT",
+            "heartbeat": "HEALTH_WRITE",
+            "_capture": "RAW_CAPTURE",
+        }
+        name = names.get(getattr(fn, "__name__", ""), "DATABASE_OPERATION")
+
+        def execute() -> T:
+            start = time.perf_counter_ns()
+            sql_before = getattr(LOCAL, "sql_ns", 0)
+            changes = self.connection.total_changes if hasattr(self, "connection") else 0
+            item: dict[str, Any] = dict(
+                operation_name=name,
+                operation_start_utc=queued_utc,
+                worker_start_utc=utc_now().isoformat(),
+                success=True,
+                error=None,
+                rows_processed=None,
+            )
+            try:
+                result = fn(*args)
+                item["rows_processed"] = (
+                    len(result)
+                    if isinstance(result, list)
+                    else 1
+                    if isinstance(result, str)
+                    else None
+                )
+                return result
+            except BaseException as exc:
+                item.update(
+                    success=False,
+                    error=type(exc).__name__,
+                    sqlite_error=getattr(exc, "sqlite_errorname", None),
+                )
+                raise
+            finally:
+                end = time.perf_counter_ns()
+                try:
+                    changed = (
+                        self.connection.total_changes - changes
+                        if hasattr(self, "connection")
+                        else None
+                    )
+                except sqlite3.ProgrammingError:
+                    changed = None  # Connection just closed.
+                item.update(
+                    operation_end_utc=utc_now().isoformat(),
+                    duration_ms=(end - queued) / 1e6,
+                    queue_wait_ms=(start - queued) / 1e6,
+                    worker_execution_ms=(end - start) / 1e6,
+                    db_execution_ms=(getattr(LOCAL, "sql_ns", 0) - sql_before) / 1e6,
+                    rows_changed=changed,
+                )
+                self.timings.record(item)
+
+        async with self.pending:
+            future = asyncio.get_running_loop().run_in_executor(self.executor, execute)
+            try:
+                return await asyncio.shield(future)
+            except asyncio.CancelledError:
+                await (
+                    future
+                )  # Finish the bounded in-flight disk operation before releasing capacity.
+                raise
 
     async def open(self, manifest: dict[str, Any], intervals: dict[str, float]) -> None:
         await self._call(self._open, manifest, intervals)
 
     def _open(self, manifest: dict[str, Any], intervals: dict[str, float]) -> None:
         self.database.parent.mkdir(parents=True, exist_ok=True)
-        self.connection = sqlite3.connect(self.database, timeout=30)
+        self.connection = sqlite3.connect(self.database, timeout=30, factory=TimedConnection)
         self.connection.executescript(SCHEMA)
         version = self.connection.execute("SELECT max(version) FROM schema_version").fetchone()[0]
         if version != 1:

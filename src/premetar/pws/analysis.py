@@ -16,27 +16,42 @@ from premetar.pws.geometry import haversine_km
 from premetar.pws.integrity import first_target_receive, prediction_issues
 from premetar.pws.models import QCConfig, Station, utc
 from premetar.pws.quality import effective_time, eligible
-from premetar.pws.repository import inventory, readings, rows, selected
+from premetar.pws.repository import inventory, parameter_available, readings, rows, selected
 from premetar.pws.timestamps import policy
 
-VERSION = "pws-estimator-1.3-active-sensors"
+VERSION = "pws-estimator-1.4-deferred-qc"
 
 
-def precise_reference_comparison(
-    connection: sqlite3.Connection, airport: str, station_id: str, config: QCConfig, at: datetime
-) -> dict[str, Any]:
-    """Separate conditional comparison to existing DWD 0.1C observations.
-
-    This does not establish METAR sensor parity or treat 0.1C as exact truth.
-    Calibration is evaluated chronologically, never used as METAR calibration.
-    """
-    references = rows(
+def precise_reference_rows(
+    connection: sqlite3.Connection, airport: str, at: datetime
+) -> list[dict[str, Any]]:
+    return rows(
         connection,
         """SELECT event_time,collector_receive_time,temperature_c,temperature_precision
         FROM observations WHERE station_icao=? AND product_type='DWD_10MIN'
         AND evidence_class='REALTIME_CAPTURED' AND temperature_c IS NOT NULL
         AND julianday(collector_receive_time)<=julianday(?)""",
         (airport, utc(at).isoformat()),
+    )
+
+
+def precise_reference_comparison(
+    connection: sqlite3.Connection,
+    airport: str,
+    station_id: str,
+    config: QCConfig,
+    at: datetime,
+    reference_rows: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Separate conditional comparison to existing DWD 0.1C observations.
+
+    This does not establish METAR sensor parity or treat 0.1C as exact truth.
+    Calibration is evaluated chronologically, never used as METAR calibration.
+    """
+    references = (
+        reference_rows
+        if reference_rows is not None
+        else precise_reference_rows(connection, airport, at)
     )
     unique: dict[datetime, dict[str, Any]] = {}
     conflicted: set[datetime] = set()
@@ -217,16 +232,10 @@ def latest_station_reading(
     return latest
 
 
-def make_pairs(
-    connection: sqlite3.Connection,
-    airport: str,
-    station_id: str,
-    config: QCConfig,
-    at: datetime,
-    lead_seconds: int = 600,
+def metar_reference_rows(
+    connection: sqlite3.Connection, airport: str, at: datetime
 ) -> list[dict[str, Any]]:
-    # Reuse existing METAR observations/receipts, never collect another reference.
-    references = rows(
+    return rows(
         connection,
         """SELECT o.identity,o.event_time,o.temperature_c,o.data_json,
         rr.collector_receive_time available FROM observations o
@@ -234,6 +243,23 @@ def make_pairs(
         WHERE o.station_icao=? AND o.product_type='METAR' AND o.evidence_class='REALTIME_CAPTURED'
         AND o.startup_censored=0 AND o.coverage_gap=0 AND julianday(rr.collector_receive_time)<=julianday(?)""",
         (airport, at.isoformat()),
+    )
+
+
+def make_pairs(
+    connection: sqlite3.Connection,
+    airport: str,
+    station_id: str,
+    config: QCConfig,
+    at: datetime,
+    lead_seconds: int = 600,
+    reference_rows: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    # Reuse existing METAR observations/receipts, never collect another reference.
+    references = (
+        reference_rows
+        if reference_rows is not None
+        else metar_reference_rows(connection, airport, at)
     )
     # Legacy METAR clocks serialize as Z; PWS clocks use +00:00. SQL narrows
     # candidates only; aware comparisons preserve UTC equivalence/microseconds.
@@ -396,16 +422,24 @@ def predict(
             connection,
             """SELECT * FROM pws_calibrations WHERE station_id=? AND airport_icao=?
             AND json_extract(data_json,'$.timestamp_policy_version')=?
-            AND created_at<=? AND trained_through<? ORDER BY created_at DESC,id DESC LIMIT 1""",
+            AND created_at<=? AND trained_through<? ORDER BY created_at DESC,id DESC""",
             (station_id, airport, policy().version, at.isoformat(), at.isoformat()),
         )
+        calibration = [
+            r
+            for r in calibration
+            if parameter_available(connection, json.loads(r["data_json"]), at)
+        ][:1]
         bias = json.loads(calibration[0]["data_json"])["bias"] if calibration else 0
         quality = rows(
             connection,
             """SELECT * FROM pws_quality_results WHERE station_id=? AND airport_icao=?
-            AND json_extract(data_json,'$.timestamp_policy_version')=? AND created_at<=? ORDER BY created_at DESC,id DESC LIMIT 1""",
+            AND json_extract(data_json,'$.timestamp_policy_version')=? AND created_at<=? ORDER BY created_at DESC,id DESC""",
             (station_id, airport, policy().version, at.isoformat()),
         )
+        quality = [
+            r for r in quality if parameter_available(connection, json.loads(r["data_json"]), at)
+        ][:1]
         q = json.loads(quality[0]["data_json"]) if quality else {}
         if "STUCK_SENSOR" in q.get("flags", []):
             continue

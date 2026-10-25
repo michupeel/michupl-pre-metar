@@ -302,6 +302,7 @@ def heartbeat(
         raw_bytes=raw_size,
         raw_size_checked_at=checked_at,
         database_bytes=db_size,
+        performance=store.timings.snapshot(),
         storage_warning=raw_size + db_size >= config.storage_warning_bytes,
     )
     with store.connection:
@@ -380,7 +381,11 @@ async def run_jobs(
     storage: tuple[int, str] | None = None
     last_reference_id = -1
     next_settlement = 0.0
-    next_quality = time.monotonic() + config.minimum_poll_interval
+    from premetar.continuous.analytical_qc import AnalyticalQC
+    from premetar.continuous.analytical_qc import migrate as migrate_analytical
+
+    await store._call(migrate_analytical, store.connection)
+    tasks.append(asyncio.create_task(AnalyticalQC(store, config).run(stop), name="analytical-qc"))
     try:
         while not stop.is_set():
             for task in tasks:
@@ -399,12 +404,6 @@ async def run_jobs(
                 await store._call(settle, store.connection, None, max(0, last_reference_id))
                 last_reference_id = reference_id
                 next_settlement = time.monotonic() + 30
-            if time.monotonic() >= next_quality:
-                for airport in config.airports:
-                    if stop.is_set():
-                        break
-                    await store._call(refresh_quality, store, airport, config)
-                next_quality = time.monotonic() + config.quality_seconds
             if time.monotonic() >= next_health:
                 storage = await store._call(
                     heartbeat,

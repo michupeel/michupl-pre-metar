@@ -294,3 +294,18 @@ def selected(connection: sqlite3.Connection, station_id: str, airport: str, at: 
         (station_id, airport, at.isoformat()),
     ).fetchone()
     return bool(row and row[0])
+
+
+def parameter_available(connection: sqlite3.Connection, data: dict[str, Any], at: datetime) -> bool:
+    """New deferred parameters require proof that their complete batch was committed."""
+    batch = data.get("qc_batch_id")
+    if not batch:
+        return True
+    if not connection.execute(
+        "SELECT 1 FROM sqlite_master WHERE name='analytical_qc_publications'"
+    ).fetchone():
+        return False
+    proof = connection.execute(
+        "SELECT committed_at FROM analytical_qc_publications WHERE batch_id=?", (batch,)
+    ).fetchone()
+    return bool(proof and datetime.fromisoformat(proof[0]) <= at)

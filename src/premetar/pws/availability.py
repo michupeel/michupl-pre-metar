@@ -13,7 +13,7 @@ from premetar.model import utc_now
 from premetar.pws.geometry import haversine_km
 from premetar.pws.models import Reading, Station
 from premetar.pws.recovery_state import transition
-from premetar.pws.repository import rows
+from premetar.pws.repository import parameter_available, rows
 from premetar.pws.timestamps import assess_time, parse_utc
 from premetar.pws.timestamps import policy as timestamp_policy
 
@@ -312,6 +312,8 @@ def candidates(conn: sqlite3.Connection, airport: str, at: datetime) -> list[dic
             (station.station_id, airport, at.isoformat()),
         )
         qc = json.loads(quality[0]["data_json"]) if quality else {}
+        if qc and not parameter_available(conn, qc, at):
+            qc = {}
         operational_qc = None
         if (
             qc.get("timestamp_policy_version") == timestamp_policy().version

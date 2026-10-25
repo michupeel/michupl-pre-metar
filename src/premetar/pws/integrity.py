@@ -144,6 +144,8 @@ def prediction_issues(
             check = assess_time(row, cutoff)
             if not check.eligible:
                 reasons.extend((reason, str(identity)) for reason in check.reasons)
+    from premetar.pws.repository import parameter_available
+
     for c in prediction.get("contributions", []):
         for key, table in (
             ("calibration_id", "pws_calibrations"),
@@ -158,6 +160,8 @@ def prediction_issues(
                     or json.loads(parameter[0]).get("timestamp_policy_version") != policy().version
                 ):
                     reasons.append(("UNVERIFIED_PARAMETER_TIMESTAMP_POLICY", f"{key}:{c[key]}"))
+                elif not parameter_available(conn, json.loads(parameter[0]), cutoff):
+                    reasons.append(("QC_PARAMETER_NOT_COMMITTED_AT_CUTOFF", f"{key}:{c[key]}"))
     return sorted(set(reasons))
 
 

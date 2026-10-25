@@ -1,0 +1,6 @@
+{
+  "detailed": false,
+  "slow_ms": 100,
+  "max_pending": 64,
+  "samples_per_operation": 4096
+}

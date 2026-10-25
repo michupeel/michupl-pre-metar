@@ -4,15 +4,16 @@ import asyncio
 import csv
 import hashlib
 import json
+import sqlite3
 import ssl
 import time
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import Any, Protocol
 from uuid import uuid4
 
 import httpx
@@ -258,8 +259,16 @@ async def collect(
     return {"received_readings": counts, "duration_limit_seconds": duration}
 
 
+class QualityStore(Protocol):
+    connection: sqlite3.Connection
+
+
 def quality_snapshot(
-    store: PWSStore, airport: str, config: Settings, at: datetime
+    store: QualityStore,
+    airport: str,
+    config: Settings,
+    at: datetime,
+    cancelled: Callable[[], bool] | None = None,
 ) -> list[dict[str, Any]]:
     connection = store.connection
     items = inventory(connection, airport)
@@ -274,9 +283,20 @@ def quality_snapshot(
                     max(valid, key=lambda r: r["first_receive_time"]),
                 )
             )
+    from premetar.pws.analysis import metar_reference_rows, precise_reference_rows
+    from premetar.pws.quality import prepare_peer_history
+
+    references = metar_reference_rows(connection, airport, at)
+    precise_references = precise_reference_rows(connection, airport, at)
+    all_histories = [
+        (Station.model_validate_json(i["data_json"]), histories[i["station_id"]]) for i in items
+    ]
+    prepared = prepare_peer_history(all_histories, config.qc)
     output = []
     with connection:
         for item in items:
+            if cancelled and cancelled():
+                raise InterruptedError("QC cancelled")
             station = Station.model_validate_json(item["data_json"])
             history = histories[item["station_id"]]
             qc = assess(station, history, at, config.qc, peers)
@@ -285,7 +305,9 @@ def quality_snapshot(
                 for i in items
                 if i["station_id"] != station.station_id
             ]
-            differences = historical_peer_differences(station, history, history_peers, config.qc)
+            differences = historical_peer_differences(
+                station, history, history_peers, config.qc, prepared, cancelled
+            )
             qc["solar"] = solar_suspicion(station, differences)
             qc["flags"] = sorted(set(qc["flags"]) | set(qc["solar"]["flags"]))
             if (
@@ -296,10 +318,12 @@ def quality_snapshot(
                 qc["flags"] = sorted(
                     set(qc["flags"]) | {"PERSISTENT_SPATIAL_ANOMALY", "MICROCLIMATE_OR_SENSOR_BIAS"}
                 )
-            pairs = make_pairs(connection, airport, station.station_id, config.qc, at)
+            pairs = make_pairs(
+                connection, airport, station.station_id, config.qc, at, reference_rows=references
+            )
             predictive = walk_forward(pairs, config.qc)
             precise_reference = precise_reference_comparison(
-                connection, airport, station.station_id, config.qc, at
+                connection, airport, station.station_id, config.qc, at, precise_references
             )
             predictive["temperature_bias_estimate"] = correction(pairs, at, config.qc)
             predictive["bias_uncertainty"] = "QUANTIZED_REFERENCE_NOT_EXACT_SENSOR_BIAS"

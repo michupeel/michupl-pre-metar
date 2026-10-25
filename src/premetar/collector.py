@@ -272,6 +272,9 @@ async def collect(
         from premetar.pws.availability import policy as availability_policy
 
         manifest["availability_policy"] = availability_policy().model_dump()
+        from premetar.performance import policy as performance_policy
+
+        manifest["performance_policy"] = performance_policy().model_dump()
         manifest["reference_receipt_barrier"] = "HTTP_COMPLETE_UNTIL_DURABLE_PARSE"
 
         continuous_protocol = (
@@ -292,6 +295,10 @@ async def collect(
             "pws/availability_loop.py",
             "pws/recovery_state.py",
             "continuous/reference_gate.py",
+            "continuous/analytical_qc.py",
+            "pws/service.py",
+            "performance.py",
+            "timing_summary.py",
             "pws/providers.py",
             "continuous/config.py",
             "continuous/data.py",

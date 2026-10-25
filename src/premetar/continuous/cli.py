@@ -53,6 +53,14 @@ def start(config: Path = DEFAULT, duration: float | None = typer.Option(None, mi
         handler.setFormatter(JsonFormatter())
         logging.getLogger("premetar").addHandler(handler)
     logging.getLogger("premetar").setLevel(logging.INFO)
+    performance_log = logging.getLogger("premetar.performance")
+    performance_log.propagate = False
+    performance_handler = RotatingFileHandler(
+        cfg.log_path / "performance.log", maxBytes=2_000_000, backupCount=3, encoding="utf-8"
+    )
+    performance_handler.setFormatter(logging.Formatter("%(message)s"))
+    performance_log.addHandler(performance_handler)
+    performance_log.setLevel(logging.INFO)
     sources = configured_sources(set(cfg.airports), {"awc", "dwd_10min", "knmi_metar"}, 60)
     # Small documented history window catches delayed/out-of-order routine/SPECI/COR.
     # First startup snapshot remains censored; history never supplies publication clocks.
