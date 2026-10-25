@@ -92,6 +92,9 @@ class PWSStore(Store):
         from premetar.pws.integrity import backfill
 
         backfill(self.connection)
+        from premetar.pws.availability import migrate as migrate_availability
+
+        migrate_availability(self.connection)
 
     def register(self, airports: list[Airport], providers: list[Any]) -> None:
         with self.connection:
@@ -142,8 +145,16 @@ class PWSStore(Store):
         packet: dict[str, Any],
         startup: bool = True,
         historical: bool = False,
-    ) -> None:
+        poll_context: str | None = "INGEST",
+    ) -> str | None:
         historical = historical or reading.evidence_class == "HISTORICAL_EVENT_ONLY"
+        # No empty/untimed OSM result becomes a meteorological observation. Raw is already durable.
+        if station.provider == "opensensemap" and (
+            reading.temperature_c is None or reading.observation_time is None
+        ):
+            if poll_context and not historical:
+                self.record_availability(station, reading, packet, poll_context, None, False)
+            return None
         data = reading.model_dump_json()
         key = sensor_key(station.station_id, reading.provider_sensor_id)
         # Unknown clocks cannot deduplicate observation identity across requests.
@@ -162,6 +173,27 @@ class PWSStore(Store):
                 + str(historical)
             ).encode()
         ).hexdigest()
+        # Same source measurement survives harmless raw formatting/metadata changes.
+        # Conflicting values at the same clock remain distinct evidence.
+        if reading.observation_time is not None and reading.temperature_c is not None:
+            for old_id, old_time in self.connection.execute(
+                "SELECT id,observation_time FROM pws_observations WHERE sensor_id=? AND julianday(observation_time)=julianday(?) AND temperature_c=? AND evidence_class=?",
+                (
+                    key,
+                    reading.observation_time.isoformat(),
+                    reading.temperature_c,
+                    "HISTORICAL_EVENT_ONLY" if historical else "REALTIME_CAPTURED",
+                ),
+            ):
+                if datetime.fromisoformat(old_time) == reading.observation_time:
+                    ident = old_id
+                    break
+        is_new = (
+            self.connection.execute(
+                "SELECT 1 FROM pws_observations WHERE id=?", (ident,)
+            ).fetchone()
+            is None
+        )
         with self.connection:
             self.connection.execute(
                 "INSERT OR IGNORE INTO pws_observations VALUES(?,?,?,?,?,?,?,?)",
@@ -192,6 +224,37 @@ class PWSStore(Store):
             from premetar.pws.integrity import record_observation
 
             record_observation(self.connection, ident)
+        if station.provider == "opensensemap" and poll_context and not historical:
+            self.record_availability(station, reading, packet, poll_context, ident, is_new)
+        return ident
+
+    def record_availability(
+        self,
+        station: Station,
+        reading: Reading,
+        packet: dict[str, Any],
+        context: str,
+        observation_id: str | None,
+        is_new: bool,
+    ) -> None:
+        from premetar.pws.availability import record_check
+
+        for (airport,) in self.connection.execute(
+            "SELECT airport_icao FROM pws_airport_stations WHERE station_id=?",
+            (station.station_id,),
+        ).fetchall():
+            record_check(
+                self.connection,
+                self.run_id,
+                airport,
+                station,
+                sensor_key(station.station_id, reading.provider_sensor_id),
+                reading,
+                packet,
+                context,
+                observation_id,
+                is_new,
+            )
 
 
 def rows(

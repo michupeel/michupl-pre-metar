@@ -19,7 +19,7 @@ from premetar.pws.quality import effective_time, eligible
 from premetar.pws.repository import inventory, readings, rows, selected
 from premetar.pws.timestamps import policy
 
-VERSION = "pws-estimator-1.2-strict-time"
+VERSION = "pws-estimator-1.3-active-sensors"
 
 
 def precise_reference_comparison(
@@ -61,7 +61,7 @@ def precise_reference_comparison(
         if not snapshot:
             continue
         candidate = latest_station_reading(
-            connection, Station.model_validate_json(snapshot["data_json"]), event, config
+            connection, Station.model_validate_json(snapshot["data_json"]), event, config, airport
         )
         if not candidate or not candidate.get("observation_time"):
             continue
@@ -176,13 +176,31 @@ def station_at(
 
 
 def latest_station_reading(
-    connection: sqlite3.Connection, station: Station, at: datetime, config: QCConfig
+    connection: sqlite3.Connection,
+    station: Station,
+    at: datetime,
+    config: QCConfig,
+    airport: str | None = None,
 ) -> dict[str, Any] | None:
     if station.exposure == "indoor" or station.mobile or not station.sensors:
         return None
     data = readings(connection, station.station_id, at)
     # Stable sensor choice prevents choosing by proximity to the target outcome.
     sensor = min(s.provider_sensor_id for s in station.sensors)
+    if airport and station.provider == "opensensemap":
+        from premetar.pws.availability import selection_at
+
+        version = selection_at(connection, airport, station.provider, at)
+        if version:
+            allowed = set(json.loads(version["data_json"])["selected_sensor_ids"])
+            available = [
+                s.provider_sensor_id
+                for s in station.sensors
+                if station.station_id + ":" + s.provider_sensor_id in allowed
+            ]
+            if not available:
+                return None
+            sensor = min(available)
     candidates = [r for r in data if r["provider_sensor_id"] == sensor and eligible(r, at, config)]
     if not candidates:
         return None
@@ -252,7 +270,7 @@ def make_pairs(
         if not metadata:
             continue
         station = Station.model_validate_json(metadata["data_json"])
-        candidate = latest_station_reading(connection, station, decision, config)
+        candidate = latest_station_reading(connection, station, decision, config, airport)
         if not candidate:
             continue
         previous = [
@@ -371,7 +389,7 @@ def predict(
         if not snapshot:
             continue
         station = Station.model_validate_json(snapshot["data_json"])
-        candidate = latest_station_reading(connection, station, at, config)
+        candidate = latest_station_reading(connection, station, at, config, airport)
         if not candidate:
             continue
         calibration = rows(
@@ -413,6 +431,9 @@ def predict(
             for c in contributions
         ):
             continue
+        from premetar.pws.availability import selection_at
+
+        cohort_version = selection_at(connection, airport, station.provider, at)
         contributions.append(
             {
                 "station_id": station_id,
@@ -424,6 +445,7 @@ def predict(
                 "calibration_id": calibration[0]["id"] if calibration else None,
                 "quality_id": quality[0]["id"] if quality else None,
                 "discovery_id": snapshot["id"],
+                "selection_version_id": cohort_version["id"] if cohort_version else None,
                 "latitude": station.latitude,
                 "longitude": station.longitude,
                 "distance_km": snapshot["distance_km"],

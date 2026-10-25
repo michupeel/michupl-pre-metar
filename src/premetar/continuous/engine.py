@@ -6,7 +6,7 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -17,7 +17,7 @@ from premetar.continuous.polling import next_interval
 from premetar.continuous.reference_gate import ReferenceGate
 from premetar.model import utc_now
 from premetar.pws.models import Station
-from premetar.pws.providers import PROVIDERS, ProviderError, PWSProvider, Transport
+from premetar.pws.providers import PROVIDERS, OpenSenseMap, ProviderError, PWSProvider, Transport
 from premetar.pws.quality import eligible
 from premetar.pws.repository import PWSStore, inventory, rows, selected
 from premetar.pws.service import discover, settings
@@ -154,6 +154,11 @@ def record_poll(
 async def provider_loop(
     store: PWSStore, provider: PWSProvider, config: Config, stop: asyncio.Event
 ) -> None:
+    if provider.name == "opensensemap":
+        from premetar.pws.availability_loop import availability_loop
+
+        await availability_loop(store, cast(OpenSenseMap, provider), config, stop)
+        return
     pws = settings()
     pws.providers = config.providers
     pws.discovery_seconds = config.discovery_seconds
@@ -347,12 +352,17 @@ async def run_jobs(
     await store._call(migrate, store.connection)
     await store._call(freeze_experiment, store.connection, config)
     pws = settings()
+    from premetar.pws.availability import policy as availability_policy
+
     providers: list[PWSProvider] = [
         PROVIDERS[name](
             Transport(
                 client,
                 store,
-                request_spacing=config.polling(name).request_spacing,
+                request_spacing=max(
+                    config.polling(name).request_spacing,
+                    availability_policy().request_spacing_seconds if name == "opensensemap" else 1,
+                ),
                 timeout_seconds=config.polling(name).timeout_seconds,
                 max_attempts=config.polling(name).max_attempts,
             )

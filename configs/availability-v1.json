@@ -1,0 +1,16 @@
+{
+  "version": "active-sensors-1.0",
+  "radius_km": 20,
+  "maximum_age_seconds": 300,
+  "max_stations_per_airport": 4,
+  "max_sensors_per_airport": 4,
+  "max_sensors_per_station": 1,
+  "request_spacing_seconds": 2,
+  "inactive_recheck_seconds": 1800,
+  "recovery_confirm_seconds": 300,
+  "candidate_refresh_seconds": 3600,
+  "failures_to_inactive": 3,
+  "recoveries_to_active": 2,
+  "max_preflight_stations_per_airport": 200,
+  "minimum_station_separation_km": 0.2
+}

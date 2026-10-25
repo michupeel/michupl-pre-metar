@@ -50,11 +50,13 @@ class Transport:
         self.next_request: dict[str, float] = {}
         self.locks: dict[str, asyncio.Lock] = {}
         self.disabled: set[str] = set()
+        self.last_packets: dict[str, dict[str, Any]] = {}
 
     async def get(
         self, provider: str, url: str, headers: dict[str, str] | None = None
     ) -> tuple[Any, dict[str, Any]]:
         async with self.locks.setdefault(provider, asyncio.Lock()):
+            self.last_packets.pop(provider, None)
             if provider in self.disabled:
                 raise ProviderError("PROVIDER_DISABLED")
             for attempt in range(self.max_attempts):
@@ -71,7 +73,9 @@ class Transport:
                 except (httpx.TimeoutException, httpx.NetworkError):
                     if attempt == self.max_attempts - 1:
                         raise ProviderError("TRANSPORT_FAILURE") from None
-                    self.next_request[provider] = time.monotonic() + 2**attempt
+                    self.next_request[provider] = max(
+                        self.next_request.get(provider, 0), time.monotonic() + 2**attempt
+                    )
                     continue
                 end, end_mono = utc_now(), time.perf_counter_ns()
                 packet = await self.store.capture(
@@ -88,6 +92,7 @@ class Transport:
                     },
                     response.content,
                 )
+                self.last_packets[provider] = packet
                 if response.status_code in (401, 403) or 300 <= response.status_code < 400:
                     self.disabled.add(provider)
                     raise ProviderError("AUTH_OR_REDIRECT_DISABLED")
@@ -96,7 +101,9 @@ class Transport:
                     self.next_request[provider] = time.monotonic() + delay
                     raise ProviderError("RATE_LIMITED", delay)
                 if response.status_code >= 500 and attempt < self.max_attempts - 1:
-                    self.next_request[provider] = time.monotonic() + 2**attempt
+                    self.next_request[provider] = max(
+                        self.next_request.get(provider, 0), time.monotonic() + 2**attempt
+                    )
                     continue
                 if response.status_code != 200:
                     raise ProviderError(f"HTTP_{response.status_code}")
@@ -265,10 +272,15 @@ class OpenSenseMap:
         return list(result.values())
 
     async def fetch_latest(self, station: Station) -> list[tuple[Reading, dict[str, Any]]]:
-        data, packet = await self.http.get(
-            self.name,
-            f"https://api.opensensemap.org/boxes/{identifier(station.provider_station_id)}/sensors",
-        )
+        self.last_packet = None
+        try:
+            data, packet = await self.http.get(
+                self.name,
+                f"https://api.opensensemap.org/boxes/{identifier(station.provider_station_id)}/sensors",
+            )
+        finally:
+            self.last_packet = getattr(self.http, "last_packets", {}).get(self.name)
+        self.last_packet = packet
         # Documented endpoint returns a box with sensors, not an untyped list of values.
         if not isinstance(data, dict) or not isinstance(data.get("sensors"), list):
             raise ProviderError("INVALID_LATEST_SCHEMA")
