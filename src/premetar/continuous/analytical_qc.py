@@ -24,6 +24,7 @@ from premetar.pws.service import quality_snapshot, settings
 LOG = logging.getLogger("premetar")
 SCHEMA = """
 CREATE INDEX IF NOT EXISTS receipt_observation_clock ON report_receipts(observation_id,collector_receive_time);
+CREATE INDEX IF NOT EXISTS pws_quality_asof ON pws_quality_results(station_id,airport_icao,created_at,id);
 CREATE TABLE IF NOT EXISTS analytical_schema_version(version INTEGER PRIMARY KEY);
 INSERT OR IGNORE INTO analytical_schema_version VALUES(1);
 CREATE TABLE IF NOT EXISTS analytical_qc_batches(

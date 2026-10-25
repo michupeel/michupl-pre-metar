@@ -124,6 +124,7 @@ class Store:
             sql_before = getattr(LOCAL, "sql_ns", 0)
             changes = self.connection.total_changes if hasattr(self, "connection") else 0
             item: dict[str, Any] = dict(
+                function_name=getattr(fn, "__qualname__", type(fn).__name__),
                 operation_name=name,
                 operation_start_utc=queued_utc,
                 worker_start_utc=utc_now().isoformat(),

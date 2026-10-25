@@ -492,6 +492,10 @@ def write_chart(result: dict[str, Any], path: Path) -> bool:
             label="EPWA METAR (integer °C)",
             zorder=4,
         )
+    ax.set_xlim(
+        float(dates.date2num(datetime.fromisoformat(result["start_utc"]))),
+        float(dates.date2num(datetime.fromisoformat(result["end_utc_exclusive"]))),
+    )
     ax.xaxis.set_major_formatter(dates.DateFormatter("%H:%M %Z\n%z", tz=zone))
     ax.xaxis.set_major_locator(dates.HourLocator(interval=3, tz=zone))
     ax.set(

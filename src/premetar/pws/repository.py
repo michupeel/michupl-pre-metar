@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS pws_quality_results(
  id INTEGER PRIMARY KEY, station_id TEXT NOT NULL REFERENCES pws_stations(station_id),
  airport_icao TEXT NOT NULL REFERENCES pws_airports(icao), created_at TEXT NOT NULL,
  algorithm_version TEXT NOT NULL, data_json TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS pws_quality_asof ON pws_quality_results(station_id,airport_icao,created_at,id);
 CREATE TABLE IF NOT EXISTS pws_calibrations(
  id INTEGER PRIMARY KEY, station_id TEXT NOT NULL REFERENCES pws_stations(station_id),
  airport_icao TEXT NOT NULL REFERENCES pws_airports(icao), created_at TEXT NOT NULL,

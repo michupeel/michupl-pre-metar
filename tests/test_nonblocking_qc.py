@@ -300,3 +300,16 @@ def test_optimized_peer_windows_equal_original_full_scan():
         if c["difference_c"] is not None:
             expected.append((effective_time(r), c["difference_c"]))
     assert historical_peer_differences(s, history, peers, CONFIG) == expected
+
+
+async def test_candidate_quality_lookup_uses_asof_index(store):
+    await store._call(migrate, store.connection)
+
+    def verify():
+        plan = store.connection.execute(
+            "EXPLAIN QUERY PLAN SELECT data_json FROM pws_quality_results WHERE station_id=? AND airport_icao=? AND created_at<=? ORDER BY created_at DESC,id DESC LIMIT 1",
+            ("s", "EPWA", AT.isoformat()),
+        ).fetchall()
+        assert any("pws_quality_asof" in row[-1] for row in plan)
+
+    await store._call(verify)
