@@ -435,6 +435,13 @@ def make_report(
     )
     for index, r in enumerate(ranked, 1):
         r["operational_rank"] = index
+    poll_outcomes = []
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='pws_sensor_checks'").fetchone():
+        poll_outcomes = rows(
+            conn,
+            "SELECT outcome,count(*) sensor_poll_attempts FROM pws_sensor_checks WHERE airport_icao=? AND julianday(checked_at)>=julianday(?) AND julianday(checked_at)<julianday(?) GROUP BY outcome ORDER BY outcome",
+            (airport, start.isoformat(), end.isoformat()),
+        )
     result = dict(
         airport=airport,
         date=day.isoformat(),
@@ -447,6 +454,19 @@ def make_report(
         usable_sensors=len({r["sensor_id"] for r in valid}),
         total_valid_observations=len(valid),
         excluded_provider_records=len(rejected),
+        sensor_poll_outcomes=poll_outcomes,
+        normalized_provider_records_in_day=len(data),
+        actual_temperature_records_in_day=sum(
+            r.get("temperature_c") is not None and r.get("observation_time") is not None
+            for r in data
+        ),
+        legacy_empty_poll_records=sum(
+            r.get("provider") == "opensensemap"
+            and r.get("temperature_c") is None
+            and r.get("observation_time") is None
+            for r in data
+        ),
+        accounting_note="Valid observations exclude historical empty polling records; non-null temperatures still require strict timestamp eligibility.",
         measurement_start_local=local(valid[0]["_measurement"], zone) if valid else None,
         measurement_end_local=local(valid[-1]["_measurement"], zone) if valid else None,
         temperature_min_c=min((r["temperature_c"] for r in valid), default=None),
@@ -582,7 +602,12 @@ def make_report(
         return "\n".join(lines)
 
     report_text = (
-        header + "## Observed summary\n\n```json\n" + json.dumps(summary, indent=2) + "\n```\n"
+        header
+        + "Polling attempts are distinct from unique source measurements. Historical empty polls are preserved but excluded from valid temperature observations. Sensor poll outcomes: "
+        + json.dumps(poll_outcomes)
+        + "\n\n## Observed summary\n\n```json\n"
+        + json.dumps(summary, indent=2)
+        + "\n```\n"
     )
     sections = [
         (

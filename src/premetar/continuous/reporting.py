@@ -156,6 +156,21 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
             "SELECT count(*) FROM pws_arrivals a JOIN pws_observations o ON o.id=a.observation_id JOIN pws_sensors s USING(sensor_id) JOIN pws_stations st USING(station_id) WHERE st.provider=?",
             (provider,),
         ).fetchone()[0]
+        legacy_empty = conn.execute(
+            "SELECT count(*) FROM pws_observations o JOIN pws_sensors s USING(sensor_id) JOIN pws_stations st USING(station_id) WHERE st.provider=? AND st.provider='opensensemap' AND o.temperature_c IS NULL AND o.observation_time IS NULL",
+            (provider,),
+        ).fetchone()[0]
+        actual_measurements = conn.execute(
+            "SELECT count(*) FROM pws_observations o JOIN pws_sensors s USING(sensor_id) JOIN pws_stations st USING(station_id) WHERE st.provider=? AND o.temperature_c IS NOT NULL AND o.observation_time IS NOT NULL",
+            (provider,),
+        ).fetchone()[0]
+        poll_outcomes = []
+        if conn.execute("SELECT 1 FROM sqlite_master WHERE name='pws_sensor_checks'").fetchone():
+            poll_outcomes = rows(
+                conn,
+                "SELECT c.outcome,count(*) sensor_poll_attempts FROM pws_sensor_checks c JOIN pws_stations st USING(station_id) WHERE st.provider=? GROUP BY c.outcome ORDER BY c.outcome",
+                (provider,),
+            )
         relevant = [r for r in inventory if r["station_id"].startswith(provider + ":")]
         fresh = any(r["usable_now"] for r in relevant)
         providers.append(
@@ -169,10 +184,15 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
                     failures=int(bool(last and last[0]["error_class"])),
                 ),
                 polls=aggregate["polls"],
+                sensor_poll_outcomes=poll_outcomes,
                 requests=conn.execute(
                     "SELECT count(*) FROM raw_payloads WHERE source=?", ("pws_" + provider,)
                 ).fetchone()[0],
-                new=new,
+                new=actual_measurements,
+                normalized_records_including_quarantined=new,
+                actual_measurements=actual_measurements,
+                legacy_empty_records=legacy_empty,
+                measurement_count_definition="TIMESTAMPED_TEMPERATURE_RECORDS_NOT_NECESSARILY_STRICT_ELIGIBLE",
                 duplicates=max(0, arrivals - new),
                 failures=aggregate["failures"] or 0,
                 median_observation_age=median(
@@ -216,6 +236,12 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, Any]:
         observation_count_definition="NORMALIZED_RECORDS_INCLUDING_QUARANTINED_NOT_VALID_MEASUREMENTS",
         measurement_eligibility_at_receipt=eligibility,
         observations=conn.execute("SELECT count(*) FROM pws_observations").fetchone()[0],
+        actual_measurements=conn.execute(
+            "SELECT count(*) FROM pws_observations WHERE temperature_c IS NOT NULL AND observation_time IS NOT NULL"
+        ).fetchone()[0],
+        legacy_empty_records=conn.execute(
+            "SELECT count(*) FROM pws_observations o JOIN pws_sensors sn USING(sensor_id) JOIN pws_stations st USING(station_id) WHERE st.provider='opensensemap' AND o.temperature_c IS NULL AND o.observation_time IS NULL"
+        ).fetchone()[0],
         predictions=conn.execute("SELECT count(*) FROM pws_predictions").fetchone()[0],
         settled=conn.execute(
             "SELECT count(DISTINCT prediction_id) FROM continuous_settlements"

@@ -256,3 +256,31 @@ CSV/Markdown exports. Omit `--date` for the airport's current local date. Run
 `uv run premetar continuous clock-audit` for a read-only Windows/NTP check.
 [Strict timestamp policy and interpretation](docs/STRICT_TIMESTAMPS.md) describes
 the300s limit, Sensor.Community exclusion and immutable historical evidence.
+
+
+### Active openSenseMap instruments (1.6.2)
+
+The continuous collector now performs daily20km discovery plus actual per-box
+latest-reading preflight. It selects up to4 outdoor instruments at4 provider
+stations per airport using fresh verified clocks, operational quality, cadence,
+distance and metadata. Discovery measurement-ID strings are not evidence of a
+current reading. Policy is versioned separately in `configs/availability-v1.json`.
+Every sensor cohort revision is append-only; forecasts record its version.
+
+```powershell
+Set-Location D:\metar-execution-lab\michupl-pre-metar
+uv run premetar pws availability --airport EPWA
+uv run premetar pws availability --all-airports
+uv run premetar continuous status
+uv run premetar pws today --airport EPWA --limit 50
+```
+
+Availability inspection is read-only and does not initiate requests or change the
+cohort. Full sensor evidence is exported to `reports/pws/availability/`.
+Null/missing readings create poll outcomes and raw captures, not temperature rows.
+Repeated real measurements preserve first receipt and acquire separate arrival
+records. Old empty normalized rows remain intact but are excluded from real
+measurement counts. Empty200 responses are not API errors. Three empty/stale/
+invalid checks suspend a previously active instrument; inactive checks use30min
+spacing and restoration needs two fresh checks at least5min apart. Provider
+errors do not count as sensor failures. See [availability design and operations](docs/PWS_AVAILABILITY.md).

@@ -379,3 +379,92 @@ def timestamp_audit_command(
         result = timestamp_audit(conn, output)
         conn.rollback()
     console.print_json(json.dumps(result))
+
+
+@app.command(name="availability")
+def availability_command(
+    airport: str = "EPWA",
+    all_airports: bool = False,
+    provider: str = "opensensemap",
+    database: Path = Path("data/continuous-v1.sqlite3"),
+    output: Path = Path("reports/pws/availability"),
+) -> None:
+    """Read-only latest preflight/recovery evidence; never polls providers or changes selection."""
+    from contextlib import closing
+
+    from premetar.continuous.reporting import connect
+    from premetar.pws.availability_report import availability_snapshot, write_availability
+    from premetar.sources import STATIONS
+
+    airport = airport.upper()
+    if not all_airports and airport not in STATIONS:
+        raise typer.BadParameter("Unknown airport")
+    with closing(connect(database)) as conn:
+        conn.execute("BEGIN")
+        result = availability_snapshot(
+            conn,
+            None if all_airports else {airport},
+            provider=None if provider == "all" else provider,
+        )
+        conn.rollback()
+    write_availability(result, output)
+    console.print(
+        f"Availability: {result['initialization']} | {result['as_of']} | {result['provider_scope']}"
+    )
+    summary = Table(
+        "Airport",
+        "Stations",
+        "Sensors",
+        "Active",
+        "Empty",
+        "Stale",
+        "Invalid",
+        "Unverified",
+        "Selected",
+    )
+    for row in result["airports"]:
+        summary.add_row(
+            *(
+                str(row[key])
+                for key in (
+                    "airport",
+                    "discovered_stations",
+                    "temperature_sensors",
+                    "eligible_active",
+                    "no_measurement",
+                    "stale",
+                    "invalid",
+                    "unverified",
+                    "selected_sensors",
+                )
+            )
+        )
+    console.print(summary)
+    table = Table(
+        "Airport",
+        "Sensor",
+        "Distance km",
+        "Type",
+        "Measurement UTC",
+        "Age at receipt s",
+        "Status / mode",
+        "Selected",
+        "Rationale",
+    )
+    for row in result["sensors"]:
+        table.add_row(
+            row["airport"],
+            row["sensor_id"],
+            f"{row['distance_km']:.3f}",
+            row["sensor_type"] or "UNKNOWN",
+            row["measurement_time"] or "UNKNOWN",
+            str(row["age_at_receipt_seconds"]),
+            f"{row['status']} / {row['mode']}",
+            str(row["selected"]),
+            str(row["selection_rationale"]),
+        )
+    console.print(table)
+    console.print(
+        "Physical independence UNVERIFIED; provider station counts only. Full check times and diagnostic flags are in CSV/JSON."
+    )
+    console.print(str((output / "availability.md").resolve()))

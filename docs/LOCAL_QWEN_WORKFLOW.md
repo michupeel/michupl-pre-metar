@@ -136,3 +136,24 @@ accepted date helper was tested for Warsaw day bounds and both DST transitions.
 Proposal artifacts remain ignored, sanitized decisions/usage are appended to the
 existing audit JSONL. Audit timestamps identify recording time, not inferred
 inference-start times. Weather collection has no LLM dependency.
+
+
+## Milestone 1.6.2 — bounded recovery delegation
+
+The existing authenticated local worker passed model discovery and READY inference
+at http://127.0.0.1:8888/v1. Actual active model:
+`unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF` (17 model entries).
+Two narrow proposals were requested, with relevant interface, constraints and tests:
+
+| Task | Decision | Duration | Server tokens |
+|---|---|---:|---:|
+| m162-1: pure recovery counters | Counter structure partially adapted; malformed patch/docstring, UNVERIFIED logic and validation rewritten | 7.640s | 1246 |
+| m162-2: isolated recovery tests | Rejected; malformed Python, incorrect one-failure inactivity and timestamp assertions; Codex wrote tests | 8.609s | 1384 |
+
+Total substantive inference16.249s,2630 tokens. Separate health probe0.500s,31
+ tokens. No automatic patch was applied. Corrected counter code and integration
+are covered by regression tests. No repair loop followed the repeated defects.
+No measured speedup or token savings is claimed. Sampling parameter acceptance
+was observable; effectiveness was not independently verified except stream mode.
+The existing JSONL audit records actual usage and review decisions. Collection has
+no LLM dependency; no server settings changed.
