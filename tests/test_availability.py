@@ -380,3 +380,34 @@ async def test_diversity_caps_avoid_multiple_station_votes(store):
         assert len(d["selected_station_ids"]) == 4
 
     await store._call(verify)
+
+
+@pytest.mark.parametrize("failure", ["rate", "timeout", "malformed", "auth"])
+async def test_provider_errors_are_not_empty_sensor_failures(store, failure):
+    s = station()
+    await discovered(store, s)
+
+    def respond(request):
+        if failure == "timeout":
+            raise httpx.ReadTimeout("synthetic", request=request)
+        if failure == "malformed":
+            return httpx.Response(200, content=b"invalid json")
+        return httpx.Response(429 if failure == "rate" else 401)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+        p = OpenSenseMap(Transport(client, store, max_attempts=1))
+        result = await poll_station(store, p, s, "EPWA", "TEST")
+        assert result[0]["outcome"] == "PROVIDER_ERROR"
+        assert result[0]["status"] == "UNVERIFIED"
+        assert result[0]["fail_streak"] == 0
+
+    def verify():
+        assert store.connection.execute("SELECT count(*) FROM pws_observations").fetchone()[0] == 0
+        assert (
+            store.connection.execute(
+                "SELECT count(*) FROM continuous_polls WHERE error_class IS NOT NULL"
+            ).fetchone()[0]
+            == 1
+        )
+
+    await store._call(verify)
