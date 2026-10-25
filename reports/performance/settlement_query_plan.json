@@ -1,0 +1,37 @@
+{
+  "query": "SELECT o.event_time,r.collector_receive_time FROM observations o JOIN report_receipts r ON r.observation_id=o.id WHERE o.station_icao=? AND o.product_type='METAR' AND julianday(o.event_time)=julianday(?)",
+  "parameters": [
+    "EPWA",
+    "2026-10-25T19:30:00+00:00"
+  ],
+  "before_plan": [
+    [
+      3,
+      0,
+      53,
+      "SEARCH o USING COVERING INDEX continuous_reference_target (station_icao=? AND product_type=?)"
+    ],
+    [
+      16,
+      0,
+      216,
+      "SCAN r"
+    ]
+  ],
+  "after_plan": [
+    [
+      3,
+      0,
+      53,
+      "SEARCH o USING COVERING INDEX continuous_reference_target (station_icao=? AND product_type=?)"
+    ],
+    [
+      16,
+      0,
+      54,
+      "SEARCH r USING COVERING INDEX receipt_observation_clock (observation_id=?)"
+    ]
+  ],
+  "before_100_queries_ms": 494.0758999437094,
+  "after_100_queries_ms": 1.5245000831782818
+}

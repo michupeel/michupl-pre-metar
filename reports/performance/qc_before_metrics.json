@@ -1,0 +1,19 @@
+{
+  "sql_calls": 32871,
+  "sql_execute_ms": 1635.2724832249805,
+  "transactions": [
+    {
+      "end": "COMMIT",
+      "duration_ms": 211141.17129996885
+    },
+    {
+      "end": "COMMIT",
+      "duration_ms": 8.626699913293123
+    }
+  ],
+  "airport": "EPWA",
+  "wall_seconds": 211.768617899972,
+  "cpu_seconds": 209.515625,
+  "cutoff": "2026-10-25T19:57:33.271911+00:00",
+  "integrity": "ok"
+}

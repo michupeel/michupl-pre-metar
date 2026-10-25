@@ -1,0 +1,34 @@
+{
+  "wall_seconds": 5.45531570003368,
+  "cpu_seconds": 5.421875,
+  "quality_rows": 187,
+  "differences": [],
+  "timings": {
+    "QC_DATABASE_READ": {
+      "count": 1,
+      "failed_count": 0,
+      "queue_wait_ms_p95": 0.0,
+      "queue_wait_ms_p99": 0.0,
+      "duration_ms_p95": 150.2172,
+      "duration_ms_p99": 150.2172,
+      "db_execution_ms_p95": 149.6845,
+      "db_execution_ms_p99": 149.6845,
+      "worker_execution_ms_p95": 150.2172,
+      "worker_execution_ms_p99": 150.2172,
+      "total_operations": 1
+    },
+    "QC_HOURLY": {
+      "count": 1,
+      "failed_count": 0,
+      "queue_wait_ms_p95": 0.0,
+      "queue_wait_ms_p99": 0.0,
+      "duration_ms_p95": 5421.0121,
+      "duration_ms_p99": 5421.0121,
+      "db_execution_ms_p95": 610.8817,
+      "db_execution_ms_p99": 610.8817,
+      "worker_execution_ms_p95": 5421.0121,
+      "worker_execution_ms_p99": 5421.0121,
+      "total_operations": 1
+    }
+  }
+}

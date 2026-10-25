@@ -50,6 +50,11 @@ scientific samples or clock-accuracy certification.
 The receipt join index was added after EXPLAIN confirmed full receipt-table scans
 in first-target lookup. Existing WAL/FULL durability and single-writer policy are
 retained. The online backup avoids a long analytical reader pinning the live WAL.
+The station/airport/created-at quality index also prevents repeated full scans
+when selecting the latest available quality parameters. Neither index changes
+eligibility or first-receipt semantics. Cold-start historical settlement can
+still occupy the writer for about 2.8 seconds; the short live run did not meet
+every latency target. See the before/after report for uncensored startup metrics.
 See [SQLite backup](https://www.sqlite.org/backup.html),
 [WAL concurrency/checkpoint constraints](https://www.sqlite.org/wal.html), and
 [Python backup API](https://docs.python.org/3.12/library/sqlite3.html#sqlite3.Connection.backup).
@@ -75,3 +80,5 @@ Nearest±5min METAR pairs are exploratory agreement, not prospective forecasts.
 Receipt-cutoff comparisons and linked immutable predictions are separate. Initial
 routine transitions, corrections and false-alarm record definitions are explicit.
 A one-day warm offset is not proof of sensor heating or professional calibration.
+Report generation emits a separate timing JSON alongside the CSV/Markdown/chart;
+it measures rendering/export, not the earlier read-only snapshot query.

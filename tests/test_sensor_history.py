@@ -106,6 +106,10 @@ def test_empty_export(tmp_path: Path) -> None:
     assert result["observations"] == []
     assert Path(paths["csv"]).read_text(encoding="utf-8").startswith("measurement_time_utc")
     assert "Valid unique measurements: **0**" in Path(paths["markdown"]).read_text(encoding="utf-8")
+    timing = json.loads(Path(paths["timing"]).read_text(encoding="utf-8"))
+    assert timing["operation_name"] == "REPORT_GENERATION"
+    assert timing["rows_processed"] == 0
+    assert timing["success"] is True
 
 
 def test_distinct_instruments_duplicate_and_conflicting_values() -> None:

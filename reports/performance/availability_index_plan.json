@@ -1,0 +1,28 @@
+{
+  "before_plan": [
+    [
+      4,
+      0,
+      216,
+      "SCAN pws_quality_results"
+    ],
+    [
+      23,
+      0,
+      0,
+      "USE TEMP B-TREE FOR ORDER BY"
+    ]
+  ],
+  "after_plan": [
+    [
+      5,
+      0,
+      50,
+      "SEARCH pws_quality_results USING INDEX pws_quality_asof (station_id=? AND airport_icao=? AND created_at<?)"
+    ]
+  ],
+  "before_ms": 2176.90910003148,
+  "after_ms": 25.15170001424849,
+  "rows": 107,
+  "same_sensor_ids": true
+}

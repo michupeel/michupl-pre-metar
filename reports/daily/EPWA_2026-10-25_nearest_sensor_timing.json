@@ -1,0 +1,12 @@
+{
+  "rows_processed": 85,
+  "success": true,
+  "error": null,
+  "operation_name": "REPORT_GENERATION",
+  "operation_start_utc": "2026-10-25T20:43:36.475934+00:00",
+  "operation_end_utc": "2026-10-25T20:43:36.993062+00:00",
+  "duration_ms": 517.762,
+  "queue_wait_ms": 0,
+  "worker_execution_ms": 517.762,
+  "db_execution_ms": 0.0
+}

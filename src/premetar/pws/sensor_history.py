@@ -13,7 +13,7 @@ from astral import Observer
 from astral.sun import elevation
 
 from premetar.model import icao_round_temperature, utc_now
-from premetar.performance import timed_operation
+from premetar.performance import DEFAULT, timed_operation
 from premetar.pws.analysis import interval_residual
 from premetar.pws.daily import export, load_day, local, metars
 from premetar.pws.daily_time import local_day_bounds
@@ -514,7 +514,13 @@ def write_chart(result: dict[str, Any], path: Path) -> bool:
 
 def write_report(result: dict[str, Any], output: Path) -> dict[str, str]:
     with timed_operation("REPORT_GENERATION", rows=len(result["observations"])):
-        return _write_report_impl(result, output)
+        paths = _write_report_impl(result, output)
+    timing = output / f"{result['airport']}_{result['date']}_nearest_sensor_timing.json"
+    timing.write_text(
+        json.dumps(DEFAULT.samples["REPORT_GENERATION"][-1], indent=2), encoding="utf-8"
+    )
+    paths["timing"] = str(timing)
+    return paths
 
 
 def _write_report_impl(result: dict[str, Any], output: Path) -> dict[str, str]:

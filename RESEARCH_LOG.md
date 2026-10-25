@@ -368,3 +368,37 @@ INSUFFICIENT DATA for improved prediction accuracy or an information edge. Next:
 collect prospective data, assess cohort freshness/coverage over days, separately
 address shared-writer QC scalability, and review clock uncertainty before latency
 claims. Qwen usage and rejected proposals recorded in the existing audit.
+
+
+## Milestone1.6.3 — QC isolation and nearest EPWA sensor,25Oct2026
+
+Baseline: one-worker SQLite queue held full hourly Python QC/transactions;
+frozen EPWA187station cProfile run211.769s wall/209.516s CPU. Hypothesis:
+shared prepared history and separate private-snapshot analysis reduce repeated
+work and release time-critical ingestion. Candidate:10.983s profiled/10.938s CPU,
+all187quality rows identical. Unprofiled5.455s is separately labeled. Real-payload
+concurrent replay: PWS queue p95/p9914.265/63.568ms, METAR21.559/21.559ms,
+publication28.201ms. Original full-history settlement failure retained; measured
+receipt and as-of-quality indexes added after EXPLAIN evidence.
+
+Final live4-airport QC cycle20:42:23–20:42:48Z completed while collection ran;
+EPWA6.651s calculation,19–451ms writer publication across airports. Whole-run
+METAR p95462ms, cold raw-capture p992493ms and checkpoint-delay p951.112s miss
+proposed targets: remaining startup settlement/durability/serial forecasting
+limitations are explicit. SQL integrity/FKs and preservation of all prior
+observations/predictions/settlements pass. Two controlled restarts; original
+Windows task retained; no time-setting changes.219tests, Ruff and strict mypy pass.
+
+EPWA exactstation61c1f4ff80a739001cda08bb: initial77 then85 valid readings,
+12:34:50–20:41:26Z,10.9–14.6°C, median update327.719s/age82.608s. One BMP180
+instrument2.665km from airport;25h Warsaw DST day preserved.17quantized-reference
+pairs show evening warm disagreement. Five observed cooling transitions had
+matching PWS trend direction but no timely matching new integer; persistence
+also failed these changes. Existing forecasts remain immutable,135linked inputs
+do not establish causal improvement. EXP-0006/0007/0008/0009 remain OPEN;
+INSUFFICIENT DATA for robust accuracy or information-edge claims. Next: measure
+multi-day operation, cold-start latency, matched baseline comparisons and clock
+uncertainty. Reports: reports/performance/qc_root_cause.md,
+qc_benchmark_before_after.md; reports/daily/EPWA_2026-10-25_nearest_sensor.md.
+Actual Qwen:2tasks, one partially adapted helper, one rejected test proposal;
+17.439s/2465tokens; final tests/architecture independently reviewed.
