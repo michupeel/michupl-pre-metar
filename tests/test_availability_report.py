@@ -229,3 +229,41 @@ def test_preflight_inventory_and_current_run_poll_counts_are_separate(tmp_path):
     } == {"SUCCESS_NEW_MEASUREMENT": 1, "SUCCESS_UNCHANGED_MEASUREMENT": 1}
     write_availability(report, tmp_path)
     assert "Fresh stations" in (tmp_path / "availability.md").read_text(encoding="utf-8")
+
+
+def test_empty_payload_missing_clocks_do_not_inflate_invalid_timestamp_count():
+    conn = database()
+    conn.execute("INSERT INTO pws_sensors VALUES('sensor-c','opensensemap:one','{}')")
+    examples = (
+        (
+            "sensor-a",
+            "NO_MEASUREMENT",
+            None,
+            None,
+            ["MISSING_MEASUREMENT_TIME", "UNKNOWN_TIMESTAMP_PROVENANCE"],
+        ),
+        ("sensor-b", "INVALID", 12, "12", ["FUTURE_MEASUREMENT_AT_RECEIPT"]),
+        ("sensor-c", "INVALID", None, "malformed", ["INVALID_MEASUREMENT_TIMESTAMP"]),
+    )
+    for sensor, status, temperature, raw, reasons in examples:
+        conn.execute(
+            "INSERT INTO pws_sensor_checks VALUES(NULL,'EPWA',?,'2026-10-25T09:59:00Z',?,'INVALID_MEASUREMENT',?)",
+            (
+                sensor,
+                status,
+                json.dumps(
+                    dict(
+                        temperature_c=temperature,
+                        raw_temperature=raw,
+                        reasons=reasons,
+                        mode="INACTIVE",
+                    )
+                ),
+            ),
+        )
+    report = availability_snapshot(conn, now=AT)
+    summary = report["airports"][0]
+    assert summary["no_measurement"] == 1
+    assert summary["invalid_timestamps"] == 2
+    assert "MISSING_MEASUREMENT_TIME" in report["sensors"][0]["reasons"]
+    assert report["sensors"][2]["raw_temperature"] == "malformed"

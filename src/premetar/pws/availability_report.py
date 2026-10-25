@@ -125,6 +125,7 @@ def availability_snapshot(
                     checked_at=check["checked_at"] if check else None,
                     measurement_time=measurement,
                     temperature_c=data.get("temperature_c"),
+                    raw_temperature=data.get("raw_temperature"),
                     age_at_receipt_seconds=data.get("age_seconds"),
                     measurement_age_now_seconds=measurement_age,
                     check_age_seconds=check_age,
@@ -231,7 +232,8 @@ def availability_snapshot(
                 active_temperature_sensors=counts["ACTIVE"],
                 eligible_active=sum(r["monitoring_eligible"] for r in items),
                 invalid_timestamps=sum(
-                    any(
+                    (r["temperature_c"] is not None or r["raw_temperature"] not in (None, ""))
+                    and any(
                         str(reason).startswith(
                             (
                                 "INVALID_MEASUREMENT_TIMESTAMP",
