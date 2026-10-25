@@ -157,3 +157,20 @@ No measured speedup or token savings is claimed. Sampling parameter acceptance
 was observable; effectiveness was not independently verified except stream mode.
 The existing JSONL audit records actual usage and review decisions. Collection has
 no LLM dependency; no server settings changed.
+
+
+## Milestone1.6.3
+
+Existing authenticated worker at127.0.0.1:8888/v1 passed model discovery (17
+entries) and READY inference. Actual model unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF.
+M163-Q01 proposed a nearest-rank timing aggregation helper (8.719s,1248 tokens).
+Grouping/percentile structure was partially adapted; Codex corrected bool metrics,
+unknown success counting, strict typing and output shape. M163-Q02 proposed tests
+(8.720s,1217 tokens); rejected for wrong package import, missing group keys, wrong
+percentiles and invalid patch anchor. Correct tests were written directly; no
+repair loop. Total substantive inference17.439s/2465 tokens; separate health31
+ tokens. Actual decisions/usage logged in reports/dev/qwen_delegation.jsonl;
+minimal proposals retained ignored under reports/dev/artifacts. Helper tests,
+concurrent integration and actual measurements are independently reviewed.
+No measured token savings or workflow speedup claimed. Weather runtime remains
+independent of Qwen. Architecture and timestamp/publication semantics are Codex-owned.

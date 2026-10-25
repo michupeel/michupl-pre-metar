@@ -284,3 +284,20 @@ measurement counts. Empty200 responses are not API errors. Three empty/stale/
 invalid checks suspend a previously active instrument; inactive checks use30min
 spacing and restoration needs two fresh checks at least5min apart. Provider
 errors do not count as sensor failures. See [availability design and operations](docs/PWS_AVAILABILITY.md).
+
+
+### Deferred QC and individual sensor history (1.6.3)
+
+Hourly QC/calibration now uses a private snapshot on a separate analysis thread;
+only short completed-result publications use the ingestion writer. New parameters
+need post-commit proof before as-of prediction use. Bounded queue/SQL/operation
+metrics are exposed in collector health and rotating performance logs. See
+[non-blocking QC and sensor operations](docs/NONBLOCKING_QC.md).
+
+```powershell
+uv run premetar pws sensor-history --station 61c1f4ff80a739001cda08bb --date 2026-10-25 --limit 30
+```
+
+This read-only command produces the full CSV, Markdown, METAR comparison and PNG
+under reports/daily. Add --format csv or --format json for structured stdout.
+ZoneInfo preserves the25-hour Warsaw fallback day and explicit local UTC offsets.

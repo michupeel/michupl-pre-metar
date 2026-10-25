@@ -28,6 +28,75 @@ DB = Path("data/premetar.sqlite3")
 RAW = Path("data/raw")
 
 
+@app.command(name="sensor-history")
+def sensor_history_command(
+    station: Annotated[str, typer.Option("--station")],
+    date: str | None = None,
+    timezone: str = "Europe/Warsaw",
+    sensor: str | None = None,
+    limit: int = 50,
+    format: str = "table",
+    database: Path = Path("data/continuous-v1.sqlite3"),
+    output: Path = Path("reports/daily"),
+) -> None:
+    """Read-only station instruments, DST-safe local day, CSV/report/chart exports."""
+    import csv
+    import io
+    from contextlib import closing
+    from datetime import date as calendar_date
+    from zoneinfo import ZoneInfo
+
+    from premetar.continuous.reporting import connect
+    from premetar.pws.sensor_history import history_snapshot, write_report
+
+    if limit < 0 or format not in {"table", "csv", "json"}:
+        raise typer.BadParameter("Nonnegative limit and table/csv/json format required")
+    try:
+        with closing(connect(database)) as conn:
+            conn.execute("BEGIN")
+            day = (
+                calendar_date.fromisoformat(date)
+                if date
+                else utc_now().astimezone(ZoneInfo(timezone)).date()
+            )
+            result = history_snapshot(conn, station, day, timezone, sensor)
+            conn.rollback()
+    except (ValueError, KeyError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    paths = write_report(result, output)
+    if format == "json":
+        print(json.dumps(result, ensure_ascii=True))
+    elif format == "csv":
+        buffer = io.StringIO(newline="")
+        fields = (
+            list(result["observations"][0])
+            if result["observations"]
+            else ["measurement_time_utc", "temperature_c"]
+        )
+        writer = csv.DictWriter(buffer, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(result["observations"])
+        print(buffer.getvalue(), end="")
+    else:
+        console.print(
+            f"{result['airport']} | {result['station']} | {result['distance_km']:.3f} km | {result['date']} {timezone}"
+        )
+        console.print(f"Valid {len(result['observations'])}; excluded {len(result['excluded'])}")
+        table = Table("Measurement local (offset)", "Measurement UTC", "Sensor", "°C", "Age s")
+        display = result["observations"][-limit:] if limit else []
+        for row in display:
+            table.add_row(
+                row["measurement_time_local"],
+                row["measurement_time_utc"],
+                row["provider_sensor_id"],
+                str(row["temperature_c"]),
+                str(row["observation_age_seconds"]),
+            )
+        console.print(table)
+        console.print_json(json.dumps(result["summaries"]))
+        console.print(paths["markdown"])
+
+
 @app.command()
 def sources() -> None:
     for name, provider in PROVIDERS.items():

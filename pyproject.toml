@@ -27,7 +27,14 @@ build-backend = "hatchling.build"
 packages = ["src/premetar"]
 
 [dependency-groups]
-dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2", "ruff>=0.11,<1", "mypy>=1.15,<2", "types-defusedxml>=0.7"]
+dev = [
+    "pytest>=8,<10",
+    "pytest-asyncio>=0.25,<2",
+    "ruff>=0.11,<1",
+    "mypy>=1.15,<2",
+    "types-defusedxml>=0.7",
+    "matplotlib>=3.9,<4",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
