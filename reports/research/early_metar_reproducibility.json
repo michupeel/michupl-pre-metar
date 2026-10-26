@@ -1,0 +1,10 @@
+{
+  "same_frozen_snapshot": "666b06cad15c99b9fe8442dca27b67a180187dfbf9b03c398790860a158fb99f",
+  "summary_rows": 3600,
+  "candidate_evaluations": 11859,
+  "unique_target_trajectories": 2453,
+  "summary_sha256": "1a0479211f37ebd99820489474d2a4b35c91577caf1a7eb068a497616f72488f",
+  "previous_summary_sha256": "1a0479211f37ebd99820489474d2a4b35c91577caf1a7eb068a497616f72488f",
+  "identical_repeated_summary": true,
+  "note": "Source changes between runs only added report provenance/export formatting; all model/status summary outputs remain identical. Repeated checkpoints are not independent events."
+}

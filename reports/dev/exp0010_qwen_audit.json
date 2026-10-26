@@ -1,0 +1,19 @@
+{
+  "task_id": "E10-Q01",
+  "recorded_at": "2026-10-26 19:39:52 UTC",
+  "model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+  "duration_seconds": 2.086,
+  "usage": {
+    "completion_tokens": 137,
+    "prompt_tokens": 439,
+    "total_tokens": 576,
+    "prompt_tokens_details": {
+      "cached_tokens": 158
+    }
+  },
+  "decision": "ADAPTED_AFTER_INDEPENDENT_REVIEW",
+  "task": "Review first-receipt query scope across providers/COR and publication limitations",
+  "accepted": "Read-only documentation observations; clarified Python UTC validation/minimum and separate censoring checks.",
+  "rejected": "No production patch requested or applied. Qwen made no scientific edge decision.",
+  "test_outcome": "Independent all-provider/COR and censored-receipt tests passed; root independently verified source and snapshot minimum."
+}

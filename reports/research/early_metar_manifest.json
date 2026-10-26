@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-10-26T19:06:15.753046+00:00",
+  "snapshot": "data\\research\\exp0010\\snapshot.sqlite3",
+  "sha256": "666b06cad15c99b9fe8442dca27b67a180187dfbf9b03c398790860a158fb99f",
+  "backup_seconds": 1.327999999979511,
+  "integrity": "ok",
+  "foreign_key_errors": [],
+  "run": {
+    "id": "20261025T203720939894Z-d9e7826e",
+    "started_at": "2026-10-25T20:37:21.968739+00:00",
+    "ended_at": null,
+    "heartbeat": "2026-10-26T19:06:14.670570+00:00"
+  },
+  "baseline_commit": "a473f6c",
+  "analysis": {
+    "version": "exp0010-1.0",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "sqlite": "3.49.1",
+    "duration_seconds": 18.21966619999148,
+    "source_sha256": {
+      "D:\\metar-execution-lab\\michupl-pre-metar\\scripts\\research\\early_metar_reconstruction.py": "2747261d7d9eaf0f1b1f93e363d71b5e6b3b143fe35083498c51ab1aca128f6d",
+      "scripts\\research\\early_metar_data.py": "26257c9b2ccc50de1cf82e2ba54018335ab5d3a2bca141c26ef6c38d22bc0eeb",
+      "scripts\\research\\early_metar_metrics.py": "bc9dce7122f727f19de804f6bd9221bf2d8ed07788390aad1c36784b65d8f20f",
+      "scripts\\research\\early_metar_prospective.py": "e86848475ada18d36b8bb22e1b59e95925c9b27ab143a12dc9bb493acee68596",
+      "scripts\\research\\early_metar_timeline.py": "ef9e06a54c76021af6396f846b8608ba0473f7b6c7ba2a59090da5edee1a3db9",
+      "docs\\research\\EXP0010_PROTOCOL.md": "61cda7cf6772ed1687ff14c942ab9ed60a1ec91b7b7117cb359e06f4e8825608",
+      "configs\\timestamp-policy-v1.json": "38b14c68f30759108d807b1324f0ab9327331d51ef6a45a4d7de57d706cfa7b9"
+    }
+  }
+}

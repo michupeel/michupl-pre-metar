@@ -463,3 +463,80 @@ candidate only; no robust edge. EXP-0006/0007/0008/0009 remainOPEN. Next: prospe
 shadow evaluation of a preregistered change rule over more changing weather/days,
 without replacing the production cohort from this evaluation set. Reports under
 reports/research/epwa_station_comparison.*; no trading or paid API changes.
+
+
+## EXP-0010 — Early METAR Temperature Reconstruction from Calibrated PWS
+
+Question: can already captured nearby temperatures, causally corrected, identify
+an upcoming METAR integer before our earliest full-report receipt, including
+post-observation/pre-receipt opportunities? Distinct from30min forecasting.
+Status: OPEN / EXPLORATORY; observed information-availability cases, no validated
+reliable edge or deployment. Baselinea473f6c. Protocol written before results:
+docs/research/EXP0010_PROTOCOL.md.
+
+Hypothesis: systematic local offsets can conceal useful temperature information;
+median correction from previously received reference cycles may reveal it.
+Data: consistent online backup26Oct2026T19:06:15.753046Z, SHA256666b06cad15c99b9fe8442dca27b67a180187dfbf9b03c398790860a158fb99f.
+EDDM/EHAM/EPWA/EGLL106/107/104/106uncensored target cycles.120instruments audited,
+46with timestamp-valid records,39with eligible reconstructions;19with>=12causal
+pair cycles. All available nearby stored sensors included, not only current
+production cohort. Sensor.Community ingestion clocks remain ineligible.
+
+Method: CAL0raw; CAL1median midpoint offset allprior data; CAL2rolling12h,
+minimum12different earlier nominal cycles. Integer reference remains quantized,
+offset±0.5C describes rounding ambiguity only, not confidence or all measurement
+uncertainty. Pair PWS asof earlierinitial outcome receipt, sameinstrument,within
+5minnominal. Calibrationoutcome receipt<decision, nominal<target; no target/future
+references. Strict300s policy unchanged. Referenceclosure earliestANY provider/COR,
+includingearlyKNMI; censored/ambiguousinitial outcomesexcluded. FixedT−600/300/180/
+120/60,T+30/60/90; latestactualeligible receiptsbyphase and allreceipt/expiry/
+metadata/calibrationboundarytrajectories. Oldpreinput isnot relabeledEXP-B.
+Reconstructed decisions are RETROSPECTIVE_AS_OF_RECONSTRUCTION, not backdated
+immutableforecasts. Same-targetpersistence/raw comparisons; gains/harms/falsealarms
+and firstcorrect versuscontinuousfreshcorrectsuffixreported. NoML/affine/tuning.
+
+Results: calibratedincremental examples exist atALL4airports. EDDM esride_krb1,
+station5beb063756a15500193139f0/sensor5beb063756a15500193139f7,16.398km:
+CAL2T−60 22/38 vsraw21/38,persistence21/38;gain8/harm7/net+1. LatestactualEXP-B
+CAL2 19/33 vspersistence18/33,gain6/harm5/net+1. Themore favorableT+90subset17
+cycles/net+4 is exploratory, not an independently validated selection. EPWA
+SaveDniproCAL2T−60 11/17 vsraw6,persistence10,gain5/harm4/net+1. EGLLwd3-5CAL2
+T−60 17/26 vsraw11,persistence19,gain3/harm5/net−2. EHAMCAL2latecheckpointshave
+no sample; earlyKNMIcloseswindow. DiemenCAL1T−300 9/21 vs14persistence,gain4/harm9.
+
+Realexamples: EDDM25Oct21:20Z previous7C,PWS7.30C withpriorbias−0.43→7.73→8C,
+received21:18:52Z, METAR8Cfirst21:23:45Z,293.090slead. EHAM26Oct08:55Z previous12,
+PWS12.13−0.775→11.355→11,receipt08:47:57,earliestKNMI08:52:11 BEFOREnominal,
+254.461slead. EPWA26Oct15:00Z previous11,PWS10.49−0.64→9.85→10,277.020slead
+(rawalsoalreadycorrect). EGLL26Oct11:50Z previous12,PWSmeasured11:50:47/received
+11:51:07,12.39−(−0.68)→13.07→13, officialfirst11:54:59,232.314sEXP-Blead.
+Theseareoutcome-conditioned selectedexamples,not independent successrates.
+Eightuniquesuccesscycles plusfourSAMEsensor/methodfalsealarmexamples exported;
+earliercorrectcompanionstates ofsamecyclesmustnot becounted asextraevents.
+Firstcorrects atT−10left-censored bysearchwindow andofteninterrupted byfreshness
+expiry; stablecorrects later, not all15minofapparentlead continuouslyusable.
+
+Actualimmutableproduction audit separately: validforecasts EDDM2808/EHAM1639/
+EPWA2757/EGLL2649,distinctcycles106/107/104/106;excluded236/154/312/248;42EHAM
+pending. ActualnearestT−60 correct/persistence matched:22/82vs52/82,2/7vs4/7,
+14/82vs53/82,25/75vs48/75; nets−30/−2/−39/−23. FourEHAM targetalreadyreceived
+forecastsremainexcluded. Originalmethodsnot relabeled asnewcalibrationrules.
+
+Limitations: shortcorrelatedhistory, manyairports/sensors/methods/checkpoints,
+nonuniformavailability, hardware/exposure/microclimateunknown, quantizedreference,
+clockverificationUNKNOWN, referencefirstreceipt isOURS notglobalpublication.
+No statisticalsignificance/reliableedge claimed. CAL2EDDM is only a future-shadow
+candidate: emit everynewvalidmeasurement, medianprevious12h/min12pairs,roundtoward
+warmerexactties,closeonanytargetreceipt,recordactualcompletiontime. Nooraclelast
+receipt, no retrospectivestationselection. Freezebeforefuturetest; recommend>=7
+newdays/200matchedcycles/30transitions, reportallmissesandfalsealarms. NOTDEPLOYED.
+
+Verification:294tests passed; Ruff/format104files, strictmypy45production+8research
+files pass. Offlineanalysis~18s onfrozenDB; currentcollectorunchangedPID54608,
+same run20261025T203720939894Z-d9e7826e; existingWindows taskRUNNING. At19:44:53Z
+liveintegrityok/FKempty;0oldraw/observations/arrivals/predictions/settlements/
+selection/calibration rowschanged/deleted;124newvalidPWSmeasurements sincesnapshot.
+No production/source/config/migration/restart/clockchanges. Qwen1SQLreview adapted,
+2.086s/576tokens;healthseparate31tokens; no savingsclaim. Reports:
+reports/research/early_metar_reconstruction.md/csv,early_metar_examples.csv,
+early_metar_sensor_ranking.csv,early_metar_stability.csv andtimelinePNG.

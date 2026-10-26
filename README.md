@@ -325,3 +325,27 @@ Invoke-Item reports/research/epwa_station_comparison.png
 The analysis distinguishes meteorological agreement, retrospective as-of replay
 and actual immutable forecasts. T−60 and T+60 experiments remain separate;
 rankings require matched target cycles. Small samples do not establish an edge.
+
+
+## EXP-0010 — early METAR reconstruction across all airports
+
+Read-only frozen-snapshot research for EDDM/EHAM/EPWA/EGLL, including unselected
+sensors. [Protocol](docs/research/EXP0010_PROTOCOL.md),
+[actual findings and examples](reports/research/early_metar_reconstruction.md),
+[summary CSV](reports/research/early_metar_reconstruction.csv),
+[timeline](reports/research/early_metar_timeline.png).
+
+```powershell
+Set-Location D:\metar-execution-lab\michupl-pre-metar
+uv sync --locked
+uv run python -m scripts.research.early_metar_reconstruction --snapshot data/research/exp0010/snapshot.sqlite3
+Invoke-Item reports/research/early_metar_timeline.png
+```
+
+The retained local snapshot is required to reproduce; hash/environment/code
+fingerprints are in reports/research/early_metar_manifest.json. Raw captures,
+full candidate JSON and the database remain ignored. Reports distinguish EXP-A,
+EXP-B, earliest versus stable correctness and original immutable forecasts.
+Calibrated incremental examples exist, but repeated false alarms and small net
+improvements do not establish a reliable information edge. A future shadow rule
+is proposed only; production behavior and the running collector are unchanged.
