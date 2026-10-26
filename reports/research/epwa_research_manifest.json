@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-10-26T12:26:35.238222+00:00",
+  "snapshot": "data\\research\\m17\\snapshot.sqlite3",
+  "seconds": 1.25,
+  "sha256": "706dd79d7f8a7fe6e689cc61489abadd3851523864a07e09b5966082356a4c1c",
+  "integrity": "ok",
+  "fk_errors": [],
+  "run": {
+    "id": "20261025T203720939894Z-d9e7826e",
+    "started_at": "2026-10-25T20:37:21.968739+00:00",
+    "ended_at": null,
+    "heartbeat": "2026-10-26T12:26:33.899660+00:00",
+    "exit_reason": null
+  },
+  "counts": {
+    "pws_observations": 32118,
+    "pws_predictions": 9500,
+    "continuous_settlements": 9485,
+    "pws_selections": 79,
+    "continuous_checkpoints": 13594
+  },
+  "analysis_environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "sqlite": "3.49.1",
+    "version": "epwa-research-1.0"
+  },
+  "source_sha256": {
+    "D:\\metar-execution-lab\\michupl-pre-metar\\scripts\\research\\epwa_comparison.py": "084551c33000a28f5498f9cbcc867fac10652126eb6f47e245c49b1adaeb10a1",
+    "scripts\\research\\epwa_plot.py": "602df33a9c53915719d4765d6b12dd55152d6726f18c630e132746a120701b82",
+    "scripts\\research\\epwa_diagnostics.py": "7c83a576f0496e07d5d7633ccbbbd2587bae9662df8e1921f1e77128fbb50ba0",
+    "docs\\research\\EPWA_M17_PROTOCOL.md": "49a6ae0b14a66036951a4ad8de84fc6d138f7a9ea09122f56953c3407f92bf6e",
+    "configs\\timestamp-policy-v1.json": "38b14c68f30759108d807b1324f0ab9327331d51ef6a45a4d7de57d706cfa7b9"
+  }
+}

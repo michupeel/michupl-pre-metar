@@ -174,3 +174,7 @@ minimal proposals retained ignored under reports/dev/artifacts. Helper tests,
 concurrent integration and actual measurements are independently reviewed.
 No measured token savings or workflow speedup claimed. Weather runtime remains
 independent of Qwen. Architecture and timestamp/publication semantics are Codex-owned.
+
+## Milestone1.7
+
+Health verified authenticated localhost8888/v1,17models, actual Qwen3-Coder-30B-A3B-Instruct-GGUF; READY generation31tokens/0.622s. Sampling parameters accepted but most effective values not exposed. Three bounded tasks:24.800s,3966tokens total. M17-Q01 metric aggregation rejected (wrong direction/baseline denominator/bias/validation); M17-Q02 tests rejected (Windows imports, datetime types and contradictory expected values). No repair loop. M17-Q03 general documentation cautions partially adapted; incorrect trend definition and12hours threshold rejected/corrected to same-sensor temperature change and12samples. Code/tests independently written and reviewed. No inference savings or validated workflow speedup claimed. Proposals retained ignored under reports/dev/artifacts; decisions in reports/dev/qwen_delegation.jsonl and m17_qwen_audit.json. Runtime never depends on Qwen.

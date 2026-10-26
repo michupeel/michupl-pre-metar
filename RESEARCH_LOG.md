@@ -402,3 +402,64 @@ uncertainty. Reports: reports/performance/qc_root_cause.md,
 qc_benchmark_before_after.md; reports/daily/EPWA_2026-10-25_nearest_sensor.md.
 Actual Qwen:2tasks, one partially adapted helper, one rejected test proposal;
 17.439s/2465tokens; final tests/architecture independently reviewed.
+
+
+## Milestone1.7 — EPWA sensor quality and incremental information
+
+Frozen protocol docs/research/EPWA_M17_PROTOCOL.md precedes implementation/results.
+Baseline59c377c; consistent backup26Oct12:26:35Z, SHA256706dd79d7f8a7fe6e689cc61489abadd3851523864a07e09b5966082356a4c1c.
+H1 absolute PWS; H2 causal interval-residual median correction48h/min12prior
+received outcomes; H3 previous METAR plus same-instrument change. Fixed four
+provider stations; no retrospective selection or production changes. Compare
+against same-target persistence/recent METAR trend; separate T−60 and T+60 replay
+from genuine immutable forecasts. No random split or ML.
+
+Observed first-receipt-valid records: Cybernetyki7/BMP180252, Czerniakowska/DHT11246,
+SaveDnipro/BME280253, Przekorna/BME280280. Two stale receipts excluded. Median
+updates327.15/342.73/333.48/298.01s; ages51.97/81.65/113.43/61.54s. All four
+selected under original cohort3. Metadata saysoutdoor/fixed consistently across
+stored discoveries, not physical installation verification. Observed decimals
+are not accuracy: BMP180-labelled outputs have0.02Cdistinct steps versus0.1C
+manufacturer reference conversion. No mounting/shielding evidence.
+
+On46 shared measurement-time METAR cycles, mean absolute rounding-interval
+distances1.233/1.513/0.215/1.320C respectively: SaveDnipro best meteorological
+agreement, no predictive advantage shown. Raw and causal calibration models
+fail to beat matched persistence. H3 T−60: Cybernetyki18/20 vs17/20 persistence,
+Czerniakowska11/14 vs12/14, SaveDnipro9/13 vs9/13, Przekorna13/18 vs15/18.
+Correct changed integers1/3,2/2,0/4,1/3; false alarms on unchanged cycles0,3,0,3.
+These station percentages have different target sets and are not a valid ranking.
+All-four shared targets: raw9, calibrated5, change1: INSUFFICIENT DATA for a
+predictive ranking. Operational ordering follows preregistered validity/coverage/
+age/gap lexicographic rules: Przekorna,SaveDnipro,Cybernetyki,Czerniakowska.
+No arbitrary combined predictive/operational score.
+
+Actual current-cohort forecasts1255 across43cycles; at T−60 productionnearest5/42,
+median2/42,inverse-distance6/42 versus recorded persistence35/42 on SAMEtargets.
+All-history eligible2345forecasts/90cycles;324excluded/unsettled including12
+pending. Actual records remain untouched. A reconstructed25Oct21:30Warsaw
+Cybernetyki change−0.6C would predict9C from previous10C before receipt, but H3
+was not running live; actual nearest forecast11C was wrong. This is a hypothesis,
+not a prospective success. Correct replay changes and false alarms are exported.
+
+Ten prior unavailable checkpoints: six NULLquality-score weighted models,
+fourEGLL T−180 methods lack selected readings<=300s; airportcountsEDDM3/EGLL6/
+EHAM1/EPWA0. Original exceptions/gate state not recorded; attribution is a durable
+state reconstruction. No scheduler defect demonstrated or production change made.
+
+Verification: uv sync --locked,242tests19.60s,Ruff/format93files, strictmypy45
+production+3researchfiles pass. Independent review added regression safeguards
+for COR receipt versus initial outcome availability and future-event previous
+METAR; no affected COR-order case in this snapshot. At12:56:31Z same collector
+run/PID54608 with fresh heartbeat, existing taskRUNNING,112newvalidPWSmeasurements
+across airports since snapshot. SQLite integrityok/FKs empty;0old raw/observation/
+arrival/prediction/settlement/selection rows changed or removed. No restart.
+Qwen3boundedtasks24.800s/3966tokens:2rejected, documentationpartiallyadapted;
+substantive analysis/tests independently verified. No savings claimed.
+
+Decision: H1/currentproduction does NOTimprove persistence in this short sample.
+H2 improves raw readings but not matched persistence. H3 is a provisional research
+candidate only; no robust edge. EXP-0006/0007/0008/0009 remainOPEN. Next: prospective
+shadow evaluation of a preregistered change rule over more changing weather/days,
+without replacing the production cohort from this evaluation set. Reports under
+reports/research/epwa_station_comparison.*; no trading or paid API changes.

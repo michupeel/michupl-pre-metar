@@ -301,3 +301,27 @@ uv run premetar pws sensor-history --station 61c1f4ff80a739001cda08bb --date 202
 This read-only command produces the full CSV, Markdown, METAR comparison and PNG
 under reports/daily. Add --format csv or --format json for structured stdout.
 ZoneInfo preserves the25-hour Warsaw fallback day and explicit local UTC offsets.
+
+
+## EPWA sensor comparison (Milestone1.7)
+
+Read-only research against a frozen SQLite backup; collector rules and station
+selection remain unchanged. [Frozen protocol](docs/research/EPWA_M17_PROTOCOL.md),
+[actual comparison](reports/research/epwa_station_comparison.md),
+[hardware evidence](docs/research/EPWA_HARDWARE.md) and
+[checkpoint diagnostics](reports/research/epwa_checkpoint_diagnostics.md).
+The normalized CSV/plots are committed; private local snapshot/raw payloads remain
+ignored. Snapshot hash and code/environment fingerprints are in
+reports/research/epwa_research_manifest.json. Reproduce on the retained workstation
+snapshot from the project root (requires the existing local dataset):
+
+```powershell
+uv sync --locked
+uv run python -m scripts.research.epwa_diagnostics --database data/research/m17/snapshot.sqlite3
+uv run python -m scripts.research.epwa_comparison --snapshot data/research/m17/snapshot.sqlite3
+Invoke-Item reports/research/epwa_station_comparison.png
+```
+
+The analysis distinguishes meteorological agreement, retrospective as-of replay
+and actual immutable forecasts. T−60 and T+60 experiments remain separate;
+rankings require matched target cycles. Small samples do not establish an edge.

@@ -1,0 +1,49 @@
+{
+  "checked_at": "2026-10-26T12:56:31.410772+00:00",
+  "run": {
+    "id": "20261025T203720939894Z-d9e7826e",
+    "started_at": "2026-10-25T20:37:21.968739+00:00",
+    "ended_at": null,
+    "heartbeat": "2026-10-26T12:56:30.408306+00:00"
+  },
+  "health": {
+    "pid": 54608,
+    "updated_at": "2026-10-26T12:55:42.630149+00:00"
+  },
+  "integrity": "ok",
+  "foreign_key_errors": [],
+  "latest_capture_by_source": [
+    {
+      "source": "awc",
+      "latest": "2026-10-26T12:56:24.378242+00:00"
+    },
+    {
+      "source": "dwd_10min",
+      "latest": "2026-10-26T12:55:49.958766+00:00"
+    },
+    {
+      "source": "knmi_metar",
+      "latest": "2026-10-26T12:55:44.974959+00:00"
+    },
+    {
+      "source": "pws_opensensemap",
+      "latest": "2026-10-26T12:54:10.877717+00:00"
+    },
+    {
+      "source": "pws_sensor_community",
+      "latest": "2026-10-26T12:49:41.163470+00:00"
+    }
+  ],
+  "old_rows_changed_or_removed": {
+    "raw_payloads": 0,
+    "pws_observations": 0,
+    "pws_arrivals": 0,
+    "pws_predictions": 0,
+    "continuous_settlements": 0,
+    "pws_selections": 0,
+    "pws_selection_versions": 0
+  },
+  "valid_measurements_since_snapshot": 112,
+  "latest_new_valid_measurement": "2026-10-26T12:54:10.877717+00:00",
+  "same_collector_run_as_snapshot": true
+}
