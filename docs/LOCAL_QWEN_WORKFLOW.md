@@ -187,3 +187,7 @@ Existing authenticated localhost8888/v1 Qwen3-Coder-30B-A3B-Instruct-GGUF verifi
 ## EXP-0011
 
 Existing authenticated localhost8888/v1 worker verified active Qwen3-Coder-30B-A3B-Instruct-GGUF among17model entries; READY health0.553s/31tokens. Two bounded read-only parser reviews: Q01 6.620s/1193tokens and Q02 7.597s/2217tokens. Both rejected after independent verification: contract review confused a proposal with missing implementation; actual-code review alleged false integer/side/list-identity bugs. No output applied, no repair loop and no savings claim. Correct implementation and168newtests independently verified. Audit:reports/dev/exp0011_qwen_audit.json and qwen_delegation.jsonl. Runtime has no inference dependency.
+
+## EXP-0012
+
+Existing localhost8888/v1 worker verified Qwen3-Coder-30B-A3B-Instruct-GGUF among17models; READY health0.606s/31tokens. One bounded implementation proposal EXP0012-Q01 produced the pure Decimal price-bucket helper:4.327s,423prompt+372completion=795tokens. Accepted after independent boundary/NaN/range review and repository formatting; covered by automated tests. No rejection or repair loop. Position accounting, chain roles, matching paths, fees and scientific conclusions remained lead-owned. Audit:reports/dev/exp0012_qwen_audit.json and qwen_delegation.jsonl. No measured savings claim or runtime inference dependency.

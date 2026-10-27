@@ -614,3 +614,16 @@ availability for traded cities. No real orders or production behavior changes.
 Reports:reports/trader/hightemptation_initial_findings.md, required activity/
 latency/shadow/weather/forensics/hypothesis outputs, book_windows/endpoint_race
 CSVs and operational JSON.
+
+## EXP-0012 — Tmax timing, limit exits and trade microstructure
+
+Hypothesis: HighTempTation buys NO near expected Tmax and passively exits higher.
+Data: frozen27Oct2026 read-only snapshots,11867public economic rows,4751NO weather BUYs, two saved Polygon receipts and hashed current official ExchangeV2 source. Neither monitor was restarted or changed.
+Method: conditional trade-only FIFO, exact quantity closure, quarantine ambiguous tokens/oversells/nontrade activity; fixed price/time probes; UTC-day block resampling. No complete inventory ledger exists, so all historical FIFO remains conditional.
+Results:4738cleanNO BUY lots,4271exact closures,467unclosed trade-ledger lots;6smedian source-block interval. Closed-only rates5/10/30/60s:35.92/79.23/91.55/92.46percent. Around0.90,305/395close higher in3–15s, but zero satisfy the fixed1–3cent improvement probe. Exact0.98is the mode878/4751. Same-city-dayTmaxNO14–16:833/3261(25.54percent), not measured forecast-Tmax alignment.
+Ankara: chain-verified taker entry AND exit,38.35shares0.98to0.99,+0.3835pUSD after zero observed exchange fees, excluding gas/relay/rebates. Entry matches four sibling YES BUYs at0.02 via supported mint path; empty direct NO asks did not exclude this liquidity. Corrects EXP0011 interpretation without changing its historical records or runtime model. Warsaw loss counterexample:−136.05935gross; no whole-history net-profit claim.
+Limitations:6863/6914SELL roles unknown; no proven passive placement or archived causal forecastTmax; no continuous pre-BUY sibling books; source seconds are block clocks, not decision/placement times. Unclosed lots and incomplete transfer/redemption history prohibit portfolio-return/win-rate conclusions.
+Conclusion: fast higher exits repeat, passive-limit and weather-trigger explanations remain unresolved. One mint/aggressive route is evidenced, not a general profitable copy rule.
+Next: freeze a bounded both-outcome watchlist, capture valid pre-entry depth, causal forecasts and no-trade controls in a separately authorized future experiment; no automatic activation.
+Verification:547tests passed23.13s; Ruffcheck/format152files; strictmypy57production+15researchfiles. Snapshots quick_checkok. LocalQwen1accepted task4.327s/795tokens plus health0.606s/31tokens.
+Artifacts:reports/trader/hightemptation_tmax_limit_exit.md and required CSVs, execution-path/depth/accounting audit exports and3charts.

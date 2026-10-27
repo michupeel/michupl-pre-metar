@@ -1,0 +1,27 @@
+{
+  "experiment": "EXP-0012",
+  "task_id": "EXP0012-Q01",
+  "model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+  "endpoint": "http://127.0.0.1:8888/v1",
+  "task": "Pure Decimal price-bucket helper with fixed boundaries, invalid-value handling; no production access",
+  "duration_seconds": 4.327,
+  "usage": {
+    "completion_tokens": 372,
+    "prompt_tokens": 423,
+    "total_tokens": 795,
+    "prompt_tokens_details": {
+      "cached_tokens": 154
+    }
+  },
+  "decision": "ACCEPTED",
+  "adaptations": "Independent boundary/NaN/outside-range review and repository formatting",
+  "test_outcome": "547 tests passed; Ruff and strict production/research mypy passed",
+  "runtime_dependency": false,
+  "failures": 0,
+  "health": {
+    "generation_seconds": 0.606,
+    "total_tokens": 31
+  },
+  "token_savings": "NOT_MEASURED",
+  "audit_recorded_at": "2026-10-27T16:26:31.187957+00:00"
+}

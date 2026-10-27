@@ -1,0 +1,98 @@
+{
+  "checked_at": "2026-10-27T16:26:31.228504+00:00",
+  "trader_health": {
+    "received_at": "2026-10-27T16:26:30.676398+00:00",
+    "clock_synchronization": "UNKNOWN_NOT_CHANGED",
+    "database_bytes": 1812852736,
+    "last_activity_poll": "2026-10-27T16:26:29.302866+00:00",
+    "last_trade_poll": "2026-10-27T16:26:29.353405+00:00",
+    "pending_jobs": 0,
+    "pid": 49208,
+    "requests": 20216,
+    "run_id": "ad520bd3f903443e902ebd58640c2ebd",
+    "state": "RUNNING",
+    "storage_warning": false,
+    "tokens": 256,
+    "trade_queue_depth": 0,
+    "uptime_seconds": 24788.178359
+  },
+  "weather_status_observed": {
+    "run_id": "20261025T203720939894Z-d9e7826e",
+    "heartbeat": "2026-10-27T16:26:06.531524+00:00",
+    "state": "RUNNING",
+    "predictions": 15319,
+    "settled": 15265,
+    "valid_opensensemap_at_receipt": 10590,
+    "sensor_community": "STALE / transport failures, no production change"
+  },
+  "tasks": [
+    "MichuplPreMetar-Continuous-v1",
+    "MichuplPreMetar-TraderShadow-v1"
+  ],
+  "task_states": "Running",
+  "same_pids_as_start": [
+    54608,
+    49208
+  ],
+  "restarts_performed": 0,
+  "production_changes": false,
+  "clock_status": "UNKNOWN",
+  "verification": {
+    "pytest": "547 passed in23.13s",
+    "ruff_check": "PASS",
+    "ruff_format": "152files formatted",
+    "mypy_production": "57files PASS",
+    "mypy_research": "15files PASS",
+    "uv_sync_locked": "48packages PASS"
+  },
+  "snapshot_manifest": {
+    "started_at": "2026-10-27T11:37:17.793386+00:00",
+    "baseline_commit": "bef6931",
+    "initial_backup_attempt": "Aborted at30s budget; uncommitted partial snapshot excluded. Retry pins a read-only WAL snapshot with15s backup budget.",
+    "sources": {
+      "trader": {
+        "source": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\trader\\monitor.sqlite3",
+        "snapshot": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0012\\trader_pinned.sqlite3",
+        "snapshot_pinned_at": "2026-10-27T11:37:17.798402+00:00",
+        "completed_at": "2026-10-27T11:37:22.751218+00:00",
+        "backup_seconds": 3.781999999890104,
+        "sha256": "6cddb1ee11e6a30d9bc9fac15ba659eb1a1a57045c7809e19db2bca3d3709b89",
+        "integrity": "ok",
+        "bytes": 785821696
+      },
+      "weather": {
+        "source": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\continuous-v1.sqlite3",
+        "snapshot": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0012\\weather_pinned.sqlite3",
+        "snapshot_pinned_at": "2026-10-27T11:37:22.760234+00:00",
+        "completed_at": "2026-10-27T11:37:25.104333+00:00",
+        "backup_seconds": 1.6090000001713634,
+        "sha256": "5f3d063bad70795ecdd15f06f0fc0f6d1b965a4c81d4ec8a52395d4266c73d5e",
+        "integrity": "ok",
+        "bytes": 377724928
+      }
+    },
+    "completed_at": "2026-10-27T11:37:25.104833+00:00"
+  },
+  "source_verification": {
+    "ITrading.sol": {
+      "url": "https://raw.githubusercontent.com/Polymarket/ctf-exchange-v2/main/src/exchange/interfaces/ITrading.sol",
+      "received_at": "2026-10-27T11:52:48.621960+00:00",
+      "sha256": "df0a14ff32cfdfe38feb6f469d1cf5012df4fd2f658d1f1a6ce765a5a7dc8954"
+    },
+    "Trading.sol": {
+      "url": "https://raw.githubusercontent.com/Polymarket/ctf-exchange-v2/main/src/exchange/mixins/Trading.sol",
+      "received_at": "2026-10-27T11:52:48.935365+00:00",
+      "sha256": "dd8d18fca897e664583a93944b379435e6f70e84f4190c39d669b2be62596012"
+    },
+    "Events.sol": {
+      "url": "https://raw.githubusercontent.com/Polymarket/ctf-exchange-v2/main/src/exchange/mixins/Events.sol",
+      "received_at": "2026-10-27T11:52:49.253538+00:00",
+      "sha256": "50ec1ce60573fa46cf7776a9207aacbefa8881a899df706da2ce7275692c5f3b"
+    }
+  },
+  "reproducibility": {
+    "csv_files": 20,
+    "identical_sha256_after_rerun": true,
+    "includes_existing_unchanged_csvs": true
+  }
+}

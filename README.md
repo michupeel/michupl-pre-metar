@@ -10,6 +10,21 @@ This is not conventional weather forecasting. We do not assume an information
 edge exists. A reproducible negative result is useful; insufficient data is a
 different result. There is no real-money order execution.
 
+## Execution microstructure research (EXP-0012)
+
+Read [the forensic report](reports/trader/hightemptation_tmax_limit_exit.md) and
+[protocol](docs/research/EXP0012_PROTOCOL.md). Conditional quantity-matched FIFO
+replaces first-later-SELL pairing. Ankara's chain evidence supports taker entry/
+exit and opposite-outcome BUY/BUY mint matching; direct asks alone did not capture
+that liquidity route. Historical full-cost profitability and forecast-Tmax
+causality remain unverified. Neither live monitor is changed.
+
+Reproduce against the retained, hash-verified local snapshots (not distributed):
+
+```powershell
+uv run python -m scripts.research.hightemptation_tmax_limit_exit --snapshot-dir data/research/exp0012 --output reports/trader
+```
+
 ## Public trader shadow research (EXP-0011)
 
 The independent `premetar trader` commands capture HighTempTation public activity,
