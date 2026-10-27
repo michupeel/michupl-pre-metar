@@ -182,3 +182,8 @@ Health verified authenticated localhost8888/v1,17models, actual Qwen3-Coder-30B-
 ## EXP-0010
 
 Existing authenticated localhost8888/v1 Qwen3-Coder-30B-A3B-Instruct-GGUF verified active among16model entries; READY health generation0.525s/31tokens. Sampling accepted but effective values remain mostlyunverified. One bounded SQL-scope review E10-Q01:2.086s/576tokens, adapted into docs/research/EXP0010_SQL_REVIEW.md after independent source and test verification. Corrected wording clarifies that Python validatesUTC clocks/takesminimum, and startup/coverage censoring is separate. No scientific conclusions or production patches delegated to Qwen. Full audit in reports/dev/qwen_delegation.jsonl and exp0010_qwen_audit.json; proposal retained ignored under reports/dev/artifacts. No savings or validated inference efficiency claim.
+
+
+## EXP-0011
+
+Existing authenticated localhost8888/v1 worker verified active Qwen3-Coder-30B-A3B-Instruct-GGUF among17model entries; READY health0.553s/31tokens. Two bounded read-only parser reviews: Q01 6.620s/1193tokens and Q02 7.597s/2217tokens. Both rejected after independent verification: contract review confused a proposal with missing implementation; actual-code review alleged false integer/side/list-identity bugs. No output applied, no repair loop and no savings claim. Correct implementation and168newtests independently verified. Audit:reports/dev/exp0011_qwen_audit.json and qwen_delegation.jsonl. Runtime has no inference dependency.

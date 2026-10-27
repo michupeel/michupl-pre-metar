@@ -8,7 +8,27 @@ aggregators → market.
 
 This is not conventional weather forecasting. We do not assume an information
 edge exists. A reproducible negative result is useful; insufficient data is a
-different result. There is no trading functionality.
+different result. There is no real-money order execution.
+
+## Public trader shadow research (EXP-0011)
+
+The independent `premetar trader` commands capture HighTempTation public activity,
+market depth and paper-only copy scenarios. There is no real order submission or
+private-key handling. Research storage and the Windows task are separate from the
+weather collector. [Protocol](docs/research/EXP0011_PROTOCOL.md),
+[verified sources](docs/research/EXP0011_SOURCES.md) and
+[PowerShell operation](docs/research/EXP0011_OPERATION.md) document the experiment.
+
+```powershell
+uv run premetar trader status
+uv run premetar trader recent --limit 20
+uv run premetar trader shadow
+uv run premetar trader analyze
+```
+
+Bootstrap/history are excluded from prospective copying. Unavailable books, fees,
+rules or outcomes remain unknown; a successful wallet is not proof that delayed
+copying is profitable. Read the generated `reports/trader/` evidence and limits.
 
 ## Continuous experiment (Milestone 1.6)
 

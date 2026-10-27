@@ -1,0 +1,127 @@
+{
+  "recorded_at": "2026-10-27T09:37:53.985735+00:00",
+  "research_integrity": "ok",
+  "research_run": {
+    "code_sha256": {
+      "trader_analytics.py": "af1a1e7b524582814b3584f609e7bc90c51173c2183abecb5a928a5ab7f1f3a4",
+      "trader_cli.py": "9d9b8d016209dc13f61c831ae5748c0df9e78f638e0ba11fd345b3587376198b",
+      "trader_execution.py": "f3c920d92053ef78d28f95b6ba452be7990c42ebecb0138e23e3b72f593eaa61",
+      "trader_monitor.py": "39f92ccfd03f69216b6c0f166deeb2257a02119fbcf14775395d74deff13a97d",
+      "trader_normalizer.py": "e53ea4a357e7118e14bf7fcb2b36ed7231c05f57c0d35d6ed09d05d12406a71e",
+      "trader_portfolio.py": "53373f6b9b2ecac639934a5dcbed652c39f06a74fdfae52f5ffe72a3e28e812b",
+      "trader_reports.py": "741f7cc18395d0429caeebe3147afb41ae69e3f9a3c99766454533750dd2b89a",
+      "trader_service.py": "956caae333d99be3c43bbec5c0172f13ca43fc4ac106c747d3f15ddad287196c",
+      "trader_store.py": "a8e446ab58f5f45763701ce856b116d1496fd0e4ad5c941c5581a03dfec2e574",
+      "trader_stream.py": "547095f1843147107300f7495747080af6870dd7066726ef50a2586584ac494b",
+      "trader_weather.py": "a2c8452d476fee2d75c8b6d56a5d587638047ac9e368530e74c48c161e236eb1"
+    },
+    "delays": [
+      0,
+      1,
+      3,
+      5,
+      10,
+      30
+    ],
+    "detector_version": "DUAL_PUBLIC_FEEDS-v2",
+    "notionals": [
+      10,
+      25,
+      50,
+      100
+    ],
+    "pid": 49208,
+    "poll_interval": 3.0,
+    "protocol": "EXP0011-v1",
+    "run_id": "ad520bd3f903443e902ebd58640c2ebd",
+    "started_at": "2026-10-27T09:33:22.498039+00:00",
+    "strategies": [
+      "COPY_HOLD",
+      "COPY_FOLLOW",
+      "COPY_TAKE_PROFIT"
+    ],
+    "wallet": "0x6011655c4afb76f36dd1b08a137a1ba73466b31e",
+    "weather_database": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\continuous-v1.sqlite3"
+  },
+  "research_health": {
+    "clock_synchronization": "UNKNOWN_NOT_CHANGED",
+    "database_bytes": 330846208,
+    "last_activity_poll": "2026-10-27T09:37:47.318532+00:00",
+    "last_trade_poll": "2026-10-27T09:37:47.105046+00:00",
+    "pending_jobs": 0,
+    "pid": 49208,
+    "requests": 262,
+    "run_id": "ad520bd3f903443e902ebd58640c2ebd",
+    "state": "RUNNING",
+    "storage_warning": false,
+    "tokens": 256,
+    "trade_queue_depth": 0,
+    "uptime_seconds": 265.702317
+  },
+  "counts": {
+    "ACTIVITY": 45,
+    "BACKFILL_STATE": 12,
+    "BOOK": 2364,
+    "COPY_COMPLETE": 12,
+    "COPY_REQUEST": 12,
+    "DATA_SERVICE_STATUS": 36,
+    "DISCOVERY": 8,
+    "ENDPOINT_RECEIPT": 641,
+    "ERROR": 2,
+    "EXECUTION_GROUP": 597,
+    "HEALTH": 203,
+    "MARKET": 3657,
+    "PROFILE_VERIFIED": 7,
+    "RAW": 1422,
+    "ROLE_EVIDENCE": 104,
+    "RUN": 7,
+    "SHADOW": 72,
+    "STOP": 6,
+    "STREAMHEALTH": 86,
+    "TRADE": 11865,
+    "WEATHER": 2,
+    "WS_DELTA": 58373,
+    "WS_RAW": 59107,
+    "WS_TRADE": 152
+  },
+  "trade_evidence_classes": {
+    "BOOTSTRAP_HISTORICAL": 595,
+    "HISTORICAL_BACKFILL": 11268,
+    "PROSPECTIVE_POLL": 2
+  },
+  "activity_types": {
+    "REDEEM": 1,
+    "TRADE": 44
+  },
+  "weather_read_only_status": {
+    "integrity": "ok",
+    "run": [
+      "20261025T203720939894Z-d9e7826e",
+      "2026-10-27T09:37:53.808317+00:00"
+    ],
+    "last_metar": "2026-10-27T09:33:50.582164Z",
+    "last_pws": "2026-10-27T09:37:50.155409+00:00"
+  },
+  "errors": [
+    {
+      "consecutive": 1,
+      "error_class": "ConnectTimeout",
+      "operation": "SERVICE_STATUS"
+    },
+    {
+      "consecutive": 1,
+      "error_class": "ReadError",
+      "operation": "SERVICE_STATUS"
+    }
+  ],
+  "tests": {
+    "pytest": "462 passed in 21.57s",
+    "ruff_check": "PASS",
+    "ruff_format": "136 files already formatted",
+    "strict_mypy": "57 source files PASS",
+    "uv_sync_locked": "48 packages PASS"
+  },
+  "live_trade_count": 2,
+  "live_independent_market_cases": 1,
+  "research_code_manifest_matches_running_monitor": true
+}

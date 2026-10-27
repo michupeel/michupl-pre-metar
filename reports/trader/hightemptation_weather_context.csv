@@ -1,0 +1,3 @@
+airport,calibrations,context_asof,context_semantics,current_confirmed_daily_tmax,event_receipt_utc,forecast,forecast_daily_max,metar,pws,status,tmax_note,trade_id
+,[],2026-10-27T09:22:33.012009+00:00,RECORDED_AVAILABLE_AT_DETECTION_NOT_AT_SOURCE_TRADE_TIME,,2026-10-27T09:22:33.023025+00:00,,,[],[],WEATHER_NOT_MONITORED,Routine METAR maximum does not establish settlement daily Tmax,f0f81d04fd20a50d3648e23a6a3c9d88060d2add14fb95afe5fd4f80b4592a13
+,[],2026-10-27T09:22:38.983181+00:00,RECORDED_AVAILABLE_AT_DETECTION_NOT_AT_SOURCE_TRADE_TIME,,2026-10-27T09:22:38.999768+00:00,,,[],[],WEATHER_NOT_MONITORED,Routine METAR maximum does not establish settlement daily Tmax,1eb13fc1a1ead80a2e00989656221b72a1f28632bb7f61f9fe389e4da9ce275b

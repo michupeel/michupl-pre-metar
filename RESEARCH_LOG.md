@@ -540,3 +540,77 @@ No production/source/config/migration/restart/clockchanges. Qwen1SQLreview adapt
 2.086s/576tokens;healthseparate31tokens; no savingsclaim. Reports:
 reports/research/early_metar_reconstruction.md/csv,early_metar_examples.csv,
 early_metar_sensor_ranking.csv,early_metar_stability.csv andtimelinePNG.
+
+
+## EXP-0011 — HighTempTation public shadow copy and reconstruction
+
+Status: OPEN. Prospective monitoring began27October2026.
+Question: can publicly detected executions be copied at available prices, and
+which competing information or microstructure hypotheses explain them?
+
+Data: exact public profile association verified; separate immutable SQLite public
+Gamma metadata, Data APIv2 trades/activity/status, CLOB full books/deltas and
+unattributed tape. Initial full history:12keyset pages,11861economic fingerprints,
+4950BUY/6911SELL,4718conditions/4724tokens,5March through27October08:50:59Z.
+8692TMAX/3158TMIN/11other. No common fill/log ID; duplicate partition ambiguity
+remains documented. Source time is whole-second block time, not decision time.
+
+Method: independent process/WAL/OSlock/task; bounded128tradequeue/240pending
+jobs/256tokens. Source, endpoint first receipt, creation, request and book clocks
+remain separate. Raw first, immutable fingerprints and conservative copy groups.
+Initial trades-only detector captured Ankara; final detector races both public
+wallet feeds every3s. Nontrade activity cannot trigger orders. Bootstrap/restart/
+outage catchup remains censored. COPY-HOLD/FOLLOW/frozen TP+0.05(cap0.99),
+6delays and4budgets are alternative scenarios, not72independent observations.
+Actual post-deadline REST depth, verified token/open state and explicit zero fee
+schedule; nonzero/unknown fees prevent certified net economics.
+
+Observed first prospective case: AnkaraNO16C27October. BUY38.35at0.98, source
+09:22:30Z, received09:22:33.012009Z; SELL38.35at0.99 source09:22:35Z, received
+09:22:38.983181Z. Approximate source-to-detection ages3s/4s; API positively
+attributed both to taker, chain role/order placement unverified. The two public
+cash flows differ0.3835USD gross, not original net/whole-position PnL.
+All6actual direct-copy book windows had asks:[] and best bid0.99. Actual delays
+from detection0.670366/1.400689/3.308606/5.342763/10.315210/30.625772s.
+72NO_LIQUIDITY variant rows, zero copied positions, zero exits. No available ask
+is invented or backdated. One case cannot establish global copy profitability.
+Ankara context WEATHER_NOT_MONITORED; no retrospective weather substituted.
+
+Historical characterization: TMAX3433BUY,3417with strictly later same-token SELL,
+median8s;2322within10s. TMIN1507BUY,1481with laterSELL,median5s;1353within10s.
+These are descriptive row intervals, not inventory attribution or liquidation.
+Both extrema matter; a universal Tmax-only explanation is inadequate. H1-H7
+remain competing. Prior EHAM KNMI receipt427.275458s beforeAWC demonstrates
+possible feed differences, not HighTempTation's source. No archived forecast or
+verified Ankara as-of settlement statistic establishes H1-H4. Fast turnover and
+empty copy asks make execution/microstructure a priority for future tests.
+
+Operational cutoff09:37:53Z:11865fingerprints(595bootstrap,11268historical,
+2prospective),45activity records(44TRADE,1REDEEM),72entry attempts, zero lots.
+Only one independent live market case. Two recoverable SERVICE_STATUS network
+errors(ConnectTimeout/ReadError), polling continued. Six controlled research
+reloads tested recovery; intervening catchup is censored. The corrected weather
+context path comes from active config(data/continuous-v1.sqlite3), not legacy
+standalone DB. No evaluated weather result used the wrong DB.
+
+Verification:462tests passed21.57s, Ruff/format136files, strictmypy57modules,
+uv sync locked48packages. Research integrity and weather quick_check bothok.
+Actual read-only EGLL diagnostic yielded100recentofficialrows/1eligiblePWS/
+1storedcausalcalibration at diagnostic time, not at Ankara execution.
+Weather run20261025T203720939894Z-d9e7826e/PID54608 remained running unchanged;
+latest METAR09:33:50.582164Z/PWS09:37:50.155409Z. Separate logon task
+MichuplPreMetar-TraderShadow-v1 running Limited/Interactive/IgnoreNew, no password.
+No weather migrations, QC/model/selection/forecast writes or clock changes.
+LocalQwen2reviews rejected after independent checks,14.217s/3410tokens plus
+health0.553s/31tokens; no savings claimed or runtime inference dependency.
+
+Limitations: clock offset UNKNOWN, source-second timing, bounded book coverage,
+REST opportunities are conservative rather than proven fastest execution,
+nonzero fees UNKNOWN, incomplete weather geography, original order placement
+unobservable, correlated market/day samples, long-duration validation pending.
+Next: retain all future executable/missed copies and outcomes per frozen policy,
+compare paired public-feed latency, audit exact settlement/legitimate weather
+availability for traded cities. No real orders or production behavior changes.
+Reports:reports/trader/hightemptation_initial_findings.md, required activity/
+latency/shadow/weather/forensics/hypothesis outputs, book_windows/endpoint_race
+CSVs and operational JSON.

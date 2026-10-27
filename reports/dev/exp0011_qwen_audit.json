@@ -1,0 +1,54 @@
+{
+  "task_id": "EXP0011-Q01",
+  "model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+  "duration_seconds": 6.62,
+  "usage": {
+    "completion_tokens": 688,
+    "prompt_tokens": 505,
+    "total_tokens": 1193,
+    "prompt_tokens_details": {
+      "cached_tokens": 265
+    }
+  },
+  "status": "REJECTED",
+  "reason": "Review of an explicitly proposed contract treated absent implementation as critical bugs and did not supply concrete new tests; no findings accepted. No repair loop.",
+  "health": {
+    "actual_model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+    "elapsed_s": 0.553,
+    "total_tokens": 31
+  },
+  "runtime_dependency": false,
+  "tasks": [
+    {
+      "task_id": "EXP0011-Q01",
+      "model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "duration_seconds": 6.62,
+      "usage": {
+        "completion_tokens": 688,
+        "prompt_tokens": 505,
+        "total_tokens": 1193,
+        "prompt_tokens_details": {
+          "cached_tokens": 265
+        }
+      },
+      "status": "REJECTED",
+      "reason": "Review of an explicitly proposed contract treated absent implementation as critical bugs and did not supply concrete new tests; no findings accepted. No repair loop."
+    },
+    {
+      "task_id": "EXP0011-Q02",
+      "model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "duration_seconds": 7.597,
+      "usage": {
+        "prompt_tokens": 1495,
+        "completion_tokens": 722,
+        "total_tokens": 2217
+      },
+      "status": "REJECTED",
+      "reason": "Four false findings: token conversion, strict integer timestamp validation, empty-side membership and list identity hashing. No suggestion accepted; no further repair loop."
+    }
+  ],
+  "substantive_task_count": 2,
+  "accepted": 0,
+  "rejected": 2,
+  "recorded_at": "2026-10-27T09:08:13.104073+00:00"
+}
