@@ -16,11 +16,13 @@ from premetar.continuous.cli import predictions as predictions_app
 from premetar.continuous.cli import service as service_app
 from premetar.model import utc_now
 from premetar.pws.cli import app as pws_app
+from premetar.research.trader_cli import app as trader_app
 from premetar.sources import OPTIONAL_SOURCES, STATIONS, configured_sources
 
 app = typer.Typer(no_args_is_help=True, help="Prospective pre-METAR research; no trading.")
 console = Console()
 app.add_typer(pws_app, name="pws")
+app.add_typer(trader_app, name="trader")
 
 app.add_typer(continuous_app, name="continuous")
 app.add_typer(service_app, name="service")
