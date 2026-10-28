@@ -36,6 +36,17 @@ def battle_view(service: DashboardService, day: date, at: datetime | None = None
         raw.get("forecasts", []) + forecasts, day, cutoff
     ).get("delta_tmax")
     realization["view_semantics"] = "AS_OF_RECONSTRUCTION_NOT_AN_IMMUTABLE_LIVE_CONFIDENCE_EVENT"
+    realization["confidence_scope"] = "QUALITATIVE_TRAJECTORY_NOT_VALIDATED_TMAX_PROBABILITY"
+    peak = realization.get("forecast_tmax") or {}
+    observed = realization.get("observed_metar_maximum_c")
+    realization["raw_tmax_minus_reported_max_c"] = (
+        peak["temperature_c"] - observed if peak.get("complete") and observed is not None else None
+    )
+    realization["tmax_risk"] = (
+        "PEAK_PASSED_FINAL_TMAX_UNVERIFIED"
+        if (realization.get("evidence", {}).get("hours_to_tmax") or 0) < 0
+        else realization["confidence"]
+    )
     latest_rich = max(
         (f for f in forecasts if datetime.fromisoformat(f["first_received"]) <= cutoff),
         key=lambda f: f["first_received"],

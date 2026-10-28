@@ -14,6 +14,21 @@ def generate(directory: Path = DIRECTORY, root: Path = ROOT) -> dict[str, Any]:
     metrics = [e for e in rows if e["kind"] == "METRIC"]
     latest = metrics[-1]["payload"] if metrics else {}
     realization = latest.get("realization") or {}
+    first_run = next((e["at"] for e in rows if e["kind"] == "RUN"), None)
+    alignments: dict[tuple[Any, Any], dict[str, Any]] = {}
+    for event in metrics:
+        for row in (event["payload"].get("realization") or {}).get("history", []):
+            key = (row.get("metar_id"), row.get("forecast_snapshot_id"))
+            alignments.setdefault(
+                key,
+                dict(
+                    row,
+                    evaluation_created_at=event["at"],
+                    evaluation_kind="RETROSPECTIVE_BOOTSTRAP_CONTEXT"
+                    if first_run and str(row.get("first_received", "")) < first_run
+                    else "PROSPECTIVE_REALIZATION_AFTER_REFERENCE_RECEIPT_NOT_A_TRADE",
+                ),
+            )
     research, trader = root / "reports/research", root / "reports/trader"
     research.mkdir(parents=True, exist_ok=True)
     trader.mkdir(parents=True, exist_ok=True)
@@ -33,7 +48,7 @@ def generate(directory: Path = DIRECTORY, root: Path = ROOT) -> dict[str, Any]:
             ],
         ),
         ("exp0015_portfolios", latest.get("strategies", [])),
-        ("exp0014_metar_alignment", realization.get("history", [])),
+        ("exp0014_metar_alignment", list(alignments.values())),
     ):
         path = (research if name.startswith("exp0014") else trader) / (name + ".csv")
         with path.open("w", newline="", encoding="utf-8") as stream:
