@@ -10,6 +10,20 @@ This is not conventional weather forecasting. We do not assume an information
 edge exists. A reproducible negative result is useful; insufficient data is a
 different result. There is no real-money order execution.
 
+## EPWA local dashboard (Milestone 2.0)
+
+```powershell
+uv sync --locked
+uv run premetar dashboard --port 8766
+Start-Process 'http://127.0.0.1:8766/'
+```
+
+Read-only weather/market views, causal as-of inspection, hourly details and DST-safe
+replay. RAW and calibrated Tmax are separate; calibration remains pending until
+verified daily targets and prospective improvement exist. See
+[operation and limits](docs/DASHBOARD.md) and
+[forward-only calibration methodology](docs/EPWA_FORECAST_CALIBRATION.md).
+
 ## Forecast-guided observation (EXP-0013)
 
 An independent, observation-only sidecar captures explicit ICON hourly forecast
