@@ -288,11 +288,16 @@ def test_current_metadata_must_still_be_eligible_at_arrival() -> None:
 
 def test_restart_does_not_refresh_old_queue_evidence() -> None:
     engine, p = rested_maker()
+    reserve = p["reserved"]
     engine.restart(AT + timedelta(seconds=1))
     at = AT + timedelta(seconds=2)
     engine.observe(at, market(), book(at, bid=".95", ask=".97"), {}, trade(at, quantity="100"))
     assert not p["positions"]
     assert not orders(p)[0]["queue_valid"]
+    assert orders(p)[0]["state"] == "UNKNOWN"
+    assert p["reserved"] == reserve
+    engine.restart(at)
+    assert p["reserved"] == reserve
 
 
 def test_full_taker_roundtrip_conserves_cash_and_cannot_sell_more_than_bought() -> None:

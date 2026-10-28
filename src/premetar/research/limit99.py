@@ -158,6 +158,8 @@ class Limit99:
             for order in p["orders"]:
                 if order["state"] not in TERMINAL:
                     order["queue_valid"] = False
+                    order["execution_unknown"] = True
+                    self.terminate(p, order, at, "UNKNOWN", "PROCESS_RESTART_WITH_OPEN_ORDER")
                     self.emit(
                         "QUEUE_EVIDENCE_LOST", at, p, order_id=order["id"], reason="PROCESS_RESTART"
                     )
