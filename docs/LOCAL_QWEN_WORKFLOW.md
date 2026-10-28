@@ -191,3 +191,11 @@ Existing authenticated localhost8888/v1 worker verified active Qwen3-Coder-30B-A
 ## EXP-0012
 
 Existing localhost8888/v1 worker verified Qwen3-Coder-30B-A3B-Instruct-GGUF among17models; READY health0.606s/31tokens. One bounded implementation proposal EXP0012-Q01 produced the pure Decimal price-bucket helper:4.327s,423prompt+372completion=795tokens. Accepted after independent boundary/NaN/range review and repository formatting; covered by automated tests. No rejection or repair loop. Position accounting, chain roles, matching paths, fees and scientific conclusions remained lead-owned. Audit:reports/dev/exp0012_qwen_audit.json and qwen_delegation.jsonl. No measured savings claim or runtime inference dependency.
+
+## EXP-0013
+
+28October2026 local worker health diagnosed localhost8888/v1 connection failure.
+No active model or generation could be verified; zero actual delegated tasks,
+unknown token usage, no savings claim. Continued with independently reviewed
+implementation/tests rather than changing the inference server or either live
+monitor. Sanitized audit:reports/dev/exp0013_qwen_audit.json. No runtime LLM use.

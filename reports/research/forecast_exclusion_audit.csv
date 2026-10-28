@@ -1,0 +1,2 @@
+id,kind,payload,received_at
+40856,EXCLUSION,"{""raw_forecast_and_book_evidence"": ""PRESERVED; require station identity and original raw provenance"", ""reason"": ""PROTOTYPE_STARTUP_METAR_FORECAST_PAIRING_AND_STATION_MISMATCH; v1.1 fixed; original records preserved"", ""scope"": ""SIGNAL_AND_WEATHER_VS_MARKET_COMPARISONS"", ""version"": ""EXP0013-v1""}",2026-10-28T10:22:55.891382+00:00

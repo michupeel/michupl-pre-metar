@@ -1,0 +1,12 @@
+{
+  "experiment": "EXP-0013",
+  "checked_at": "2026-10-28T10:25:54.375864+00:00",
+  "endpoint": "http://127.0.0.1:8888/v1",
+  "status": "UNAVAILABLE_CONNECTION_FAILED",
+  "expected_model": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+  "actual_model": null,
+  "delegated_tasks": 0,
+  "generation_tokens": null,
+  "action": "Continued independently after one health diagnosis; no server/global changes",
+  "runtime_llm_dependency": false
+}

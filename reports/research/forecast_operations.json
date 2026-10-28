@@ -1,0 +1,135 @@
+{
+  "checked_at": "2026-10-28T10:38:40.624739+00:00",
+  "observer_health_received": "2026-10-28T10:38:35.938565+00:00",
+  "observer_health": {
+    "clock": "UNKNOWN_NOT_CHANGED",
+    "forecasts": [
+      "EDDM",
+      "EGLL",
+      "EHAM",
+      "EPWA"
+    ],
+    "frozen_windows": 376,
+    "markets": 33,
+    "pid": 51460,
+    "run_id": "58079178f8684a75a1b94d50badf66b2",
+    "state": "RUNNING",
+    "tokens": 66
+  },
+  "observer_run": {
+    "existing_trader_db_mode": "READ_ONLY",
+    "existing_weather_db_mode": "READ_ONLY",
+    "max_duration_seconds": 86400.0,
+    "pid": 51460,
+    "protocol_sha256": "132d01efe126bc86548443e8491912fdd4a0fadc476c012c182b90ac162309d4",
+    "run_id": "58079178f8684a75a1b94d50badf66b2",
+    "started_at": "2026-10-28T10:29:13.068568+00:00",
+    "version": "EXP0013-v1.1"
+  },
+  "live_event_inventory": {
+    "BOOK": 582,
+    "BOOK_SAMPLE": 5214,
+    "CALIBRATION_CACHE": 2,
+    "COVERAGE": 3,
+    "DEPTH_RECOVERY": 268,
+    "EXCLUSION": 1,
+    "FORECAST": 12,
+    "HEALTH": 166,
+    "MARKET": 99,
+    "OUTCOME": 5,
+    "RAW": 105,
+    "RUN": 3,
+    "SIGNAL": 989,
+    "STOP": 2,
+    "STREAMHEALTH": 23,
+    "WEATHER_CONTEXT": 112,
+    "WINDOW": 381,
+    "WS_DELTA": 19734,
+    "WS_RAW": 51357,
+    "WS_TRADE": 58
+  },
+  "analysis_cutoff": "2026-10-28T10:35:35.354440+00:00",
+  "snapshots": {
+    "captured_at": "2026-10-28T10:35:35.398983+00:00",
+    "baseline": "070113f",
+    "weather": {
+      "pinned_at": "2026-10-28T10:35:35.399483+00:00",
+      "snapshot": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0013\\weather_final.sqlite3",
+      "integrity": "ok",
+      "sha256": "748e53c157a9c9e46cacb4af7846e99a600193738e2dee956ab85d0cce0896a7",
+      "duration_seconds": 2.5
+    },
+    "research": {
+      "pinned_at": "2026-10-28T10:35:37.905208+00:00",
+      "snapshot": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0013\\research_final.sqlite3",
+      "integrity": "ok",
+      "sha256": "035c4e72b6d523e445c14f30425d0a72fb8e0fb02b2fbbe5833a91d8db058097",
+      "duration_seconds": 0.5940000000409782
+    }
+  },
+  "existing_monitors": "PRESERVED_NO_RESTART_OR_PRODUCTION_CHANGES",
+  "tests": {
+    "pytest": "645 passed in25.45s",
+    "uv_sync_locked": "48packages PASS",
+    "ruff_check": "PASS",
+    "ruff_format": "165files alreadyformatted",
+    "mypy_production": "60files PASS",
+    "mypy_research": "17files PASS"
+  },
+  "research_runtime_limits": {
+    "maximum_seconds": 86400,
+    "database_plus_wal_max_bytes": 2000000000,
+    "task_scheduler_installed": false
+  },
+  "qwen": "UNAVAILABLE_CONNECTION_FAILED_ZERO_DELEGATED_TASKS",
+  "clock_offset": "UNKNOWN",
+  "observed_window_seconds": 1189.834056,
+  "long_duration_validation": "PENDING",
+  "final_monitor_check": {
+    "checked_at": "2026-10-28T10:39:50.537765+00:00",
+    "weather": {
+      "run": [
+        "20261025T203720939894Z-d9e7826e",
+        "2026-10-28T10:39:49.965217+00:00"
+      ],
+      "latest_metar_receive": "2026-10-28T10:33:32.552342Z",
+      "latest_pws_receive": "2026-10-28T10:39:26.166720+00:00"
+    },
+    "trader": {
+      "health_received": "2026-10-28T10:39:49.350827+00:00",
+      "clock_synchronization": "UNKNOWN_NOT_CHANGED",
+      "database_bytes": 6540382208,
+      "last_activity_poll": "2026-10-28T10:39:47.335507+00:00",
+      "last_trade_poll": "2026-10-28T10:39:47.300968+00:00",
+      "pending_jobs": 0,
+      "pid": 49208,
+      "requests": 83720,
+      "run_id": "ad520bd3f903443e902ebd58640c2ebd",
+      "state": "RUNNING",
+      "storage_warning": false,
+      "tokens": 256,
+      "trade_queue_depth": 0,
+      "uptime_seconds": 90386.852788
+    },
+    "research": {
+      "health_received": "2026-10-28T10:39:46.049099+00:00",
+      "clock": "UNKNOWN_NOT_CHANGED",
+      "forecasts": [
+        "EDDM",
+        "EGLL",
+        "EHAM",
+        "EPWA"
+      ],
+      "frozen_windows": 376,
+      "markets": 33,
+      "pid": 51460,
+      "run_id": "58079178f8684a75a1b94d50badf66b2",
+      "state": "RUNNING",
+      "tokens": 66
+    }
+  },
+  "reproducibility": {
+    "csv_files": 9,
+    "identical_sha256_after_rerun": true
+  }
+}

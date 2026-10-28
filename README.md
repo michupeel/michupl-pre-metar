@@ -10,6 +10,25 @@ This is not conventional weather forecasting. We do not assume an information
 edge exists. A reproducible negative result is useful; insufficient data is a
 different result. There is no real-money order execution.
 
+## Forecast-guided observation (EXP-0013)
+
+An independent, observation-only sidecar captures explicit ICON hourly forecast
+revisions, future-frozen windows, both binary token books and causal weather
+signals. It never changes the existing weather/trader processes or submits orders.
+See [operations](docs/research/EXP0013_OPERATIONS.md),
+[frozen protocol](docs/research/EXP0013_PROTOCOL.md) and
+[source/access audit](docs/research/EXP0013_SOURCES.md).
+
+```powershell
+uv run python -m premetar.research.forecast_monitor watch --duration 86400
+uv run python -m premetar.research.forecast_monitor status
+```
+
+The run is bounded by24hours/2GB and protected against duplicate instances.
+Publication clocks stay unknown unless evidenced; Weathercloud coordinates are
+not machine-readable measurements. Prospective matched controls are required
+before claiming weather-window effects or an information edge.
+
 ## Execution microstructure research (EXP-0012)
 
 Read [the forensic report](reports/trader/hightemptation_tmax_limit_exit.md) and
