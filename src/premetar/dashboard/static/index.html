@@ -6,8 +6,10 @@
   <meta name="color-scheme" content="dark">
   <title>EPWA · Weather Intelligence</title>
   <link rel="stylesheet" href="/static/dashboard.css">
+  <link rel="stylesheet" href="/static/battle.css">
   <script defer src="/static/echarts.min.js"></script>
   <script defer src="/static/dashboard.js"></script>
+  <script defer src="/static/battle.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -36,6 +38,30 @@
     <output id="scrub-time">—</output>
   </section>
 
+  <section class="panel realization-panel" aria-label="Realizacja prognozy EPWA">
+    <div class="panel-heading"><div><span class="eyebrow">EXP-0014 / EPWA</span><h2>Realizacja prognozy</h2></div><span class="tag amber" id="realization-confidence">BRAK DANYCH</span></div>
+    <div id="realization-metrics" class="realization-grid"><div class="empty">Oczekiwanie na przyczynową ocenę prognozy…</div></div>
+    <p id="realization-explanation" class="realization-explanation micro">Klasyfikacja badawcza, nie prawdopodobieństwo ani zwalidowana pewność.</p>
+    <details class="research-evidence"><summary>Obserwacje i reguły oceny</summary><div id="realization-evidence" class="micro">Brak danych.</div></details>
+  </section>
+
+  <section class="panel battle-panel" aria-label="Strategy Battle EPWA">
+    <div class="panel-heading"><div><span class="eyebrow">EXP-0015 / WYŁĄCZNIE SHADOW</span><h2>Strategy Battle — EPWA</h2></div><span class="tag amber" id="battle-sample">BRAK WYNIKÓW PROSPEKTYWNYCH</span></div>
+    <div class="battle-toolbar" aria-label="Filtry badania strategii">
+      <label>STRATEGIA<select id="battle-family" aria-label="Rodzina strategii"><option value="ALL">Wszystkie</option><option value="SIMPLE">SIMPLE</option><option value="WEATHER">WEATHER</option><option value="HYBRID">HYBRID</option><option value="SIMPLE_98_CONTROL">Kontrola 0.98</option></select></label>
+      <label>WYKONANIE<select id="battle-mode" aria-label="Model wykonania"><option value="ALL">Wszystkie</option><option value="MAKER">Maker</option><option value="TAKER">Taker</option></select></label>
+      <label>SCENARIUSZ<select id="battle-scenario" aria-label="Scenariusz fill"><option value="EVIDENCE_SUPPORTED">Poparty dowodami</option><option value="PESSIMISTIC">Pesymistyczny</option><option value="OPTIMISTIC_UPPER_BOUND">Optymistyczna granica górna</option><option value="ALL">Wszystkie osobno</option></select></label>
+      <label>OPÓŹNIENIE<select id="battle-latency" aria-label="Opóźnienie wykonania"><option value="ALL">Wszystkie osobno</option><option value="100">100 ms</option><option value="500">500 ms</option><option value="1000" selected>1 s</option><option value="3000">3 s</option><option value="5000">5 s</option></select></label>
+      <span id="battle-cutoff" class="micro">Odczyt —</span>
+    </div>
+    <p id="battle-warning" class="battle-warning micro">Brak wystarczających wyników. Wystawiona oferta nie dowodzi wykonania; otwarte pozycje i niepewne fille pozostają jawne.</p>
+    <div id="battle-cards" class="battle-cards"><article class="empty">Oczekiwanie na niezależny rejestr shadow…</article></div>
+    <div class="battle-chart-tools"><label class="micro">WYKRES<select id="battle-chart-metric" aria-label="Metryka wykresu strategii"><option value="equity">Kapitał paper</option><option value="realized_pnl">Zrealizowany PnL</option><option value="unrealized_pnl">Ostrożny niezrealizowany PnL</option><option value="drawdown">Obsunięcie</option><option value="exposure_usd">Otwarta ekspozycja</option></select></label><span class="micro">Scenariusze maker są oddzielnymi ścieżkami, nie sumą kapitału.</span></div>
+    <div id="battle-chart" class="battle-chart" role="img" aria-label="Porównanie kapitału i ryzyka strategii shadow"></div>
+    <div class="battle-event-heading"><h3>Oś zdarzeń i decyzji</h3><span id="battle-health" class="micro">Stan monitora —</span></div>
+    <div class="table-scroll battle-events"><table class="data-table"><thead><tr><th>Czas lokalny</th><th>Zdarzenie</th><th>Strategia / wykonanie</th><th>Dowody i niepewność</th></tr></thead><tbody id="battle-events-body"><tr><td colspan="4" class="empty">Brak zapisanych zdarzeń.</td></tr></tbody></table></div>
+  </section>
+
   <div class="main-grid">
     <section class="panel weather-panel"><div class="panel-heading"><div><span class="eyebrow">TEMPERATURA / EUROPE/WARSAW</span><h2>Prognoza, METAR i czujniki</h2></div><span id="chart-cutoff" class="micro">—</span></div><div id="weather-chart" class="chart weather-chart" role="img" aria-label="Interaktywny wykres temperatury EPWA"></div><div class="chart-foot"><span><b class="dot cyan-dot"></b>Godzinowa prognoza punktowa</span><span><b class="dot white-dot"></b>METAR: pełne °C</span><span>Legenda przełącza serie · scroll powiększa · przeciągnij, aby przesunąć</span></div></section>
     <aside class="panel inspector"><div class="panel-heading"><div><span class="eyebrow">DOSTĘPNOŚĆ INFORMACJI</span><h2>Co wiedzieliśmy wtedy?</h2></div><span class="tag amber" id="inspection-mode">TERAZ</span></div><div class="inspect-time" id="inspect-time">—</div><p class="micro inspect-note">Najedź na wykres lub przesuń oś czasu. Wyłącznie dane odebrane do wskazanej chwili.</p><div class="inspect-row"><span>Ostatni znany METAR</span><strong id="inspect-metar">—</strong></div><div class="micro" id="inspect-metar-time">—</div><div class="inspect-row"><span>Dostępna prognoza Tmax</span><strong id="inspect-forecast">—</strong></div><div class="micro" id="inspect-forecast-time">—</div><div class="inspect-row"><span>Następny nominalny METAR</span><strong id="inspect-countdown">—</strong></div><div id="inspect-pws" class="inspect-sensors"><span class="micro">Brak kwalifikujących się pomiarów.</span></div><div class="inspect-book" id="inspect-market">Arkusz —</div><div id="inspect-warning" class="micro amber-text"></div></aside>
@@ -51,5 +77,7 @@
   <footer class="footer"><span>MICHUPL PRE-METAR · tylko obserwacja · bez składania zleceń</span><span id="footer-status">Odczyt lokalnych baz SQLite · wszystkie czasy mają jawne strefy</span></footer>
 </div>
 <dialog id="hour-dialog"><div class="dialog-heading"><div><span class="eyebrow">SZCZEGÓŁY GODZINY</span><h2 id="hour-title">—</h2></div><button type="button" id="close-hour" class="button" aria-label="Zamknij szczegóły">✕</button></div><div id="hour-detail"></div></dialog>
+<dialog id="battle-event-dialog"><div class="dialog-heading"><div><span class="eyebrow">SHADOW / NIEZMIENNY REJESTR</span><h2 id="battle-event-title">Szczegóły zdarzenia</h2></div><button type="button" id="close-battle-event" class="button" aria-label="Zamknij zdarzenie strategii">✕</button></div><div id="battle-event-detail"></div></dialog>
+<p class="micro" style="text-align:center">Prognozy: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo / DWD ICON</a> · CC BY 4.0 · wyłącznie badanie, bez zleceń rzeczywistych.</p>
 </body>
 </html>

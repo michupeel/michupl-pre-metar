@@ -12,6 +12,16 @@ different result. There is no real-money order execution.
 
 ## EPWA local dashboard (Milestone 2.0)
 
+EXP0014/15 adds causal forecast realization and a separate SIMPLE/WEATHER/HYBRID
+shadow study. [Frozen protocol and safe operation](docs/research/EXP0014_15_OPERATIONS.md).
+There are no real orders; maker fills remain conditional/unidentified.
+
+```powershell
+uv run python -m premetar.research.battle_monitor watch
+uv run python -m premetar.research.battle_monitor status
+uv run python -m premetar.research.battle_monitor report
+```
+
 ```powershell
 uv sync --locked
 uv run premetar dashboard --port 8766

@@ -1,0 +1,43 @@
+{
+  "cutoff": "2026-10-28T23:26:01.203986+00:00",
+  "journal_cutoff": "2026-10-28T23:26:01.203986+00:00",
+  "counts": {
+    "ACCOUNTING_EXCLUSION": 30,
+    "BUY_SUBMITTED": 30,
+    "CANCEL_REQUEST": 9,
+    "CONFIDENCE": 4,
+    "CONTROL_ANNOTATION": 15,
+    "CONTROL_HORIZON_UNRESOLVED": 90,
+    "CONTROL_UNMATCHED": 15,
+    "FORECAST": 10,
+    "FORECAST_RAW": 10,
+    "METRIC": 73,
+    "ORDER_EXPIRED": 9,
+    "ORDER_REJECTED": 21,
+    "ORDER_RESTING": 9,
+    "REALIZATION_BOOTSTRAP": 1,
+    "RESTART_GAP": 5,
+    "RUN": 10,
+    "STOP": 9,
+    "WEATHER_REJECT": 15
+  },
+  "sample_days": [
+    "2026-10-28",
+    "2026-10-29"
+  ],
+  "limits": {
+    "truncated": false,
+    "segment_limit_reached": false,
+    "segments_available": 1,
+    "segments_considered": 1,
+    "errors": {},
+    "limit": 100000,
+    "cutoff": null,
+    "semantics": "IMMUTABLE_EVENTS_ONLY_CHECKPOINT_NOT_HISTORICAL_EVIDENCE"
+  },
+  "exports": {
+    "exp0015_events": "D:\\metar-execution-lab\\michupl-pre-metar\\reports\\trader\\exp0015_events.csv",
+    "exp0015_portfolios": "D:\\metar-execution-lab\\michupl-pre-metar\\reports\\trader\\exp0015_portfolios.csv",
+    "exp0014_metar_alignment": "D:\\metar-execution-lab\\michupl-pre-metar\\reports\\research\\exp0014_metar_alignment.csv"
+  }
+}

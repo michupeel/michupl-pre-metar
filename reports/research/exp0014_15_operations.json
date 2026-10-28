@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-28T22:16:19.670845+00:00",
+  "disk_free": 23707308032,
+  "weather_snapshot": {
+    "pinned_at": "2026-10-28T22:16:16.509702+00:00",
+    "snapshot": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0014_audit\\weather_initial.sqlite3",
+    "integrity": "ok",
+    "sha256": "511c8462abf010eaceb750bf79b379a0ca5400db6c253c8b90a79cb9c0cec55b",
+    "duration_seconds": 3.1560000001918525
+  },
+  "shadow_integrity": {
+    "battle-000001.sqlite3": "ok"
+  },
+  "original_collectors_not_restarted": true,
+  "prospective_start": "2026-10-28T22:08:12.294484+00:00"
+}

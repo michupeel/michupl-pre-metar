@@ -18,7 +18,9 @@ runner. Immutable event records must retain inputs and this exact rule version.
 ## Availability and reference
 
 For every routine EPWA METAR use the latest explicit ICON Global snapshot whose
-first receipt is strictly before that METAR's nominal observation time. Both METAR
+first receipt is strictly before BOTH that METAR's nominal observation time and
+the earliest report receipt for its nominal cycle. Early reports/corrections cannot
+admit a forecast revision obtained after the target was already known. Both METAR
 event and first receipt must be no later than the state decision. Never evaluate
 an early nominal-future report before its nominal time. Never use a forecast
 revision received between nominal observation and report receipt to evaluate that
