@@ -2,6 +2,7 @@
 
 import csv
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -9,8 +10,10 @@ from premetar.research.battle_monitor import DIRECTORY, ROOT
 from premetar.research.battle_store import read_battle
 
 
-def generate(directory: Path = DIRECTORY, root: Path = ROOT) -> dict[str, Any]:
-    rows = read_battle(directory, limit=100000)
+def generate(
+    directory: Path = DIRECTORY, root: Path = ROOT, at: datetime | None = None
+) -> dict[str, Any]:
+    rows = read_battle(directory, at, limit=100000)
     metrics = [e for e in rows if e["kind"] == "METRIC"]
     latest = metrics[-1]["payload"] if metrics else {}
     realization = latest.get("realization") or {}
@@ -127,6 +130,7 @@ def generate(directory: Path = DIRECTORY, root: Path = ROOT) -> dict[str, Any]:
     (trader / "exp0015_simple_limit99_vs_weather.md").write_text(text, encoding="utf-8")
     result = dict(
         cutoff=cutoff,
+        journal_cutoff=max((e["at"] for e in rows), default=None),
         counts=counts,
         sample_days=latest.get("sample_days", []),
         limits=rows.metadata,

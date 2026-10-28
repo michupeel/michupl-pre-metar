@@ -240,6 +240,8 @@ def test_report_regeneration_deterministic(tmp_path: Path) -> None:
     before = {p: p.read_bytes() for p in tmp_path.glob("reports/**/*") if p.is_file()}
     generate(directory, tmp_path)
     assert before == {p: p.read_bytes() for p in before}
+    historical = generate(directory, tmp_path, AT - timedelta(seconds=1))
+    assert historical["counts"] == {}
     store.close()
 
 

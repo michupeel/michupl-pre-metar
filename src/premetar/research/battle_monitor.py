@@ -847,6 +847,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["watch", "status", "report"])
     parser.add_argument("--seconds", type=float)
+    parser.add_argument(
+        "--at", help="Report only: timezone-aware ISO cutoff for reproducible replay"
+    )
     args = parser.parse_args()
     if args.seconds is not None and args.seconds <= 0:
         parser.error("Positive bounded smoke duration required")
@@ -864,7 +867,10 @@ def main() -> None:
     else:
         from premetar.research.battle_reports import generate
 
-        print(json.dumps(generate(), indent=2))
+        point = clock(args.at) if args.at else None
+        if point and point > now():
+            parser.error("Cannot report future availability")
+        print(json.dumps(generate(at=point), indent=2))
 
 
 if __name__ == "__main__":
