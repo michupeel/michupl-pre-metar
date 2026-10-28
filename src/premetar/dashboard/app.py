@@ -96,6 +96,15 @@ def create_app(reader: Reader | None = None) -> FastAPI:
             raise HTTPException(422, "Niepoprawny identyfikator kontraktu")
         return service.asof(selected, point, market)
 
+    @application.get("/api/battle")
+    def battle(date: str | None = None, at: str | None = None) -> dict[str, Any]:
+        from premetar.dashboard.battle import battle_view
+
+        selected, point = selected_day(date), cutoff(at)
+        if point and point.astimezone(ZONE).date() != selected:
+            raise HTTPException(422, "Czas inspekcji musi należeć do wybranego dnia")
+        return battle_view(service, selected, point)
+
     @application.get("/api/events")
     async def events(request: Request) -> StreamingResponse:
         async def stream() -> AsyncIterator[str]:
