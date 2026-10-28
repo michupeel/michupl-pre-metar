@@ -499,7 +499,9 @@ class Monitor:
                 ]
             )
 
-    async def fallback_metadata(self, client: httpx.AsyncClient) -> None:
+    async def fallback_metadata(
+        self, client: httpx.AsyncClient, settlement_only: bool = False
+    ) -> None:
         """Only replaces metadata service after the old source stops; public reads."""
         candidates = await asyncio.to_thread(candidate_markets, TRADER, now())
         for candidate in candidates:
@@ -521,6 +523,12 @@ class Monitor:
                 for c, number_pos in p["positions"].items()
                 if c == condition
             )
+            if settlement_only and (
+                not held
+                or market["identity"].get("day")
+                >= now().astimezone(ZoneInfo("Europe/Warsaw")).date().isoformat()
+            ):
+                continue
             if (
                 market["identity"].get("day")
                 != now().astimezone(ZoneInfo("Europe/Warsaw")).date().isoformat()
@@ -750,8 +758,13 @@ class Monitor:
                     else:
                         self.commit()
                     await self.source_fallback()
-                    if self.fallback and tick >= next_metadata:
-                        await self.fallback_metadata(client)
+                    overdue = any(
+                        number(pos["quantity"]) > 0 and pos["day"] < today
+                        for p in self.engine.state["portfolios"].values()
+                        for pos in p["positions"].values()
+                    )
+                    if (self.fallback or overdue) and tick >= next_metadata:
+                        await self.fallback_metadata(client, settlement_only=self.fallback is None)
                         next_metadata = tick + 900
                     if self.fallback and self.fallback.done():
                         self.fallback.result()
