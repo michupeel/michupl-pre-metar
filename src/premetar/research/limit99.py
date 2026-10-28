@@ -321,7 +321,7 @@ class Limit99:
         self, p: dict[str, Any], o: dict[str, Any], at: datetime, state: str, reason: str
     ) -> None:
         o["terminal_reason"] = reason
-        if reason.startswith("ARRIVAL_BOOK"):
+        if state == "UNKNOWN" or reason.startswith("ARRIVAL_BOOK"):
             state = "UNKNOWN"
             o["execution_unknown"] = True
         if o["side"] == "BUY" and state != "UNKNOWN":
@@ -539,6 +539,14 @@ class Limit99:
                 if any(number(row["price"]) <= number(o["limit"]) for row in book["asks"]):
                     self.terminate(p, o, at, "REJECTED", "POST_ONLY_WOULD_CROSS")
                     continue
+                paired = book.get("complementary_book") or {}
+                if not fresh_book(paired, at, market["identity"]["yes"], condition) or any(
+                    number(row["price"]) + number(o["limit"]) >= 1 for row in paired.get("bids", [])
+                ):
+                    self.terminate(
+                        p, o, at, "UNKNOWN", "POST_ONLY_COMPLEMENTARY_ELIGIBILITY_UNVERIFIED"
+                    )
+                    continue
             else:
                 levels = book["asks"] if o["side"] == "BUY" else book["bids"]
                 quantity, gross = take_depth(
@@ -561,6 +569,16 @@ class Limit99:
                     self.terminate(p, o, at, "CANCELLED", "MARKETABLE_ENTRY_IOC_REMAINDER")
                     continue
             o["rested_at"] = at.isoformat()
+            paired = book.get("complementary_book") or {}
+            if o["side"] == "SELL" and (
+                not fresh_book(paired, at, market["identity"]["yes"], condition)
+                or any(
+                    number(row["price"]) + number(o["limit"]) <= 1 for row in paired.get("asks", [])
+                )
+            ):
+                self.terminate(p, o, at, "UNKNOWN", "EXIT_COMPLEMENTARY_ROLE_UNVERIFIED")
+                continue
+            o["complementary_post_only_checked"] = True
             o["connection_id"] = book["connection_id"]
             o["queue_ahead"] = str(
                 sum(

@@ -140,20 +140,27 @@ class Monitor:
         # Preserve prototype events; correct only future accounting, audibly.
         for event in read_battle(store.directory, limit=100000):
             payload = event["payload"]
-            if event["kind"] != "ORDER_REJECTED" or not str(payload.get("reason", "")).startswith(
-                "ARRIVAL_BOOK"
-            ):
-                continue
             old_order = payload.get("order") or {}
+            arrival_unknown = event["kind"] == "ORDER_REJECTED" and str(
+                payload.get("reason", "")
+            ).startswith("ARRIVAL_BOOK")
+            role_unknown = event["kind"] == "ORDER_RESTING" and not old_order.get(
+                "complementary_post_only_checked"
+            )
+            if not arrival_unknown and not role_unknown:
+                continue
+            reason = (
+                payload.get("reason")
+                if arrival_unknown
+                else "PROTOTYPE_COMPLEMENTARY_ROLE_UNVERIFIED"
+            )
             key = f"{payload.get('family')}:{payload.get('mode')}:{payload.get('scenario')}:{payload.get('latency_ms')}"
             portfolio = self.engine.state["portfolios"].get(key)
             if not portfolio:
                 continue
             for order in portfolio["orders"]:
                 if order["id"] == old_order.get("id") and not order.get("execution_unknown"):
-                    order.update(
-                        execution_unknown=True, state="UNKNOWN", terminal_reason=payload["reason"]
-                    )
+                    order.update(execution_unknown=True, state="UNKNOWN", terminal_reason=reason)
                     if order["side"] == "BUY":
                         portfolio["reserved"] = str(
                             number(portfolio["reserved"])
@@ -166,7 +173,9 @@ class Monitor:
                         portfolio,
                         order_id=order["id"],
                         original_event_id=event["id"],
-                        reason="MISSING_ARRIVAL_BOOK_IS_UNKNOWN_NOT_EXCHANGE_REJECTION",
+                        reason="MISSING_ARRIVAL_BOOK_IS_UNKNOWN_NOT_EXCHANGE_REJECTION"
+                        if arrival_unknown
+                        else reason,
                         historical_events_preserved=True,
                     )
 
@@ -216,6 +225,7 @@ class Monitor:
             if kind == "WS_TRADE" and payload.get("token_id") != identity["no"]:
                 continue
             book = self.tracker.view(identity["no"], at)
+            book["complementary_book"] = self.tracker.view(identity["yes"], at)
             if identity["no"] in self.tick_blocks:
                 book["status"] = "TICK_METADATA_UNVERIFIED"
             coverage = self.engine.state.setdefault(
@@ -670,6 +680,9 @@ class Monitor:
                         self.engine.state["study_days"].append(today)
                     for market in list(self.markets.values()):
                         book = self.tracker.view(market["identity"]["no"], at)
+                        book["complementary_book"] = self.tracker.view(
+                            market["identity"]["yes"], at
+                        )
                         if market["identity"]["no"] in self.tick_blocks:
                             book["status"] = "TICK_METADATA_UNVERIFIED"
                         self.control_events.extend(

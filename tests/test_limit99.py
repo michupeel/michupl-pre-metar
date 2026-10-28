@@ -84,6 +84,15 @@ def book(
         received_at=at.isoformat(),
         bids=[dict(price=bid, size=bid_size)],
         asks=[dict(price=ask, size=ask_size)],
+        complementary_book=dict(
+            status="VALID",
+            token_id="yes-" + condition,
+            market=condition,
+            connection_id="epoch",
+            received_at=at.isoformat(),
+            bids=[dict(price=".001", size="20")],
+            asks=[dict(price=".1", size="20")],
+        ),
     )
 
 
@@ -167,6 +176,23 @@ def test_98_is_separate_predeclared_control() -> None:
     engine.observe(AT, market(), book(ask=".98"), {})
     assert portfolio(engine)["submitted_orders"] == 0
     assert portfolio(engine, family="SIMPLE_98_CONTROL")["submitted_orders"] == 1
+
+
+@pytest.mark.parametrize("missing", [False, True])
+def test_post_only_does_not_assume_complementary_liquidity_is_ineligible(missing: bool) -> None:
+    engine = Limit99(config())
+    engine.observe(AT, market(), book(bid=".95", ask=".97"), {})
+    at = AT + timedelta(milliseconds=100)
+    arrival = book(at, bid=".95", ask=".97")
+    if missing:
+        arrival.pop("complementary_book")
+    else:
+        arrival["complementary_book"]["bids"] = [dict(price=".06", size="20")]
+    engine.observe(at, market(), arrival, {})
+    p = portfolio(engine, "MAKER")
+    assert orders(p)[0]["state"] == "UNKNOWN"
+    assert D(p["reserved"]) > D("4.9")
+    assert not p["positions"]
 
 
 def test_decision_book_cannot_fill_later_arrival() -> None:
