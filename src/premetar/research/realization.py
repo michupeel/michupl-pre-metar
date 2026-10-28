@@ -315,6 +315,7 @@ def evaluate_realization(
             known_forecasts.append((received, f))
     known_forecasts.sort(key=lambda item: item[0])
     versions: dict[datetime, tuple[datetime, dict[str, Any]]] = {}
+    cycle_first_receipts: dict[datetime, datetime] = {}
     rejected: dict[str, int] = {}
     for report in metars:
         event = _clock(report.get("observation_time_utc"))
@@ -340,6 +341,7 @@ def evaluate_realization(
             )
             continue
         # Latest available correction for a nominal cycle, never another sample.
+        cycle_first_receipts[event] = min(cycle_first_receipts.get(event, received), received)
         if event not in versions or received > versions[event][0]:
             versions[event] = received, report
     history = []
@@ -348,7 +350,8 @@ def evaluate_realization(
         eligible = [
             (receipt, forecast)
             for receipt, forecast in known_forecasts
-            if receipt < event and (event - receipt).total_seconds() <= 10800
+            if receipt < min(event, cycle_first_receipts[event])
+            and (event - receipt).total_seconds() <= 10800
         ]
         if not eligible:
             continue
@@ -458,7 +461,11 @@ def evaluate_realization(
                 (
                     forecast
                     for receipt, forecast in reversed(known_forecasts)
-                    if receipt < (_clock(first["nominal_time"]) or at)
+                    if receipt
+                    < min(
+                        (_clock(first["nominal_time"]) or at),
+                        cycle_first_receipts[_clock(first["nominal_time"]) or at],
+                    )
                 ),
                 None,
             )

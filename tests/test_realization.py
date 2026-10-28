@@ -50,6 +50,19 @@ def three() -> list[dict[str, Any]]:
     return [report(60), report(30), report(0)]
 
 
+def test_early_report_receipt_blocks_later_pre_nominal_forecast_revision() -> None:
+    event = AT.replace(minute=0)
+    row = dict(
+        report(0),
+        observation_time_utc=event.isoformat(),
+        first_received_utc=(event - timedelta(minutes=2)).isoformat(),
+    )
+    f = forecast(event - timedelta(minutes=1))
+    result = evaluate_realization([row], [f], [], AT)
+    assert not result["history"]
+    assert result["state"] == "INSUFFICIENT DATA"
+
+
 def test_remaining_warming_does_not_reuse_a_past_daily_peak() -> None:
     at = AT + timedelta(hours=3)
     f = forecast(at - timedelta(hours=2))
