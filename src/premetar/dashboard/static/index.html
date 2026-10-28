@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>EPWA · Weather Intelligence</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+  <script defer src="/static/echarts.min.js"></script>
+  <script defer src="/static/dashboard.js"></script>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">M</span><div><div class="eyebrow">MICHUPL / OBSERVATION CENTER</div><h1>EPWA <span>Warszawa Chopina</span></h1></div></div>
+    <div class="header-right"><div class="clock-block"><strong id="local-clock">—</strong><span id="utc-clock">— UTC</span></div><span id="connection" class="connection degraded"><i></i>Łączenie</span></div>
+  </header>
+  <div class="source-strip" id="source-strip" aria-live="polite"><span>Odczyt istniejących źródeł…</span></div>
+  <div id="error-banner" class="banner danger hidden" role="alert"></div>
+  <div id="warnings" class="banner hidden"></div>
+
+  <section class="hero-grid" aria-label="Najważniejsze temperatury">
+    <article class="metric-card forecast-card"><div class="card-kicker"><span>TMAX RAW</span><span class="tag cyan">PUNKTY GODZINOWE</span></div><div class="big-value" id="forecast-tmax">—<small>°C</small></div><div class="metric-caption" id="forecast-peak">Brak dostępnej prognozy</div><div class="micro" id="forecast-countdown">Termin prognozowanego maksimum: —</div><div class="metric-footer"><span id="forecast-model">Model —</span><span id="forecast-change">Zmiana —</span></div><div class="micro" id="forecast-meta">Czas publikacji i przebieg modelu: —</div></article>
+    <article class="metric-card calibrated-tmax-card"><div class="card-kicker"><span>TMAX KALIBROWANE</span><span class="tag amber" id="forecast-calibration-status">OCZEKUJE</span></div><div class="big-value" id="calibrated-tmax">—<small>°C</small></div><div class="metric-caption" id="calibrated-peak">Brak zwalidowanej prognozy Tmax</div><div class="metric-footer"><span id="calibrated-version">EPWA-FC-CAL-v1</span><span id="calibrated-samples">0 dni walidacji</span></div><div class="micro" id="calibrated-error">Błąd walidacyjny: brak potwierdzonej oceny</div><div class="micro" id="calibrated-freshness">Oczekiwanie na wiarygodne dane referencyjne.</div></article>
+    <article class="metric-card observed-card"><div class="card-kicker"><span>MAX METAR INTEGER</span><span class="tag">METAR · INTEGER</span></div><div class="big-value" id="observed-max">—<small>°C</small></div><div class="metric-caption" id="observed-max-time">Brak otrzymanych raportów</div><div class="metric-footer"><span id="routine-count">0 raportów rutynowych</span><span id="speci-policy">SPECI: —</span></div><div class="official-so-far"><span>Kwalifikowane maksimum AWC</span><strong id="official-maximum">—</strong></div><div class="micro" id="official-maximum-policy">Rutynowe raporty; precyzyjny T-group, gdy dostępny.</div><div class="micro" id="settlement-value">Rozliczenie rynku: nieustalone.</div></article>
+    <article class="metric-card latest-card"><div class="card-kicker"><span>OSTATNI OTRZYMANY METAR</span><span class="tag" id="latest-report-type">—</span></div><div class="big-value" id="latest-temperature">—<small>°C</small></div><div class="metric-caption" id="latest-report-time">Pomiar — · odbiór —</div><div class="metric-footer"><span id="current-forecast">Prognoza teraz —</span><span id="forecast-trend">Trend —</span></div><div class="micro tac" id="latest-tac">Oczekiwanie na dane…</div></article>
+  </section>
+
+  <section class="toolbar" aria-label="Dzień i odtwarzanie">
+    <label class="date-label">DZIEŃ WARSZAWSKI <input type="date" id="date-select" aria-label="Wybierz dzień"></label>
+    <button type="button" id="live-button" class="button primary">● Na żywo</button>
+    <span class="toolbar-divider"></span>
+    <button type="button" id="replay-toggle" class="button">▶ Odtwarzaj</button>
+    <label class="speed-label"><select id="replay-speed" aria-label="Prędkość odtwarzania"><option value="1">1×</option><option value="5">5×</option><option value="20">20×</option></select></label>
+    <input id="time-scrubber" type="range" min="0" max="86400" value="0" step="1" aria-label="Historyczny punkt czasu">
+    <output id="scrub-time">—</output>
+  </section>
+
+  <div class="main-grid">
+    <section class="panel weather-panel"><div class="panel-heading"><div><span class="eyebrow">TEMPERATURA / EUROPE/WARSAW</span><h2>Prognoza, METAR i czujniki</h2></div><span id="chart-cutoff" class="micro">—</span></div><div id="weather-chart" class="chart weather-chart" role="img" aria-label="Interaktywny wykres temperatury EPWA"></div><div class="chart-foot"><span><b class="dot cyan-dot"></b>Godzinowa prognoza punktowa</span><span><b class="dot white-dot"></b>METAR: pełne °C</span><span>Legenda przełącza serie · scroll powiększa · przeciągnij, aby przesunąć</span></div></section>
+    <aside class="panel inspector"><div class="panel-heading"><div><span class="eyebrow">DOSTĘPNOŚĆ INFORMACJI</span><h2>Co wiedzieliśmy wtedy?</h2></div><span class="tag amber" id="inspection-mode">TERAZ</span></div><div class="inspect-time" id="inspect-time">—</div><p class="micro inspect-note">Najedź na wykres lub przesuń oś czasu. Wyłącznie dane odebrane do wskazanej chwili.</p><div class="inspect-row"><span>Ostatni znany METAR</span><strong id="inspect-metar">—</strong></div><div class="micro" id="inspect-metar-time">—</div><div class="inspect-row"><span>Dostępna prognoza Tmax</span><strong id="inspect-forecast">—</strong></div><div class="micro" id="inspect-forecast-time">—</div><div class="inspect-row"><span>Następny nominalny METAR</span><strong id="inspect-countdown">—</strong></div><div id="inspect-pws" class="inspect-sensors"><span class="micro">Brak kwalifikujących się pomiarów.</span></div><div class="inspect-book" id="inspect-market">Arkusz —</div><div id="inspect-warning" class="micro amber-text"></div></aside>
+  </div>
+
+  <section class="panel hours-panel"><div class="panel-heading"><div><span class="eyebrow">GODZINA PO GODZINIE</span><h2>Pełna oś dnia</h2></div><span class="micro">Kliknij godzinę, aby zobaczyć pomiary i czasy odbioru</span></div><div class="table-scroll hours-scroll"><table class="data-table hours-table"><thead><tr><th>Godzina lokalna</th><th>Prognoza punktowa</th><th>Max godzinowe</th><th>Rewizja</th><th>Oficjalne raporty</th><th>Ostatni znany METAR</th><th>PWS / kalibracja</th><th>Jakość</th></tr></thead><tbody id="hours-body"><tr><td colspan="8" class="empty">Wczytywanie zapisanych obserwacji…</td></tr></tbody></table></div></section>
+
+  <section class="panel markets-panel"><div class="panel-heading"><div><span class="eyebrow">POLYMARKET / KONTRAKTY EPWA</span><h2>Temperatura a ceny rynku</h2></div><label class="contract-label">KONTRAKT <select id="market-select" aria-label="Kontrakt temperatury"><option value="">Brak danych</option></select></label></div><div class="market-layout"><div class="market-table-wrap table-scroll"><table class="data-table market-table"><thead><tr><th>Temperatura</th><th>YES bid / ask</th><th>NO bid / ask</th><th>Głębokość na szczycie</th><th>Aktualność</th></tr></thead><tbody id="market-body"><tr><td colspan="5" class="empty">Brak zweryfikowanych arkuszy.</td></tr></tbody></table></div><div class="market-chart-wrap"><div id="market-chart" class="chart market-chart" role="img" aria-label="Historia cen bid i ask YES oraz NO"></div><div id="market-detail" class="micro market-detail">Ostatnia transakcja nie potwierdza bieżącej wykonalności.</div></div></div></section>
+
+  <section class="stations-section"><div class="section-heading"><div><span class="eyebrow">PERSONAL WEATHER STATIONS</span><h2>Wybrane czujniki w pobliżu EPWA</h2></div><span class="micro" id="station-count">—</span></div><div class="station-grid" id="station-grid"><article class="panel empty">Brak dostępnych czujników.</article></div></section>
+
+  <details class="panel external-panel"><summary><span>Weathercloud · zewnętrzne referencje badawcze</span><span class="tag amber">BEZ AUTOMATYCZNYCH POMIARÓW</span></summary><div id="weathercloud-links" class="external-links"></div><p class="micro">Przypisanie nazwy i sprzętu wymaga potwierdzenia źródła. Nie pobieramy danych przez scraping ani nieudokumentowane interfejsy.</p></details>
+  <footer class="footer"><span>MICHUPL PRE-METAR · tylko obserwacja · bez składania zleceń</span><span id="footer-status">Odczyt lokalnych baz SQLite · wszystkie czasy mają jawne strefy</span></footer>
+</div>
+<dialog id="hour-dialog"><div class="dialog-heading"><div><span class="eyebrow">SZCZEGÓŁY GODZINY</span><h2 id="hour-title">—</h2></div><button type="button" id="close-hour" class="button" aria-label="Zamknij szczegóły">✕</button></div><div id="hour-detail"></div></dialog>
+</body>
+</html>

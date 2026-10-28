@@ -734,13 +734,18 @@ class Observer:
                 )
 
 
-async def watch(duration: float = 86400) -> None:
+async def watch(duration: float = 86400, database: Path = DB) -> None:
     DATA.mkdir(parents=True, exist_ok=True)
     if (DATA / "stop.request").exists():
         raise RuntimeError("Research stop.request exists; no process started")
     lock_path = DATA / "observer.lock"
     lock = acquire(lock_path, uuid4().hex, recover=True)
-    store = TraderStore(DB)
+    database = await asyncio.to_thread(database.resolve)
+    if database.parent != DATA or database.suffix != ".sqlite3":
+        lock.close()
+        lock_path.unlink(missing_ok=True)
+        raise ValueError("Research database segment must be inside EXP0013 directory")
+    store = TraderStore(database)
     stop: asyncio.Event | None = None
     tasks: list[asyncio.Task[Any]] = []
     try:
@@ -802,13 +807,19 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["watch", "status", "snapshot"])
     parser.add_argument("--duration", type=float, default=86400)
+    parser.add_argument(
+        "--database",
+        type=Path,
+        default=DB,
+        help="Append-only EXP0013 segment; same global instance lock",
+    )
     args = parser.parse_args()
     if args.command == "status":
-        print(json.dumps(read_status(DB), indent=2))
+        print(json.dumps(read_status(args.database), indent=2))
     elif args.command == "snapshot":
         result = backup_weather(WEATHER, DATA / f"weather_{now():%Y%m%dT%H%M%S}.sqlite3")
         print(json.dumps(result, indent=2))
     elif args.duration < 1 or args.duration > 604800:
         parser.error("Duration must be between1second and7days")
     else:
-        asyncio.run(watch(args.duration))
+        asyncio.run(watch(args.duration, args.database))

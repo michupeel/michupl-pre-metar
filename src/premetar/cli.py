@@ -30,6 +30,14 @@ app.add_typer(predictions_app, name="predictions")
 DEFAULT_DB = Path("data/premetar.sqlite3")
 
 
+@app.command()
+def dashboard(port: Annotated[int, typer.Option(min=1024, max=65535)] = 8765) -> None:
+    """EPWA web dashboard; local read-only access, no duplicate collectors."""
+    from premetar.dashboard.app import run
+
+    run(port)
+
+
 def comma_set(value: str) -> set[str]:
     result = {item.strip() for item in value.split(",") if item.strip()}
     if not result:
