@@ -797,6 +797,14 @@ class Limit99:
                     (number(o["quantity"]) - number(o["filled"])) * number(o["limit"])
                 )
             # Zero recovery is a stress bound, not a liquidation mark or realized loss.
+            unknown_cost = sum(
+                [
+                    (number(o["quantity"]) - number(o["filled"])) * number(o["limit"])
+                    for o in unknown_orders
+                    if o["side"] == "BUY"
+                ],
+                ZERO,
+            )
             result.append(
                 dict(
                     family=p["family"],
@@ -834,10 +842,7 @@ class Limit99:
                     equity=float(equity) if equity is not None else None,
                     cash=float(cash),
                     reserved=float(number(p["reserved"])),
-                    maximum_loss=float(cost + sum(
-                        ((number(o["quantity"])-number(o["filled"]))*number(o["limit"])
-                         for o in unknown_orders if o["side"] == "BUY"
-                    )),
+                    maximum_loss=float(cost + unknown_cost),
                     maximum_loss_semantics="CONSERVATIVE_COST_BOUND_NO_ASSUMED_DIVERSIFICATION",
                     conditional_loss_by_single_winning_condition=day_risks,
                     bucket_partition_status="DISJOINT_EXHAUSTIVE_PARTITION_NOT_CERTIFIED",
