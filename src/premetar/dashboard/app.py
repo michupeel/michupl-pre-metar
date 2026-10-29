@@ -105,6 +105,12 @@ def create_app(reader: Reader | None = None) -> FastAPI:
             raise HTTPException(422, "Czas inspekcji musi należeć do wybranego dnia")
         return battle_view(service, selected, point)
 
+    @application.get("/api/tomorrow")
+    def tomorrow(at: str | None = None) -> dict[str, Any]:
+        from premetar.research.d1_monitor import view
+
+        return view(cutoff(at) or datetime.now(UTC))
+
     @application.get("/api/events")
     async def events(request: Request) -> StreamingResponse:
         async def stream() -> AsyncIterator[str]:

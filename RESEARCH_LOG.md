@@ -650,6 +650,50 @@ Live display verification:28Oct18:32Warsaw RAW hourly-point peak11.8C at12:00loc
 Verification:708tests27.73s; Ruffcheck/format179files; strictmypy configured67production and18research filesPASS. Bare mypy dot includes ignored third-party capture sources and is not the project scope; research uses MYPYPATH=src plus explicit-package-bases. LiveHTTP1140ms, cached-asof819ms in bounded smoke, SSE refresh, naive-time422/cross-origin403/write405. Read budgets/truncation exposed. No long soak claim. Qwen health could not connect localhost8888; zero delegated generations, no fabricated usage savings.
 Decision: accept read-only dashboard and audit implementation, retain RAW and pending calibration. Need frozen future prospective forecasts plus audited final settlement-source values before promoting a daily correction. Artifacts:docs/DASHBOARD.md, docs/EPWA_FORECAST_CALIBRATION.md, reports/dashboard screenshots/verification and reports/research/epwa_forecast_calibration CSV/summary/Markdown.
 
+## EXP-0016 — D-1 forecast disagreement versus actual EPWA contracts
+
+Baseline:d1b93aa. Hypothesis: earlier forecast/price disagreement may create
+executable economic value; consensus is not probability. Frozen protocol
+EXP0016_PROTOCOL.md/epwa-d1-v1.json;100USD capital/5USDorder/25USDday/3positions,
+5percentage-point minimum probability edge and5percent expected net return.
+Three separate D1 exit policies are pure triggers; default promotionNULL keeps
+live proposals SIGNAL-ONLY, not a claimed filled-trade execution ledger.
+
+Data29Oct2026: actual public5-model batch succeeded, D0/D1 Gamma discovery found
+11contracts each. Snapshot14:06:28Warsaw for30Oct: API dailyTmax ICONGlobal11.0C,
+ICONEU10.8C,IFS9.5C,AIFS8.9C,GFS12.5C; respective hourly-point maxima11.0/10.7/
+9.4/8.9/12.5C. Spread3.6C across3related-family groups. Original init/publication
+NULL; actual firstreceipt preserved. Not five independent probabilistic votes.
+At29Oct13:08:00.753845UTC, NO exactly9C had bid.56/ask.61 with book receipt
+13:08:00.077063UTC;5USD depth quote8.145161shares cost4.99999982USD, average
+.6138613859. Captured explicitzero-fee schedule. This is conditional decision
+depth, not an arrival fill, profitable trade or known probability.
+
+History audit:14actual archived ICON runs21–27Oct were downloaded28Oct with
+APPROXIMATE_REPLAY/init+6h assumptions. Prior94hourly targets/5days are not final
+settlementTmax.0audited horizon/final-settlement calibration pairs, therefore
+P(NO9C), EV, D1model settlementaccuracy and strategy winner remain unidentified.
+No mass archive fetch can manufacture missing historical availability evidence.
+
+Independent journal reuses public stream adapter and live captured sources,
+subscribes only uncovered tokens, preserves RAW before normalization, fails
+closed on bad/stale depth, bounded resnapshot recovery and immutable negative
+candidates. Startup skips historical books; corrected a queued-unsubscribed-frame
+invalidation and per-batch parsegap issue with regressions. Thin read-only UI
+projection excludes RAW decoding on every refresh. Warsaw calendar/DST dates,
+exact/tail outcomes, receipt provenance and all rejected cases remain explicit.
+
+Verification:892testsPASS29.31s, Ruffcheck/format205filesPASS, strictmypy78production
+and18researchPASS, Node syntaxPASS. Two bounded90second live captures plus running
+independent monitor (development gaps retained, no long-soak claim), publicHTTP/WS
+success, SQLiteintegrityok, deterministic fixed-cutoff regenerationPASS. API200,
+naive-time422/write405/cross-origin403; visual actual-models/history-empty/replay
+checks. Existing weather54608/trader49208/battle31048 processes preserved. Only
+read-only dashboard restarted to load its new GETroute. No real orders, keys,
+clock changes or productionDB writes. Decision: accept data/infrastructure,
+economic conclusionINCONCLUSIVE; preserve frozen future capture. No new reboot
+autostart configured. Artifacts:reports/research/exp0016 and dashboard screenshots.
+
 ## EXP-0014 — EPWA forecast realization and qualitative confidence
 
 Hypothesis: persistent, causal temperature/cloud/tendency disagreement can identify trajectory departures before market repricing. Baseline0c8f8ab; fixed documented thresholds, no fitted probability or model promotion. Data: existing first-receipt METAR/PWS/ICON records plus raw-first public ICON enrichment (11hourly variables and Warsaw daily maximum). One extra30minute request is justified by missing condition fields; no new paid source or Weathercloud scraping.

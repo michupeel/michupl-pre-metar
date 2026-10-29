@@ -12,6 +12,18 @@ different result. There is no real-money order execution.
 
 ## EPWA local dashboard (Milestone 2.0)
 
+EXP0016 adds a separate tomorrow forecast/market observer and dashboard panel.
+[D-1 operations and limitations](docs/research/EXP0016_OPERATIONS.md). Five models
+are grouped into three dependence families. Unverified settlement calibration
+blocks probabilities, EV and entries: all three D1 variants remain SIGNAL-ONLY.
+
+```powershell
+uv run python -m premetar.research.d1_monitor status
+uv run python -m premetar.research.d1_monitor report
+# Start only if this independent monitor is not already running:
+uv run python -m premetar.research.d1_monitor watch
+```
+
 EXP0014/15 adds causal forecast realization and a separate SIMPLE/WEATHER/HYBRID
 shadow study. [Frozen protocol and safe operation](docs/research/EXP0014_15_OPERATIONS.md).
 There are no real orders; maker fills remain conditional/unidentified.
