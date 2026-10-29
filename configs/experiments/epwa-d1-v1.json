@@ -1,0 +1,47 @@
+{
+  "version": "D1_FORECAST_RESEARCH_V1",
+  "study": "EXP0016",
+  "airport": "EPWA",
+  "timezone": "Europe/Warsaw",
+  "initial_capital_usd": "100",
+  "order_budget_usd": "5",
+  "max_day_committed_usd": "25",
+  "max_open_positions": 3,
+  "minimum_probability_edge": "0.05",
+  "minimum_executable_net_return_fraction": "0.05",
+  "minimum_calibration_days": 30,
+  "minimum_budget_fill_fraction": "0.90",
+  "entry_day": "D_MINUS_1_ONLY",
+  "entry_order_lifetime_seconds": 60,
+  "cancellation_latency_ms": 250,
+  "arrival_latencies_ms": [
+    100,
+    500,
+    1000,
+    3000,
+    5000
+  ],
+  "maximum_arrival_gap_seconds": 2,
+  "book_max_age_seconds": 5,
+  "metadata_max_age_seconds": 1200,
+  "fee_policy": "CAPTURED_EXPLICIT_CURRENT_ZERO_FEE_SCHEDULE_ONLY_ELSE_BLOCK",
+  "maker_policy": "UNKNOWN_QUEUE_NO_ASSUMED_FILL",
+  "complementary_path": "THEORETICAL_ONLY_NO_FILL_OR_DOUBLE_COUNT",
+  "strategies": {
+    "D1_FORECAST_VALUE_V1": {
+      "exit": "D0_12_00_EUROPE_WARSAW_FIRST_SUPPORTED_BID"
+    },
+    "D1_TO_D0_REPRICING_V1": {
+      "exit_net_return_fraction": "0.05",
+      "fallback_exit": "D0_END_FIRST_SUPPORTED_BID"
+    },
+    "D1_HOLD_TO_SETTLEMENT_V1": {
+      "exit": "VERIFIED_OFFICIAL_RESOLUTION_ONLY"
+    }
+  },
+  "unfilled_exit": "RETAIN_INVENTORY_AND_RISK_UNTIL_VERIFIED_SETTLEMENT",
+  "risk_exit": "NO_UNSUPPORTED_STOP_PRICE_OR_GUARANTEED_LIQUIDATION",
+  "mode": "SHADOW_ONLY",
+  "calibration_promotion_id": null,
+  "calibration_readiness": "SIGNAL_ONLY_CALIBRATION_PENDING"
+}
