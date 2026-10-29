@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-29T13:14:39.785243+00:00",
+  "integrity": {
+    "battle-000001.sqlite3": "ok"
+  },
+  "running_hashes_match": {
+    "d1_forecasts.py": true,
+    "d1_monitor.py": true,
+    "d1_strategy.py": true
+  },
+  "api": {
+    "http": 200,
+    "latency_ms": 684.51,
+    "naive_time": 422,
+    "write": 405,
+    "cross_origin": 403
+  },
+  "event_counts": {
+    "D1_RUN": 4,
+    "D1_HTTP_RAW": 12,
+    "D1_MARKET": 88,
+    "D1_DISCOVERY": 8,
+    "D1_FORECAST": 20,
+    "D1_CANDIDATE": 506,
+    "D1_SNAPSHOT": 23,
+    "D1_STREAMHEALTH": 34,
+    "D1_WS_RAW": 864,
+    "D1_STOP": 3
+  },
+  "tomorrow_evaluations": 253,
+  "distinct_tomorrow_contracts": 11,
+  "conditional_ask_depth_side_quotes": 110,
+  "independent_completed_settlement_days": 0,
+  "shadow_entries": 0,
+  "real_orders": 0,
+  "health": {
+    "errors": {},
+    "own_tokens": 28,
+    "pid": 41220,
+    "source_files": 4,
+    "state": "RUNNING",
+    "uptime_seconds": 31.593000000109896
+  },
+  "latest_NO9_depth": {
+    "at": "2026-10-29T13:13:11.312543+00:00",
+    "outcome": {
+      "kind": "EXACT",
+      "label": "9\u00b0C",
+      "temperature_c": 9
+    },
+    "side": "NO",
+    "best_ask": 0.61,
+    "best_bid": 0.56,
+    "book_received_at": "2026-10-29T13:13:11.075098+00:00",
+    "estimated_probability": null,
+    "expected_return_usd": null,
+    "quote": {
+      "average_buy_price": "0.6138613859198117753596276366",
+      "budget_used_fraction": 0.999999964,
+      "execution_path": "DIRECT_BOOK_SUPPORTED",
+      "fees_usd": "0",
+      "gross_cost_usd": "4.99999982",
+      "is_fill": false,
+      "quantity": "8.145161",
+      "semantics": "DECISION_DEPTH_ONLY_NOT_ARRIVAL_OR_OWN_EXECUTION",
+      "status": "DEPTH_SUPPORTED_CONDITIONAL"
+    },
+    "reasons": [
+      "PROBABILITY_UNVALIDATED"
+    ],
+    "status": "RESEARCH_CANDIDATE",
+    "token_id": "81895080218839988692736035436537160997223453846533151296786848727850281926476"
+  },
+  "tests": {
+    "full": "892 passed in29.31s",
+    "after_schema_guard": "13 focused tests passed",
+    "ruff": "PASS205files",
+    "mypy": "PASS78production+18research"
+  },
+  "existing_collectors_preserved": [
+    54608,
+    49208,
+    31048
+  ],
+  "clock": "UNKNOWN",
+  "scope": "Two bounded90s smokes plus own controlled deployments/live capture; no long-duration soak",
+  "deterministic_regeneration": true
+}
