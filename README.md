@@ -12,6 +12,19 @@ different result. There is no real-money order execution.
 
 ## EPWA local dashboard (Milestone 2.0)
 
+EXP0016.1 adds audited historical settlement labels and D-1 forecast joins.
+See [settlement rules](docs/research/EXP0016_1_RULES.md),
+[calibration scope](docs/research/EXP0016_1_CALIBRATION.md) and
+[safe D1 logon startup](docs/research/EXP0016_1_STARTUP.md).
+Current-archive reproduction is separate from an original resolution-time source
+snapshot. Backfilled labels never become historical live information.
+
+```powershell
+uv run python -m premetar.research.settlement_truth --start 2026-10-15 --end 2026-10-28
+uv run python -m premetar.research.settlement_truth --report-only
+uv run python -m premetar.research.d1_service status
+```
+
 EXP0016 adds a separate tomorrow forecast/market observer and dashboard panel.
 [D-1 operations and limitations](docs/research/EXP0016_OPERATIONS.md). Five models
 are grouped into three dependence families. Unverified settlement calibration

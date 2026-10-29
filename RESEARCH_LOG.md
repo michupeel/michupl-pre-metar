@@ -650,6 +650,48 @@ Live display verification:28Oct18:32Warsaw RAW hourly-point peak11.8C at12:00loc
 Verification:708tests27.73s; Ruffcheck/format179files; strictmypy configured67production and18research filesPASS. Bare mypy dot includes ignored third-party capture sources and is not the project scope; research uses MYPYPATH=src plus explicit-package-bases. LiveHTTP1140ms, cached-asof819ms in bounded smoke, SSE refresh, naive-time422/cross-origin403/write405. Read budgets/truncation exposed. No long soak claim. Qwen health could not connect localhost8888; zero delegated generations, no fabricated usage savings.
 Decision: accept read-only dashboard and audit implementation, retain RAW and pending calibration. Need frozen future prospective forecasts plus audited final settlement-source values before promoting a daily correction. Artifacts:docs/DASHBOARD.md, docs/EPWA_FORECAST_CALIBRATION.md, reports/dashboard screenshots/verification and reports/research/epwa_forecast_calibration CSV/summary/Markdown.
 
+## EXP-0016.1 — EPWA settlement ground truth and causal forecast joins
+
+Baseline8e99c3e. Question: can actual historical market outcomes be independently
+reproduced under EACH captured source/rule version? Bounded15–28Oct2026 audit
+found14 events/all14 resolved by closed+UMAresolved+binarypayout+oneYeswinner.
+23Oct event1227844=14C,26Oct event1244351=11C match officialAWC reconstruction.
+23–28Oct source+market maxima14/11/14/11/13/10C with48/48/50/48/48/48routine
+observations;25Oct correctly25hours.0conflicts among6 independent verified days.
+15–22Oct primary source is olderNOAA WRH Temp table, Wunderground FALLBACK only;
+no archivedWRH view:8VERIFIED_MARKET_ONLY. Initial diagnostic misdescription of
+WUprimary was corrected from actual captured rules; originalauditrows retained.
+
+Method: immutable content-addressed rawHTTP, per-event fullrules/source hashes,
+preciseTremark else permittedbody, SPECIexclude/allother routine incloffhour,
+Decimalhalf-to-warmer, versions/dedup/source-providerreceipt cutoff. Exact stated
+sourceRAW + widerstructuredAWCquery + full declaredhalf-hourcoverage required.
+Backfilledcurrentarchive labels VERIFIED_SOURCE_AND_MARKET are explicitly NOT
+archivedresolution-time views (source_cutoff_certified=false/NOT_ARCHIVED).
+Actual labelcreation/collectorreceipt29Oct distinct from historicAWCreceiptTime.
+Missingfallback/lateCOR/incompletecoverage cannot certify a target or inventlowestbin.
+
+New35model/init runs from7successfulbatchedSingleRunsAPIrequests complement14old
+ICONcaptures;49captures,35unique(model,init). Allfive models supporthourlypoints.
+APIrejectsstart_date anddailyWarsawaggregation for00UTCruns; thoseerrorspreserved,
+dailyAPI TmaxNULL, no silentlystitched/quantizedreference substitution. Frozen
+D1checkpoints06/12/18local andinit+6h APPROXIMATE_REPLAY, nooriginalpublicationproof.
+30approximate model/day pairs over6verifieddays;0strict availabilityverifiedpairs.
+NoonRAWpoint-maxMAE globalICON.917/EU.833/IFS1.317/AIFS1.350/GFS1.117C, signedbias
+.217/.300/.217/-.650/.817C, integer2/6,2/6,1/6,1/6,3/6 respectively. These are
+descriptive reported-max deviations, not validatedphysicalbias/edge or modelranking.
+6/30trainingdays plus20heldoutdays needed; disagreement association underpowered.
+
+Dashboard adds publicthinstaticcatalog and as-of gating withoutserverrestart.
+Existingweather54608/trader49208/battle31048/D1observer41220/dashboard45512
+processes preserved. DedicatedlimitedinteractiveLogon taskD1Research-v1 installed,
+IgnoreNew,60s×3restart,no credentials; actualtasklaunch0 ALREADY_RUNNING,no duplicate.
+No reboot/interruption induced. No strategyconfig/promotion/productionDB changes.
+Artifacts:docs/research/EXP0016_1_RESULTS.md; reports/research/epwa_settlement
+groundtruth/selected+excludedTAC/calibrationCSVs+JSON and screenshot. Probability
+promotion remainsBLOCKED. Next: moreverifiedindependentdays plusoriginalforecast
+availability evidence and oldWRHsource views. Existingruntime collectors untouched.
+
 ## EXP-0016 — D-1 forecast disagreement versus actual EPWA contracts
 
 Baseline:d1b93aa. Hypothesis: earlier forecast/price disagreement may create
