@@ -1,0 +1,96 @@
+{
+  "id": "1227844",
+  "slug": "highest-temperature-in-warsaw-on-october-23-2026",
+  "description": "This market will resolve to the temperature range that contains the highest temperature reported at Warsaw Chopin Airport (EPWA) on 23 Oct '26.\n\nThe qualifying value is the highest temperature reported in the hourly temperature remark of any routine (METAR) observation for Warsaw Chopin Airport (EPWA) on that date, in tenths of a degree Celsius as reported. A report whose line begins with SPECI is a special observation and does not count. Every other report is routine, including one issued off the nominal hour and one that carries no METAR or SPECI label.\n\nFor How to Read the METAR Report, see: https://polymarket-upload.s3.us-east-2.amazonaws.com/market_products/Weather/How+to+Read+the+METAR+Report.pdf\n\nThe hourly temperature remark is the group beginning with the letter T followed by exactly eight digits. After the T, one digit for sign (0 positive, 1 negative) and three for tenths of a degree Celsius give the temperature; the following four are the dew point and are not used. T01390133 is 13.9\u00b0C; T10171022 is \u22121.7\u00b0C.\n\nIf a routine observation does not carry the hourly temperature remark, the temperature group in the body of that observation governs for that observation, in whole degrees Celsius as reported. It appears as temperature and dew point separated by a slash, with M marking a negative value: 18/12 is 18\u00b0C; M11/M17 is \u221211\u00b0C. An observation that reports no temperature in either place is disregarded.\n\nEach market in this event states its range in whole degrees Celsius. The qualifying value is rounded to the nearest whole degree, with a value ending in exactly half rounded up to the next higher whole degree, and that whole Celsius value determines which range contains it. For example, 13.9\u00b0C counts as 14\u00b0C; 17.4\u00b0C counts as 17\u00b0C; 16.5\u00b0C counts as 17\u00b0C; \u22121.7\u00b0C counts as \u22122\u00b0C; \u22128.5\u00b0C counts as \u22128\u00b0C.\n\nAn observation counts if its time stamp, converted to the station's local time (including any daylight-saving shift in effect), falls on the observation date.\n\nThis market will resolve at the issuance of the first METAR observation for the station on the day following the observation date or by 11:59 PM ET on the day following the observation date, whichever comes first. Resolution is determined from the observations the resolution source shows for the observation date.\n\nIn the event that the Aviation Weather Center has published no routine observation reporting a temperature for the observation date by 11:59 PM ET on the day following the observation date, the Weather Underground Daily Observations table will be used as the resolution source. In the event that neither source has published data sufficient to determine a temperature for the observation date by 11:59 PM ET on the day following the observation date, this market will resolve to the lowest bracket.\n\nThe report the resolution source shows for a given observation time is the one that counts, whether or not it is marked as a correction (COR). Changes to observations within this market's timeframe will be considered until the first datapoint for the following date has been published, after which any alterations will not be considered. Where the first routine observation for the following date is published before that deadline, resolution is determined from a read taken after it. Where it is not, resolution is determined from a read taken at that deadline.\n\nIn the case that the Resolution Source publishes data, sufficient to settle a Market, that is clearly erroneous and the result of technical or operational error, or of unauthorized interference with the Resolution Source or its data, the Market may remain open for a period of up to seven (7) calendar days (ET) from the time of the original release, in anticipation of a correction by the Resolution Source. If the Resolution Source publishes a corrected value within that period, that value will be eligible for resolution. If no corrected value is published within that period, Polymarket will issue a Clarification to determine whether the originally published value may be eligible for resolution, or whether other action is required to preserve the orderly functioning of the Market.\n\nThe resolution source for this market will be the routine observations for Warsaw Chopin Airport (EPWA) published here:\nhttps://aviationweather.gov/api/data/metar?ids=EPWA&format=raw&date=2026-10-23T22:00:00Z&hours=27",
+  "resolutionSource": "https://aviationweather.gov/api/data/metar?ids=EPWA&format=raw&date=2026-10-23T22:00:00Z&hours=27",
+  "markets": [
+    {
+      "conditionId": "0x14f0b17641efbe26c888785427cfbe3ca74d1af73b17d0bedf088b9220005e17",
+      "groupItemTitle": "7\u00b0C or below",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x381e1c2629c851a51adf2148d45e064c5e352cebd4d24776ff699baceb9df1d8",
+      "groupItemTitle": "8\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x84a2a68876e52b75ddc91b7310f5a712f42a4c3da6fd3ae8901f7a215c0b5b06",
+      "groupItemTitle": "9\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x10ffefe4ff780c3a42bb70378e7533f0728bd68f8a82a7635301673aee70e91a",
+      "groupItemTitle": "10\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0xb0dc52a9bdbc45cee3c17f6e29a3409facc9ccbcb276756bbbcc58dd46642b56",
+      "groupItemTitle": "11\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0xdf8913979aa834b085b636125ef4f27f0113ad034ac90490c54640e56b9dddfd",
+      "groupItemTitle": "12\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0xc1bab2605387717220c1b4f84e81d33c7d70c23c821555ff389071af00161dde",
+      "groupItemTitle": "13\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x0cd5d86583dc239d44f99939c3654be96cb8fea7ac71bb0f0fe9c531f6cef64f",
+      "groupItemTitle": "14\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"1\", \"0\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x335f25bac123c67dbb80bc9d03938e54796cf36449766bdad4b9b7235310938d",
+      "groupItemTitle": "15\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x3b42ccb595f9d367d34b1d8b7fdfe78cb3bf0099119332fb8fd4d6d178a89efd",
+      "groupItemTitle": "16\u00b0C",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    },
+    {
+      "conditionId": "0x0dc68fb1fbf765850639f59ec147638843d60cf9e46b42d89bfbda26aebff512",
+      "groupItemTitle": "17\u00b0C or higher",
+      "closed": true,
+      "umaResolutionStatus": "resolved",
+      "outcomePrices": "[\"0\", \"1\"]",
+      "outcomes": "[\"Yes\", \"No\"]"
+    }
+  ]
+}
