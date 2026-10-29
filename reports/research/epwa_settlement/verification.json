@@ -1,0 +1,50 @@
+{
+  "verified_at": "2026-10-29T17:51:54.287812+00:00",
+  "classification_counts": {
+    "VERIFIED_MARKET_ONLY": 8,
+    "VERIFIED_SOURCE_AND_MARKET": 6
+  },
+  "market_events_found": 14,
+  "resolved_market_labels": 14,
+  "source_reproduced_days": 6,
+  "strict_pairs": 0,
+  "approximate_verified_model_day_pairs": 30,
+  "current_archive_not_resolution_time_snapshot": true,
+  "integrity": {
+    "battle-000001.sqlite3": "ok"
+  },
+  "deterministic_reports": true,
+  "report_only_wrote_no_journal_events": true,
+  "task": {
+    "task_name": "MichuplPreMetar-D1Research-v1",
+    "owned": true,
+    "settings_verified": true,
+    "state": "Ready",
+    "last_run_result": 0,
+    "multiple_instances": "IgnoreNew",
+    "run_level": "Limited",
+    "logon_type": "Interactive",
+    "restart_count": 3
+  },
+  "existing_observer_lock": "ALREADY_RUNNING",
+  "preserved_pids": [
+    54608,
+    49208,
+    31048,
+    41220,
+    45512
+  ],
+  "event_counts": {
+    "HTTP_CAPTURE": 49,
+    "SETTLEMENT_TARGET": 22,
+    "ARCHIVE_REQUEST_FAILED": 14,
+    "ARCHIVED_FORECAST_RUN": 35
+  },
+  "tests": {
+    "pytest": "979 passed in31.20s",
+    "ruff": "PASS",
+    "format": "218 files PASS",
+    "mypy": "82 production/18 research PASS",
+    "node": "PASS"
+  }
+}
