@@ -53,6 +53,20 @@ uv run premetar dashboard --port 8766
 Start-Process 'http://127.0.0.1:8766/'
 ```
 
+On this workstation, `MichuplPreMetar-Dashboard-v1` starts the dashboard at user
+logon, independently of the weather and trader collectors. It runs the project's
+absolute `.venv\Scripts\pythonw.exe -m premetar.dashboard --port 8766` with the
+repository as working directory, limited privileges, `IgnoreNew` and three
+one-minute failure restarts. It does not run before login or open a browser.
+When running without a console, bounded diagnostic logs go to
+`logs/dashboard.log` (2 MB plus two rotations).
+
+```powershell
+Get-ScheduledTask -TaskName 'MichuplPreMetar-Dashboard-v1'
+# If the dashboard is stopped:
+Start-ScheduledTask -TaskName 'MichuplPreMetar-Dashboard-v1'
+```
+
 Read-only weather/market views, causal as-of inspection, hourly details and DST-safe
 replay. RAW and calibrated Tmax are separate; calibration remains pending until
 verified daily targets and prospective improvement exist. See

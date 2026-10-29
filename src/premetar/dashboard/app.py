@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import sys
 import time
 from collections.abc import AsyncIterator
 from datetime import UTC, date, datetime, timedelta
@@ -139,4 +140,28 @@ def create_app(reader: Reader | None = None) -> FastAPI:
 def run(port: int = 8765) -> None:
     import uvicorn
 
-    uvicorn.run(create_app(), host="127.0.0.1", port=port, access_log=False, log_level="warning")
+    options: dict[str, Any] = {}
+    if sys.stderr is None:
+        # pythonw has no stderr: Uvicorn's default formatter calls isatty().
+        # Keep unattended startup independent of an interactive console.
+        logs = ROOT / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        options["log_config"] = {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {"plain": {"format": "%(asctime)s %(levelname)s %(message)s"}},
+            "handlers": {
+                "file": {
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "filename": str(logs / "dashboard.log"),
+                    "maxBytes": 2_000_000,
+                    "backupCount": 2,
+                    "encoding": "utf-8",
+                    "formatter": "plain",
+                }
+            },
+            "loggers": {"uvicorn": {"handlers": ["file"], "level": "WARNING", "propagate": False}},
+        }
+    uvicorn.run(
+        create_app(), host="127.0.0.1", port=port, access_log=False, log_level="warning", **options
+    )
