@@ -1,0 +1,18 @@
+.entry-timing-panel { margin: 20px 0; padding: 20px; }
+.entry-timing-panel h3 { margin-top: 24px; font-size: 15px; }
+.entry-timing-warning { padding: 12px 14px; border-left: 3px solid #e8b453; background: #b67b1110; color: #ebd5a9; font-size: 13px; line-height: 1.6; }
+.entry-timing-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+.entry-timing-metric { min-width: 0; padding: 14px; border: 1px solid #294151; border-radius: 8px; background: #102432; display: flex; flex-direction: column; gap: 8px; }
+.entry-timing-metric strong { font-size: 24px; font-variant-numeric: tabular-nums; }
+.entry-timing-histogram { margin: 20px 0; overflow-x: auto; }
+.entry-timing-histogram figcaption { margin-bottom: 10px; font-size: 14px; color: #b7ccda; }
+.entry-timing-histogram svg { display: block; width: 100%; min-width: 650px; max-height: 420px; }
+.entry-timing-histogram svg text { fill: #bacbd5; font: 13px system-ui, sans-serif; }
+.entry-timing-histogram svg rect { fill: #42c9c3; opacity: .85; }
+.entry-timing-table { min-width: 760px; }
+.entry-timing-table td { max-width: 340px; overflow-wrap: anywhere; }
+.entry-timing-evidence { padding: 1px 14px 10px; border: 1px solid #294151; border-radius: 8px; }
+.entry-timing-limits { color: #9aafbd; font-size: 12px; line-height: 1.8; padding-left: 20px; }
+.entry-timing-live { padding: 1px 14px 12px; margin: 14px 0; border: 1px solid #294151; border-radius: 8px; background: #102432; }
+@media (max-width: 1100px) { .entry-timing-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 650px) { .entry-timing-panel { padding: 12px; } .entry-timing-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .entry-timing-panel .panel-heading { flex-wrap: wrap; gap: 12px; } }
