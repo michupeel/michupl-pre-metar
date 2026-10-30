@@ -1,0 +1,67 @@
+{
+  "captured_at": "2026-10-30T12:22:08.689576+00:00",
+  "entries": 11,
+  "journal_integrity": {
+    "battle-000001.sqlite3": "ok",
+    "battle-000002.sqlite3": "ok"
+  },
+  "examples": [
+    {
+      "journal": "battle-000002.sqlite3",
+      "journal_id": 1757,
+      "recorded_at": "2026-10-30T06:00:53.971342+00:00",
+      "trade_id": "45b9430e9676dc465bd3d033cbf1c0d2aad47d629ec078fde7254bc303ab73a8",
+      "transaction_hash": "0xa556bf451d9e98829a63ace3e418933c0e3218567e668cc0e3a3000fb7704054",
+      "source_trade_timestamp": "2026-10-30T06:00:42+00:00",
+      "original_first_detection": "2026-10-30T06:00:44.334578+00:00",
+      "sidecar_capture_time": "2026-10-30T06:00:53.971342+00:00",
+      "detection_delay_seconds": 2.334578,
+      "sidecar_delay_seconds": 9.636764,
+      "price": "0.9763730839",
+      "quantity": "290.31",
+      "station": null,
+      "weather_status": "UNKNOWN",
+      "source_book_available": false,
+      "detection_book_available": false,
+      "order_role": "UNKNOWN"
+    },
+    {
+      "journal": "battle-000002.sqlite3",
+      "journal_id": 2132,
+      "recorded_at": "2026-10-30T07:54:17.169033+00:00",
+      "trade_id": "c7f52595177aa7682e4b27421e034b905f66dd4416402e77d9eda95ff452e5fc",
+      "transaction_hash": "0x94a03b471b2957e825dd6858e2392a1f99218dbb204eedc8973fca435cda5123",
+      "source_trade_timestamp": "2026-10-30T07:54:07+00:00",
+      "original_first_detection": "2026-10-30T07:54:09.227733+00:00",
+      "sidecar_capture_time": "2026-10-30T07:54:17.169033+00:00",
+      "detection_delay_seconds": 2.227733,
+      "sidecar_delay_seconds": 7.9413,
+      "price": "0.9777146157",
+      "quantity": "64.93",
+      "station": "LLBG",
+      "weather_status": "UNKNOWN",
+      "source_book_available": false,
+      "detection_book_available": false,
+      "order_role": "UNKNOWN"
+    },
+    {
+      "journal": "battle-000002.sqlite3",
+      "journal_id": 2543,
+      "recorded_at": "2026-10-30T10:02:01.121361+00:00",
+      "trade_id": "c72f6a0c61df0beefc087ee0497ebdeaf041e0a326bfc53171bc2daf2c0f1435",
+      "transaction_hash": "0x7974c9cd9a464a30117f67ff142e0d6d73ad1cf6d7495e1adfbca0c4016d10c0",
+      "source_trade_timestamp": "2026-10-30T10:01:55+00:00",
+      "original_first_detection": "2026-10-30T10:01:58.049649+00:00",
+      "sidecar_capture_time": "2026-10-30T10:02:01.121361+00:00",
+      "detection_delay_seconds": 3.049649,
+      "sidecar_delay_seconds": 3.071712,
+      "price": "0.9433333333",
+      "quantity": "15.0",
+      "station": null,
+      "weather_status": "UNKNOWN",
+      "source_book_available": false,
+      "detection_book_available": false,
+      "order_role": "UNKNOWN"
+    }
+  ]
+}

@@ -1,0 +1,2323 @@
+{
+  "groups": {
+    "ALL": {
+      "archive_hourly_only_sensitivity": {
+        "hist": [
+          {
+            "count": 1069,
+            "label": "<-5m"
+          },
+          {
+            "count": 166,
+            "label": "[-5m,-3m)"
+          },
+          {
+            "count": 212,
+            "label": "[-3m,-1m)"
+          },
+          {
+            "count": 24,
+            "label": "[-60s,-30s)"
+          },
+          {
+            "count": 38,
+            "label": "[-30s,0s)"
+          },
+          {
+            "count": 252,
+            "label": "[0s,30s)"
+          },
+          {
+            "count": 476,
+            "label": "[30s,60s)"
+          },
+          {
+            "count": 1222,
+            "label": "[1m,3m)"
+          },
+          {
+            "count": 306,
+            "label": "[3m,5m)"
+          },
+          {
+            "count": 327,
+            "label": ">=5m"
+          }
+        ],
+        "independent_executions": 4092,
+        "known_before_trade_n": 0,
+        "median_minutes_to_day_end": 785.2833333333333,
+        "median_offset_seconds": 52.0,
+        "n": 4092,
+        "percentages": {
+          "after": 63.09872922776149,
+          "before": 36.87683284457478,
+          "exact_nominal": 0.024437927663734114,
+          "within_180s": 54.37438905180841,
+          "within_30s": 7.3069403714565,
+          "within_60s": 20.01466275659824
+        },
+        "receipt_known_n": 0,
+        "schedule_n": 4092,
+        "unknown_station_n": 0
+      },
+      "control": {
+        "ci_high": 5.159817351598174,
+        "ci_low": 4.616905585763718,
+        "cluster_by": "market_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 3977,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 4.891304347826087,
+        "seed": 17,
+        "settlement_day_clusters": 3841,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "control_day_sensitivity": {
+        "ci_high": 5.194485475135401,
+        "ci_low": 4.581102090171013,
+        "cluster_by": "settlement_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 3977,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 4.891304347826087,
+        "seed": 17,
+        "settlement_day_clusters": 161,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "examples": [
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9589849624",
+          "source_trade_timestamp": "2026-10-29T02:31:13+00:00",
+          "station": "OPKC",
+          "transaction_hash": "0x7244860209b3de6785d1e15c9624080b55877ce0445bda96f29549b579799895"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-10-29T02:56:28+00:00",
+          "station": "FACT",
+          "transaction_hash": "0x97d1b7ef8ee9bf8949ee71d67edb190a656840cc698f9425ff991ef7068677bc"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-10-29T04:01:56+00:00",
+          "station": "SAEZ",
+          "transaction_hash": "0x024aa1bedb400f272d2f0dbf689dddf93121018248828dce175db4b631f6b9bc"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9554866034",
+          "source_trade_timestamp": "2026-10-29T05:00:37+00:00",
+          "station": "RKPK",
+          "transaction_hash": "0xdd0664d1c018b0145a47c16c918bc31c1342b6e502a3763c05e7a042cc502e5e"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9701584535",
+          "source_trade_timestamp": "2026-10-29T05:00:43+00:00",
+          "station": "ZGGG",
+          "transaction_hash": "0xc99c600acc8286ff44bbae5cf75851462995eda1b23ddc936ed3312c7c928066"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9740536628",
+          "source_trade_timestamp": "2026-10-29T06:03:22+00:00",
+          "station": "RPLL",
+          "transaction_hash": "0xdc1495718a94b0dadae96fb30cf8ff9eed184c53424b619a37cd406005cbb6c4"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9539952454",
+          "source_trade_timestamp": "2026-10-29T09:30:14+00:00",
+          "station": "UUWW",
+          "transaction_hash": "0xbfc7281d7b54a75f59dd8a1fee2198cd7aedbb30a9e6cefa14874f6f10152ee7"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9328187332",
+          "source_trade_timestamp": "2026-10-29T09:55:22+00:00",
+          "station": "FACT",
+          "transaction_hash": "0x5b823878106b9f03e6ecad763a44df5562eb0a1a67bc668fda9e6f4c624a81cc"
+        },
+        {
+          "exit_status": "UNRECONCILED_OR_OPEN",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.966997707",
+          "source_trade_timestamp": "2026-10-29T16:52:23+00:00",
+          "station": "SBGR",
+          "transaction_hash": "0xc91a70fb33c1441829c71a6d1cd45be6db91e2f44f9ea83e5687e4a69f70dc7b"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9638535645",
+          "source_trade_timestamp": "2026-10-29T19:00:40+00:00",
+          "station": "ZUCK",
+          "transaction_hash": "0x7a0c73446682e6a801dd03c1de9d26bc96b326b7a0df0383270496b6af6038ed"
+        }
+      ],
+      "execution_summary": {
+        "closed_gross_loss_n": 3,
+        "closed_gross_pnl": "27053.5861879138420582",
+        "conditional_fifo_closed_n": 3794,
+        "first_later_sell_n": 4103,
+        "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+        "median_conditional_full_closure_seconds": 6.0,
+        "median_first_later_sell_seconds": 6.0,
+        "net_pnl": null,
+        "unrealized_pnl": null
+      },
+      "exits": {
+        "conditional_full_closure_n": 3794,
+        "first_sell_known_n": 4103,
+        "inventory_status": "UNKNOWN_OPENING_INVENTORY_CONDITIONAL_FIFO_ONLY",
+        "sold_at_099_n": 3335
+      },
+      "hist": [
+        {
+          "count": 202,
+          "label": "<-5m"
+        },
+        {
+          "count": 172,
+          "label": "[-5m,-3m)"
+        },
+        {
+          "count": 295,
+          "label": "[-3m,-1m)"
+        },
+        {
+          "count": 24,
+          "label": "[-60s,-30s)"
+        },
+        {
+          "count": 47,
+          "label": "[-30s,0s)"
+        },
+        {
+          "count": 308,
+          "label": "[0s,30s)"
+        },
+        {
+          "count": 564,
+          "label": "[30s,60s)"
+        },
+        {
+          "count": 1643,
+          "label": "[1m,3m)"
+        },
+        {
+          "count": 476,
+          "label": "[3m,5m)"
+        },
+        {
+          "count": 246,
+          "label": ">=5m"
+        }
+      ],
+      "independent_executions": 4136,
+      "known_before_trade_n": 0,
+      "median_minutes_to_day_end": 785.2833333333333,
+      "median_offset_seconds": 73.0,
+      "n": 4136,
+      "nominal_type_unverified_n": 3977,
+      "percentages": {
+        "after": 81.367865225044,
+        "before": 18.606990193613278,
+        "exact_nominal": 0.025144581342720643,
+        "within_180s": 72.51697259240633,
+        "within_30s": 9.228061352778477,
+        "within_60s": 24.515966809152626
+      },
+      "price_groups": [
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "16431.2049264747703552",
+          "conditional_fifo_closed_n": 781,
+          "first_later_sell_n": 895,
+          "hist": [
+            {
+              "count": 52,
+              "label": "<-5m"
+            },
+            {
+              "count": 35,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 64,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 9,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 13,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 73,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 116,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 327,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 109,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 69,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 895,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 7.0,
+          "median_minutes_to_day_end": 691.4166666666666,
+          "median_offset_seconds": 76.0,
+          "n": 895,
+          "net_pnl": null,
+          "percentages": {
+            "after": 80.04613610149943,
+            "before": 19.953863898500575,
+            "exact_nominal": 0.0,
+            "within_180s": 69.43483275663206,
+            "within_30s": 10.034602076124568,
+            "within_60s": 24.567474048442907
+          },
+          "price_bucket": "0.90_TO_0.95_INCLUSIVE",
+          "receipt_known_n": 0,
+          "schedule_n": 867,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 24.567474048442907
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "9912.8674757725604362",
+          "conditional_fifo_closed_n": 2107,
+          "first_later_sell_n": 2274,
+          "hist": [
+            {
+              "count": 111,
+              "label": "<-5m"
+            },
+            {
+              "count": 109,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 167,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 11,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 23,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 167,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 314,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 908,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 265,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 119,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 2277,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": 683.5916666666667,
+          "median_offset_seconds": 71.0,
+          "n": 2277,
+          "net_pnl": null,
+          "percentages": {
+            "after": 80.76572470373746,
+            "before": 19.18869644484959,
+            "exact_nominal": 0.04557885141294439,
+            "within_180s": 72.56153144940747,
+            "within_30s": 9.070191431175934,
+            "within_60s": 24.38468550592525
+          },
+          "price_bucket": "ABOVE_0.95_BELOW_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 2194,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 24.38468550592525
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "142.5410557502212668",
+          "conditional_fifo_closed_n": 51,
+          "first_later_sell_n": 60,
+          "hist": [
+            {
+              "count": 6,
+              "label": "<-5m"
+            },
+            {
+              "count": 2,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 2,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 2,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 1,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 6,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 25,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 6,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 9,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 60,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 108.0,
+          "median_first_later_sell_seconds": 65.5,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 82.0,
+          "n": 60,
+          "net_pnl": null,
+          "percentages": {
+            "after": 79.66101694915254,
+            "before": 20.338983050847457,
+            "exact_nominal": 0.0,
+            "within_180s": 61.016949152542374,
+            "within_30s": 5.084745762711864,
+            "within_60s": 15.254237288135593
+          },
+          "price_bucket": "ABOVE_0.98_BELOW_0.99",
+          "receipt_known_n": 0,
+          "schedule_n": 59,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 15.254237288135593
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "563.251319916290",
+          "conditional_fifo_closed_n": 846,
+          "first_later_sell_n": 865,
+          "hist": [
+            {
+              "count": 31,
+              "label": "<-5m"
+            },
+            {
+              "count": 25,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 62,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 4,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 9,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 66,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 126,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 377,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 96,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 49,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 892,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": 1148.5,
+          "median_offset_seconds": 77.0,
+          "n": 892,
+          "net_pnl": null,
+          "percentages": {
+            "after": 84.49704142011835,
+            "before": 15.502958579881657,
+            "exact_nominal": 0.0,
+            "within_180s": 76.33136094674556,
+            "within_30s": 9.112426035502958,
+            "within_60s": 25.443786982248522
+          },
+          "price_bucket": "EXACT_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 845,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 25.443786982248522
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "3.72141",
+          "conditional_fifo_closed_n": 9,
+          "first_later_sell_n": 9,
+          "hist": [
+            {
+              "count": 2,
+              "label": "<-5m"
+            },
+            {
+              "count": 1,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 1,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 2,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 6,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 12,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 61.0,
+          "median_first_later_sell_seconds": 15.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 61.0,
+          "n": 12,
+          "net_pnl": null,
+          "percentages": {
+            "after": 75.0,
+            "before": 25.0,
+            "exact_nominal": 0.0,
+            "within_180s": 75.0,
+            "within_30s": 8.333333333333334,
+            "within_60s": 25.0
+          },
+          "price_bucket": "EXACT_0.99",
+          "receipt_known_n": 0,
+          "schedule_n": 12,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 25.0
+        }
+      ],
+      "receipt_known_n": 0,
+      "schedule_n": 3977,
+      "strict_original_type_aligned_n": 0,
+      "unknown_station_n": 0
+    },
+    "ALL_PRICES_CONTROL": {
+      "archive_hourly_only_sensitivity": {
+        "hist": [
+          {
+            "count": 1264,
+            "label": "<-5m"
+          },
+          {
+            "count": 190,
+            "label": "[-5m,-3m)"
+          },
+          {
+            "count": 232,
+            "label": "[-3m,-1m)"
+          },
+          {
+            "count": 32,
+            "label": "[-60s,-30s)"
+          },
+          {
+            "count": 42,
+            "label": "[-30s,0s)"
+          },
+          {
+            "count": 295,
+            "label": "[0s,30s)"
+          },
+          {
+            "count": 548,
+            "label": "[30s,60s)"
+          },
+          {
+            "count": 1384,
+            "label": "[1m,3m)"
+          },
+          {
+            "count": 351,
+            "label": "[3m,5m)"
+          },
+          {
+            "count": 395,
+            "label": ">=5m"
+          }
+        ],
+        "independent_executions": 4733,
+        "known_before_trade_n": 0,
+        "median_minutes_to_day_end": 778.8,
+        "median_offset_seconds": 51.0,
+        "n": 4733,
+        "percentages": {
+          "after": 62.7931544474963,
+          "before": 37.18571730403549,
+          "exact_nominal": 0.021128248468201986,
+          "within_180s": 53.560109866892034,
+          "within_30s": 7.331502218466089,
+          "within_60s": 20.09296429326009
+        },
+        "receipt_known_n": 0,
+        "schedule_n": 4733,
+        "unknown_station_n": 0
+      },
+      "control": {
+        "ci_high": 5.191304347826087,
+        "ci_low": 4.6808207466514675,
+        "cluster_by": "market_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 4604,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 4.939550949913644,
+        "seed": 17,
+        "settlement_day_clusters": 4393,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "control_day_sensitivity": {
+        "ci_high": 5.211601065403965,
+        "ci_low": 4.635193133047209,
+        "cluster_by": "settlement_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 4604,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 4.939550949913643,
+        "seed": 17,
+        "settlement_day_clusters": 163,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "examples": [
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9701584535",
+          "source_trade_timestamp": "2026-10-29T05:00:43+00:00",
+          "station": "ZGGG",
+          "transaction_hash": "0xc99c600acc8286ff44bbae5cf75851462995eda1b23ddc936ed3312c7c928066"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.8673154551",
+          "source_trade_timestamp": "2026-10-29T06:00:41+00:00",
+          "station": "ZGSZ",
+          "transaction_hash": "0x092173f56917be3ebe230a110b209a52672c08bea7544f522278ae5d67a7f37a"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9740536628",
+          "source_trade_timestamp": "2026-10-29T06:03:22+00:00",
+          "station": "RPLL",
+          "transaction_hash": "0xdc1495718a94b0dadae96fb30cf8ff9eed184c53424b619a37cd406005cbb6c4"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.8035569768",
+          "source_trade_timestamp": "2026-10-29T06:30:47+00:00",
+          "station": "VILK",
+          "transaction_hash": "0x6425b241d059ef67e91be7afcf56d0b3064606cbdb8347f18a4f4961e717b6cc"
+        },
+        {
+          "exit_status": "UNRECONCILED_OR_OPEN",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.5272696434",
+          "source_trade_timestamp": "2026-10-29T07:30:02+00:00",
+          "station": "VILK",
+          "transaction_hash": "0x8df905c2b417662c7584fac72950e47b5c8a3cf770cc4fb991497a1218bbe6c4"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9539952454",
+          "source_trade_timestamp": "2026-10-29T09:30:14+00:00",
+          "station": "UUWW",
+          "transaction_hash": "0xbfc7281d7b54a75f59dd8a1fee2198cd7aedbb30a9e6cefa14874f6f10152ee7"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9328187332",
+          "source_trade_timestamp": "2026-10-29T09:55:22+00:00",
+          "station": "FACT",
+          "transaction_hash": "0x5b823878106b9f03e6ecad763a44df5562eb0a1a67bc668fda9e6f4c624a81cc"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.8854513167",
+          "source_trade_timestamp": "2026-10-29T09:58:29+00:00",
+          "station": "NZWN",
+          "transaction_hash": "0x549ed805669d4483f273c83548f43a340d5b19831f4682783b8b42b445caf253"
+        },
+        {
+          "exit_status": "UNRECONCILED_OR_OPEN",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.966997707",
+          "source_trade_timestamp": "2026-10-29T16:52:23+00:00",
+          "station": "SBGR",
+          "transaction_hash": "0xc91a70fb33c1441829c71a6d1cd45be6db91e2f44f9ea83e5687e4a69f70dc7b"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": null,
+          "price": "0.9638535645",
+          "source_trade_timestamp": "2026-10-29T19:00:40+00:00",
+          "station": "ZUCK",
+          "transaction_hash": "0x7a0c73446682e6a801dd03c1de9d26bc96b326b7a0df0383270496b6af6038ed"
+        }
+      ],
+      "execution_summary": {
+        "closed_gross_loss_n": 4,
+        "closed_gross_pnl": "64846.7913474724735306",
+        "conditional_fifo_closed_n": 4299,
+        "first_later_sell_n": 4747,
+        "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+        "median_conditional_full_closure_seconds": 6.0,
+        "median_first_later_sell_seconds": 6.0,
+        "net_pnl": null,
+        "unrealized_pnl": null
+      },
+      "exits": {
+        "conditional_full_closure_n": 4302,
+        "first_sell_known_n": 4747,
+        "inventory_status": "UNKNOWN_OPENING_INVENTORY_CONDITIONAL_FIFO_ONLY",
+        "sold_at_099_n": 3822
+      },
+      "hist": [
+        {
+          "count": 255,
+          "label": "<-5m"
+        },
+        {
+          "count": 197,
+          "label": "[-5m,-3m)"
+        },
+        {
+          "count": 325,
+          "label": "[-3m,-1m)"
+        },
+        {
+          "count": 33,
+          "label": "[-60s,-30s)"
+        },
+        {
+          "count": 52,
+          "label": "[-30s,0s)"
+        },
+        {
+          "count": 355,
+          "label": "[0s,30s)"
+        },
+        {
+          "count": 666,
+          "label": "[30s,60s)"
+        },
+        {
+          "count": 1876,
+          "label": "[1m,3m)"
+        },
+        {
+          "count": 543,
+          "label": "[3m,5m)"
+        },
+        {
+          "count": 302,
+          "label": ">=5m"
+        }
+      ],
+      "independent_executions": 4782,
+      "known_before_trade_n": 0,
+      "median_minutes_to_day_end": 778.4333333333334,
+      "median_offset_seconds": 73.0,
+      "n": 4782,
+      "nominal_type_unverified_n": 4604,
+      "percentages": {
+        "after": 81.25543006081668,
+        "before": 18.722849695916594,
+        "exact_nominal": 0.021720243266724587,
+        "within_180s": 71.9157254561251,
+        "within_30s": 9.122502172024326,
+        "within_60s": 24.847958297132926
+      },
+      "price_groups": [
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "16431.2049264747703552",
+          "conditional_fifo_closed_n": 781,
+          "first_later_sell_n": 895,
+          "hist": [
+            {
+              "count": 52,
+              "label": "<-5m"
+            },
+            {
+              "count": 35,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 64,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 9,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 13,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 73,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 116,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 327,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 109,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 69,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 895,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 7.0,
+          "median_minutes_to_day_end": 691.4166666666666,
+          "median_offset_seconds": 76.0,
+          "n": 895,
+          "net_pnl": null,
+          "percentages": {
+            "after": 80.04613610149943,
+            "before": 19.953863898500575,
+            "exact_nominal": 0.0,
+            "within_180s": 69.43483275663206,
+            "within_30s": 10.034602076124568,
+            "within_60s": 24.567474048442907
+          },
+          "price_bucket": "0.90_TO_0.95_INCLUSIVE",
+          "receipt_known_n": 0,
+          "schedule_n": 867,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 24.567474048442907
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "9912.8674757725604362",
+          "conditional_fifo_closed_n": 2107,
+          "first_later_sell_n": 2274,
+          "hist": [
+            {
+              "count": 111,
+              "label": "<-5m"
+            },
+            {
+              "count": 109,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 167,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 11,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 23,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 167,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 314,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 908,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 265,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 119,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 2277,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": 683.5916666666667,
+          "median_offset_seconds": 71.0,
+          "n": 2277,
+          "net_pnl": null,
+          "percentages": {
+            "after": 80.76572470373746,
+            "before": 19.18869644484959,
+            "exact_nominal": 0.04557885141294439,
+            "within_180s": 72.56153144940747,
+            "within_30s": 9.070191431175934,
+            "within_60s": 24.38468550592525
+          },
+          "price_bucket": "ABOVE_0.95_BELOW_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 2194,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 24.38468550592525
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "142.5410557502212668",
+          "conditional_fifo_closed_n": 51,
+          "first_later_sell_n": 60,
+          "hist": [
+            {
+              "count": 6,
+              "label": "<-5m"
+            },
+            {
+              "count": 2,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 2,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 2,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 1,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 6,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 25,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 6,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 9,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 60,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 108.0,
+          "median_first_later_sell_seconds": 65.5,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 82.0,
+          "n": 60,
+          "net_pnl": null,
+          "percentages": {
+            "after": 79.66101694915254,
+            "before": 20.338983050847457,
+            "exact_nominal": 0.0,
+            "within_180s": 61.016949152542374,
+            "within_30s": 5.084745762711864,
+            "within_60s": 15.254237288135593
+          },
+          "price_bucket": "ABOVE_0.98_BELOW_0.99",
+          "receipt_known_n": 0,
+          "schedule_n": 59,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 15.254237288135593
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "37793.2051595586314724",
+          "conditional_fifo_closed_n": 505,
+          "first_later_sell_n": 644,
+          "hist": [
+            {
+              "count": 53,
+              "label": "<-5m"
+            },
+            {
+              "count": 25,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 30,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 9,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 5,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 47,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 102,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 233,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 67,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 56,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 646,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 8.0,
+          "median_first_later_sell_seconds": 9.0,
+          "median_minutes_to_day_end": 677.1916666666666,
+          "median_offset_seconds": 72.0,
+          "n": 646,
+          "net_pnl": null,
+          "percentages": {
+            "after": 80.54226475279107,
+            "before": 19.45773524720893,
+            "exact_nominal": 0.0,
+            "within_180s": 68.10207336523126,
+            "within_30s": 8.452950558213717,
+            "within_60s": 26.953748006379584
+          },
+          "price_bucket": "BELOW_0.90",
+          "receipt_known_n": 0,
+          "schedule_n": 627,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 26.953748006379584
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "563.251319916290",
+          "conditional_fifo_closed_n": 846,
+          "first_later_sell_n": 865,
+          "hist": [
+            {
+              "count": 31,
+              "label": "<-5m"
+            },
+            {
+              "count": 25,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 62,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 4,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 9,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 66,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 126,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 377,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 96,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 49,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 892,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": 1148.5,
+          "median_offset_seconds": 77.0,
+          "n": 892,
+          "net_pnl": null,
+          "percentages": {
+            "after": 84.49704142011835,
+            "before": 15.502958579881657,
+            "exact_nominal": 0.0,
+            "within_180s": 76.33136094674556,
+            "within_30s": 9.112426035502958,
+            "within_60s": 25.443786982248522
+          },
+          "price_bucket": "EXACT_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 845,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 25.443786982248522
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "3.72141",
+          "conditional_fifo_closed_n": 9,
+          "first_later_sell_n": 9,
+          "hist": [
+            {
+              "count": 2,
+              "label": "<-5m"
+            },
+            {
+              "count": 1,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 1,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 2,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 6,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 12,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 61.0,
+          "median_first_later_sell_seconds": 15.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 61.0,
+          "n": 12,
+          "net_pnl": null,
+          "percentages": {
+            "after": 75.0,
+            "before": 25.0,
+            "exact_nominal": 0.0,
+            "within_180s": 75.0,
+            "within_30s": 8.333333333333334,
+            "within_60s": 25.0
+          },
+          "price_bucket": "EXACT_0.99",
+          "receipt_known_n": 0,
+          "schedule_n": 12,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 25.0
+        }
+      ],
+      "receipt_known_n": 0,
+      "schedule_n": 4604,
+      "strict_original_type_aligned_n": 0,
+      "unknown_station_n": 0
+    },
+    "EPWA": {
+      "archive_hourly_only_sensitivity": {
+        "hist": [
+          {
+            "count": 15,
+            "label": "<-5m"
+          },
+          {
+            "count": 0,
+            "label": "[-5m,-3m)"
+          },
+          {
+            "count": 0,
+            "label": "[-3m,-1m)"
+          },
+          {
+            "count": 0,
+            "label": "[-60s,-30s)"
+          },
+          {
+            "count": 0,
+            "label": "[-30s,0s)"
+          },
+          {
+            "count": 0,
+            "label": "[0s,30s)"
+          },
+          {
+            "count": 0,
+            "label": "[30s,60s)"
+          },
+          {
+            "count": 18,
+            "label": "[1m,3m)"
+          },
+          {
+            "count": 0,
+            "label": "[3m,5m)"
+          },
+          {
+            "count": 0,
+            "label": ">=5m"
+          }
+        ],
+        "independent_executions": 33,
+        "known_before_trade_n": 0,
+        "median_minutes_to_day_end": null,
+        "median_offset_seconds": 123.0,
+        "n": 33,
+        "percentages": {
+          "after": 54.54545454545455,
+          "before": 45.45454545454545,
+          "exact_nominal": 0.0,
+          "within_180s": 54.54545454545455,
+          "within_30s": 0.0,
+          "within_60s": 0.0
+        },
+        "receipt_known_n": 0,
+        "schedule_n": 33,
+        "unknown_station_n": 0
+      },
+      "control": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "cluster_by": "market_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 33,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 0.0,
+        "seed": 17,
+        "settlement_day_clusters": 32,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "control_day_sensitivity": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "cluster_by": "settlement_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 33,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 0.0,
+        "seed": 17,
+        "settlement_day_clusters": 23,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "examples": [
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 126.0,
+          "price": "0.9745240688",
+          "source_trade_timestamp": "2026-08-30T00:32:06+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x94cd50de078854227c3e0710730f05e05e95e713b6dea2c15a2bc3ad38e53f99"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 126.0,
+          "price": "0.9774628785",
+          "source_trade_timestamp": "2026-08-30T03:02:06+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x9ee6d63a697401d0febd4b23c3a4a3078ece56ebb07e44c79d0f2037174d2b51"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 124.0,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-08-31T02:02:04+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x7a23e2a3cb89bf3e1d4b92f12e4d82782b3107eb43b0c3df6197fd0cf2ddc76c"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9732075472",
+          "source_trade_timestamp": "2026-10-04T02:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xf45a9e8dd2d06e64c8858df4f3e73dd937497fb879715a126ee7e59849b992f0"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9542526708",
+          "source_trade_timestamp": "2026-10-05T12:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x28977c6f5dd6615d8beb6a4b9dfb6789d1fbbbcce694543e49d194c9ba33a350"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 124.0,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-10-06T23:02:04+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x143834387e81591a53efd1ca3adcb5500edfd259d64ecc4b564f369b2ae0d89c"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9761281337",
+          "source_trade_timestamp": "2026-10-09T22:32:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xccbd7c1d596ff98d764d12582c00eaeba323c7e584c0709c3221e4feeec8648c"
+        },
+        {
+          "exit_status": "UNRECONCILED_OR_OPEN",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9783719616",
+          "source_trade_timestamp": "2026-10-21T22:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x524bea25a1c4e21286bb9c9a02659bbd1d9ef2a2e346bd8941e81289a53c6a1e"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 126.0,
+          "price": "0.9790196078",
+          "source_trade_timestamp": "2026-10-22T07:32:06+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xb2de7a51d7558b497bbbf472288d03c1492e5e1ff6a7f61da283c96ca3b5a59e"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.94",
+          "source_trade_timestamp": "2026-10-22T20:32:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x7b7eed04263f6b0ff9bfbe64e67b24f3a2548b3ed47c60867396ed1102c84877"
+        }
+      ],
+      "execution_summary": {
+        "closed_gross_loss_n": 2,
+        "closed_gross_pnl": "-63.563110052380",
+        "conditional_fifo_closed_n": 30,
+        "first_later_sell_n": 33,
+        "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+        "median_conditional_full_closure_seconds": 9.0,
+        "median_first_later_sell_seconds": 9.0,
+        "net_pnl": null,
+        "unrealized_pnl": null
+      },
+      "exits": {
+        "conditional_full_closure_n": 30,
+        "first_sell_known_n": 33,
+        "inventory_status": "UNKNOWN_OPENING_INVENTORY_CONDITIONAL_FIFO_ONLY",
+        "sold_at_099_n": 24
+      },
+      "hist": [
+        {
+          "count": 1,
+          "label": "<-5m"
+        },
+        {
+          "count": 0,
+          "label": "[-5m,-3m)"
+        },
+        {
+          "count": 0,
+          "label": "[-3m,-1m)"
+        },
+        {
+          "count": 0,
+          "label": "[-60s,-30s)"
+        },
+        {
+          "count": 0,
+          "label": "[-30s,0s)"
+        },
+        {
+          "count": 0,
+          "label": "[0s,30s)"
+        },
+        {
+          "count": 0,
+          "label": "[30s,60s)"
+        },
+        {
+          "count": 31,
+          "label": "[1m,3m)"
+        },
+        {
+          "count": 0,
+          "label": "[3m,5m)"
+        },
+        {
+          "count": 1,
+          "label": ">=5m"
+        }
+      ],
+      "independent_executions": 33,
+      "known_before_trade_n": 0,
+      "median_minutes_to_day_end": null,
+      "median_offset_seconds": 125.0,
+      "n": 33,
+      "nominal_type_unverified_n": 33,
+      "percentages": {
+        "after": 96.96969696969697,
+        "before": 3.0303030303030303,
+        "exact_nominal": 0.0,
+        "within_180s": 93.93939393939394,
+        "within_30s": 0.0,
+        "within_60s": 0.0
+      },
+      "price_groups": [
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "-17.865990029279",
+          "conditional_fifo_closed_n": 7,
+          "first_later_sell_n": 8,
+          "hist": [
+            {
+              "count": 0,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 8,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 8,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 12.0,
+          "median_first_later_sell_seconds": 12.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 125.0,
+          "n": 8,
+          "net_pnl": null,
+          "percentages": {
+            "after": 100.0,
+            "before": 0.0,
+            "exact_nominal": 0.0,
+            "within_180s": 100.0,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "0.90_TO_0.95_INCLUSIVE",
+          "receipt_known_n": 0,
+          "schedule_n": 8,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "-46.306620023101",
+          "conditional_fifo_closed_n": 21,
+          "first_later_sell_n": 23,
+          "hist": [
+            {
+              "count": 1,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 21,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 1,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 23,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 9.0,
+          "median_first_later_sell_seconds": 9.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 125.0,
+          "n": 23,
+          "net_pnl": null,
+          "percentages": {
+            "after": 95.65217391304348,
+            "before": 4.3478260869565215,
+            "exact_nominal": 0.0,
+            "within_180s": 91.30434782608695,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "ABOVE_0.95_BELOW_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 23,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "0.6095",
+          "conditional_fifo_closed_n": 2,
+          "first_later_sell_n": 2,
+          "hist": [
+            {
+              "count": 0,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 2,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 2,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 124.0,
+          "n": 2,
+          "net_pnl": null,
+          "percentages": {
+            "after": 100.0,
+            "before": 0.0,
+            "exact_nominal": 0.0,
+            "within_180s": 100.0,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "EXACT_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 2,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        }
+      ],
+      "receipt_known_n": 0,
+      "schedule_n": 33,
+      "strict_original_type_aligned_n": 0,
+      "unknown_station_n": 0
+    },
+    "EPWA_ALL_PRICES_CONTROL": {
+      "archive_hourly_only_sensitivity": {
+        "hist": [
+          {
+            "count": 19,
+            "label": "<-5m"
+          },
+          {
+            "count": 0,
+            "label": "[-5m,-3m)"
+          },
+          {
+            "count": 0,
+            "label": "[-3m,-1m)"
+          },
+          {
+            "count": 0,
+            "label": "[-60s,-30s)"
+          },
+          {
+            "count": 0,
+            "label": "[-30s,0s)"
+          },
+          {
+            "count": 0,
+            "label": "[0s,30s)"
+          },
+          {
+            "count": 0,
+            "label": "[30s,60s)"
+          },
+          {
+            "count": 21,
+            "label": "[1m,3m)"
+          },
+          {
+            "count": 0,
+            "label": "[3m,5m)"
+          },
+          {
+            "count": 0,
+            "label": ">=5m"
+          }
+        ],
+        "independent_executions": 40,
+        "known_before_trade_n": 0,
+        "median_minutes_to_day_end": null,
+        "median_offset_seconds": 95.5,
+        "n": 40,
+        "percentages": {
+          "after": 52.5,
+          "before": 47.5,
+          "exact_nominal": 0.0,
+          "within_180s": 52.5,
+          "within_30s": 0.0,
+          "within_60s": 0.0
+        },
+        "receipt_known_n": 0,
+        "schedule_n": 40,
+        "unknown_station_n": 0
+      },
+      "control": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "cluster_by": "market_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 40,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 0.0,
+        "seed": 17,
+        "settlement_day_clusters": 37,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "control_day_sensitivity": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "cluster_by": "settlement_day",
+        "description": "No complete market-wide price/liquidity-conditioned denominator; nominal \u00b160s share / duration-uniform expectation. Cluster bootstrap, not causal or significance proof.",
+        "independent_executions": 40,
+        "matched_market_activity_status": "NOT_IDENTIFIABLE",
+        "rate_ratio": 0.0,
+        "seed": 17,
+        "settlement_day_clusters": 25,
+        "status": "UNMATCHED_UNIFORM_PHASE_DESCRIPTIVE_ONLY"
+      },
+      "examples": [
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 126.0,
+          "price": "0.9774628785",
+          "source_trade_timestamp": "2026-08-30T03:02:06+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x9ee6d63a697401d0febd4b23c3a4a3078ece56ebb07e44c79d0f2037174d2b51"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 124.0,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-08-31T02:02:04+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x7a23e2a3cb89bf3e1d4b92f12e4d82782b3107eb43b0c3df6197fd0cf2ddc76c"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 124.0,
+          "price": "0.7040411911",
+          "source_trade_timestamp": "2026-09-20T21:32:04+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xab93e67a870ad573e41041eb304fca6bd201441ced6680ff247deca1f4788d9b"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9732075472",
+          "source_trade_timestamp": "2026-10-04T02:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xf45a9e8dd2d06e64c8858df4f3e73dd937497fb879715a126ee7e59849b992f0"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9542526708",
+          "source_trade_timestamp": "2026-10-05T12:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x28977c6f5dd6615d8beb6a4b9dfb6789d1fbbbcce694543e49d194c9ba33a350"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 124.0,
+          "price": "0.98",
+          "source_trade_timestamp": "2026-10-06T23:02:04+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x143834387e81591a53efd1ca3adcb5500edfd259d64ecc4b564f369b2ae0d89c"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9761281337",
+          "source_trade_timestamp": "2026-10-09T22:32:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xccbd7c1d596ff98d764d12582c00eaeba323c7e584c0709c3221e4feeec8648c"
+        },
+        {
+          "exit_status": "UNRECONCILED_OR_OPEN",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.9783719616",
+          "source_trade_timestamp": "2026-10-21T22:02:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x524bea25a1c4e21286bb9c9a02659bbd1d9ef2a2e346bd8941e81289a53c6a1e"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 126.0,
+          "price": "0.9790196078",
+          "source_trade_timestamp": "2026-10-22T07:32:06+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0xb2de7a51d7558b497bbbf472288d03c1492e5e1ff6a7f61da283c96ca3b5a59e"
+        },
+        {
+          "exit_status": "CONDITIONAL_FIFO_CLOSED",
+          "first_metar_receipt": null,
+          "nearest_offset_seconds": 125.0,
+          "price": "0.94",
+          "source_trade_timestamp": "2026-10-22T20:32:05+00:00",
+          "station": "EPWA",
+          "transaction_hash": "0x7b7eed04263f6b0ff9bfbe64e67b24f3a2548b3ed47c60867396ed1102c84877"
+        }
+      ],
+      "execution_summary": {
+        "closed_gross_loss_n": 3,
+        "closed_gross_pnl": "427.498629907397",
+        "conditional_fifo_closed_n": 36,
+        "first_later_sell_n": 40,
+        "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+        "median_conditional_full_closure_seconds": 10.0,
+        "median_first_later_sell_seconds": 11.0,
+        "net_pnl": null,
+        "unrealized_pnl": null
+      },
+      "exits": {
+        "conditional_full_closure_n": 36,
+        "first_sell_known_n": 40,
+        "inventory_status": "UNKNOWN_OPENING_INVENTORY_CONDITIONAL_FIFO_ONLY",
+        "sold_at_099_n": 28
+      },
+      "hist": [
+        {
+          "count": 3,
+          "label": "<-5m"
+        },
+        {
+          "count": 0,
+          "label": "[-5m,-3m)"
+        },
+        {
+          "count": 0,
+          "label": "[-3m,-1m)"
+        },
+        {
+          "count": 0,
+          "label": "[-60s,-30s)"
+        },
+        {
+          "count": 0,
+          "label": "[-30s,0s)"
+        },
+        {
+          "count": 0,
+          "label": "[0s,30s)"
+        },
+        {
+          "count": 0,
+          "label": "[30s,60s)"
+        },
+        {
+          "count": 36,
+          "label": "[1m,3m)"
+        },
+        {
+          "count": 0,
+          "label": "[3m,5m)"
+        },
+        {
+          "count": 1,
+          "label": ">=5m"
+        }
+      ],
+      "independent_executions": 40,
+      "known_before_trade_n": 0,
+      "median_minutes_to_day_end": null,
+      "median_offset_seconds": 125.0,
+      "n": 40,
+      "nominal_type_unverified_n": 40,
+      "percentages": {
+        "after": 92.5,
+        "before": 7.5,
+        "exact_nominal": 0.0,
+        "within_180s": 90.0,
+        "within_30s": 0.0,
+        "within_60s": 0.0
+      },
+      "price_groups": [
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "-17.865990029279",
+          "conditional_fifo_closed_n": 7,
+          "first_later_sell_n": 8,
+          "hist": [
+            {
+              "count": 0,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 8,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 8,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 12.0,
+          "median_first_later_sell_seconds": 12.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 125.0,
+          "n": 8,
+          "net_pnl": null,
+          "percentages": {
+            "after": 100.0,
+            "before": 0.0,
+            "exact_nominal": 0.0,
+            "within_180s": 100.0,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "0.90_TO_0.95_INCLUSIVE",
+          "receipt_known_n": 0,
+          "schedule_n": 8,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "-46.306620023101",
+          "conditional_fifo_closed_n": 21,
+          "first_later_sell_n": 23,
+          "hist": [
+            {
+              "count": 1,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 21,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 1,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 23,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 9.0,
+          "median_first_later_sell_seconds": 9.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 125.0,
+          "n": 23,
+          "net_pnl": null,
+          "percentages": {
+            "after": 95.65217391304348,
+            "before": 4.3478260869565215,
+            "exact_nominal": 0.0,
+            "within_180s": 91.30434782608695,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "ABOVE_0.95_BELOW_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 23,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        },
+        {
+          "closed_gross_loss_n": 1,
+          "closed_gross_pnl": "491.061739959777",
+          "conditional_fifo_closed_n": 6,
+          "first_later_sell_n": 7,
+          "hist": [
+            {
+              "count": 2,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 5,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 7,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 13.0,
+          "median_first_later_sell_seconds": 14.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 124.0,
+          "n": 7,
+          "net_pnl": null,
+          "percentages": {
+            "after": 71.42857142857143,
+            "before": 28.571428571428573,
+            "exact_nominal": 0.0,
+            "within_180s": 71.42857142857143,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "BELOW_0.90",
+          "receipt_known_n": 0,
+          "schedule_n": 7,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        },
+        {
+          "closed_gross_loss_n": 0,
+          "closed_gross_pnl": "0.6095",
+          "conditional_fifo_closed_n": 2,
+          "first_later_sell_n": 2,
+          "hist": [
+            {
+              "count": 0,
+              "label": "<-5m"
+            },
+            {
+              "count": 0,
+              "label": "[-5m,-3m)"
+            },
+            {
+              "count": 0,
+              "label": "[-3m,-1m)"
+            },
+            {
+              "count": 0,
+              "label": "[-60s,-30s)"
+            },
+            {
+              "count": 0,
+              "label": "[-30s,0s)"
+            },
+            {
+              "count": 0,
+              "label": "[0s,30s)"
+            },
+            {
+              "count": 0,
+              "label": "[30s,60s)"
+            },
+            {
+              "count": 2,
+              "label": "[1m,3m)"
+            },
+            {
+              "count": 0,
+              "label": "[3m,5m)"
+            },
+            {
+              "count": 0,
+              "label": ">=5m"
+            }
+          ],
+          "independent_executions": 2,
+          "inventory_note": "CONDITIONAL_FIFO_NOT_VERIFIED_OPENING_INVENTORY; FIRST_SELL_NOT_PROVEN_LOT_EXIT",
+          "known_before_trade_n": 0,
+          "median_conditional_full_closure_seconds": 6.0,
+          "median_first_later_sell_seconds": 6.0,
+          "median_minutes_to_day_end": null,
+          "median_offset_seconds": 124.0,
+          "n": 2,
+          "net_pnl": null,
+          "percentages": {
+            "after": 100.0,
+            "before": 0.0,
+            "exact_nominal": 0.0,
+            "within_180s": 100.0,
+            "within_30s": 0.0,
+            "within_60s": 0.0
+          },
+          "price_bucket": "EXACT_0.98",
+          "receipt_known_n": 0,
+          "schedule_n": 2,
+          "unknown_station_n": 0,
+          "unrealized_pnl": null,
+          "within_60s_pct": 0.0
+        }
+      ],
+      "receipt_known_n": 0,
+      "schedule_n": 40,
+      "strict_original_type_aligned_n": 0,
+      "unknown_station_n": 0
+    }
+  },
+  "limitations": [
+    "Execution/block timestamps are not order creation or decision times.",
+    "Historical metadata and METAR backfills do not establish historical public availability.",
+    "No complete market-wide matched price/liquidity activity denominator; uniform phase contrast is descriptive only.",
+    "Conditional FIFO is not verified opening inventory or net profitability.",
+    "Some station mappings, archive reports, publication times and contemporaneous weather/books remain UNKNOWN.",
+    "IEM strips original METAR/SPECI prefixes; hourly/nonhourly classes are not authoritative ICAO types. Primary alignment uses recurring nominal-minute candidates, not verified routine type; hourly-only sensitivity separately available."
+  ],
+  "published_at": "2026-10-30T12:26:54.084832+00:00",
+  "scope": "PRIMARY: 0.90<=NO BUY<=0.99; all-price controls separate. Recurring nominal archive series, original ICAO types unverified; local receipts separate",
+  "snapshot_cutoff": "2026-10-29T20:04:43.473128+00:00",
+  "source_rows": 4782,
+  "version": "EXP0017-ENTRY-TIMING-v1.1"
+}

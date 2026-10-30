@@ -1,0 +1,27 @@
+{
+  "pytest": "1059 passed in 30.67s",
+  "uv_sync_locked": "PASS",
+  "ruff": "PASS",
+  "format": "232 files PASS",
+  "mypy_production": "84 files PASS",
+  "mypy_research": "20 files PASS",
+  "dom_test": "PASS",
+  "deterministic_regeneration": "12 artifacts PASS",
+  "snapshot_integrity": {
+    "trader_extract": "ok",
+    "weather_snapshot": "ok"
+  },
+  "journal_integrity": {
+    "battle-000001": "ok",
+    "battle-000002": "ok"
+  },
+  "unchanged_source_pids": [
+    11236,
+    11748,
+    32732
+  ],
+  "d1_status": "READY exit1, preexisting failure, no restart",
+  "qwen": "HTTP models success; generation400 no model loaded; no accepted output",
+  "main_price_scope": "0.90<=p<=0.99",
+  "prospective_entries_at_20261030T122208Z": 11
+}

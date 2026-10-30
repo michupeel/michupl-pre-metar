@@ -12,6 +12,16 @@ different result. There is no real-money order execution.
 
 ## EPWA local dashboard (Milestone 2.0)
 
+EXP0017 adds HighTempTation entry timing, an ALL/EPWA dashboard panel and a separate
+read-only local-feed observer. [Actual findings and evidence limits](docs/research/EXP0017_RESULTS.md).
+Nominal report timing never establishes public availability or order placement.
+
+```powershell
+uv run python -m scripts.research.hightemptation_entry_timing
+uv run python -m premetar.research.entry_timing_monitor status
+.\scripts\entry-timing-service.ps1 -Action status
+```
+
 EXP0016.1 adds audited historical settlement labels and D-1 forecast joins.
 See [settlement rules](docs/research/EXP0016_1_RULES.md),
 [calibration scope](docs/research/EXP0016_1_CALIBRATION.md) and
