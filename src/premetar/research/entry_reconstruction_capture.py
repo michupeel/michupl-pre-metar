@@ -112,6 +112,7 @@ async def capture(
     directory: Path = DIRECTORY,
     source: Path = TRADER,
     weather: Path = WEATHER,
+    max_contracts: int = 16,
 ) -> dict[str, Any]:
     if not 1 <= duration <= 3600:
         raise ValueError("Only bounded 1..3600 second shadow capture authorized")
@@ -125,7 +126,7 @@ async def capture(
     try:
         at = datetime.now(UTC)
         cursor, metadata = metadata_rows(source, at)
-        selected = select_watchlist(metadata, at)
+        selected = select_watchlist(metadata, at, max_contracts)
         if not selected:
             raise ValueError("No eligible frozen paired watchlist in bounded recent metadata")
         capture_id = uuid4().hex
@@ -156,6 +157,7 @@ async def capture(
             tokens=tokens,
             coverage="FROZEN_SUBSET_NOT_ALL_WEATHER_MARKETS",
             approval="BOUNDED_SHADOW_ONLY",
+            max_contracts=max_contracts,
         )
         raw.append("RUN", manifest, at, capture_id)
         journal.commit(
@@ -164,6 +166,7 @@ async def capture(
         stop = asyncio.Event()
         error_class = None
         counts: dict[str, int] = {}
+        callback_durations: list[float] = []
 
         def emit(kind: str, payload: dict[str, Any], received: datetime, key: str | None) -> None:
             nonlocal error_class
@@ -171,6 +174,7 @@ async def capture(
             # Existing stream commits WS_RAW before normalization invokes us again.
             if error_class:
                 return
+            started_callback = time.monotonic()
             try:
                 total = sum(p.stat().st_size for p in captures.glob("*.sqlite3*"))
                 if (
@@ -199,6 +203,9 @@ async def capture(
             except (OSError, ValueError, sqlite3.Error, StorageLimit) as error:
                 error_class = type(error).__name__
                 stop.set()
+            finally:
+                callback_durations.append((time.monotonic() - started_callback) * 1000)
+                del callback_durations[:-512]
 
         async def tail() -> None:
             nonlocal error_class
@@ -254,6 +261,11 @@ async def capture(
             else "DEGRADED_RECONNECTS"
             if counts.get("STREAM_STATE_RECONNECTING")
             else "BOUNDED_CAPTURE_COMPLETED",
+            callback_timing_scope="LAST_512_LOCAL_CALLBACKS_NOT_NETWORK_LATENCY",
+            callback_max_ms=max(callback_durations, default=None),
+            callback_p95_ms=sorted(callback_durations)[int(0.95 * (len(callback_durations) - 1))]
+            if callback_durations
+            else None,
             source_max_id_start=cursor,
             source_max_id_end=monitor.cursors["source"],
             books_database=str(path),
@@ -283,8 +295,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--duration", type=float, default=60)
     parser.add_argument("--directory", type=Path, default=DIRECTORY)
+    parser.add_argument("--max-contracts", type=int, default=16)
     args = parser.parse_args()
-    print(json.dumps(asyncio.run(capture(args.duration, args.directory)), indent=2))
+    print(
+        json.dumps(
+            asyncio.run(capture(args.duration, args.directory, max_contracts=args.max_contracts)),
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":
