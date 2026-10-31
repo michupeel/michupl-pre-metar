@@ -95,3 +95,33 @@ is reviewed and tested by Codex. Limit <=3 attempts, stop early on repeated fail
 Task ledger and actual timing/token/acceptance audit are required. Missing review
 timing is NULL; no hypothetical cloud-token savings. Initial analysis probe missed
 same-zone DST subtraction; rejected review conclusion, retain actual evidence.
+
+## Bounded comparison addendum (before promotion, 2026-10-31)
+
+The first immutable cutoff 7437602 yielded 12 entries and zero fresh paired
+pre-execution full snapshots in the preceding 1,500,000 IDs. There were 616,711
+delta packets. This measured limitation justifies an opt-in research-only
+`--experimental-deltas` variant. Keep the same cutoff for comparison.
+Seed from the recorded full WS book and same connection only; apply absolute
+level updates, require consistency with the packet's reported BBO, invalidate
+on malformed data, epoch/time regression, cap or mismatch. Keep <=4096 levels
+per token and existing ring limits. No sequence/hash continuity or executable
+depth is certified. Retained subscription identities survive unchanged subscription
+refreshes; removed tokens and reconnects lose state. Default remains snapshots.
+Official current docs confirm the schema; aggregate-size interpretation remains
+an explicitly checked reconstruction assumption, not a provider latency guarantee.
+This doesn't change production subscriptions or data. No trigger is promoted.
+
+## Paired capture addendum after source coverage diagnosis
+
+Eleven of12 entries lack ANY earlier NO full snapshot in the original source
+slice; one has observed one-sided books, so NULLmid must not be counted as no
+capture. Implement a separate bounded public socket using existing `stream_market`
+and `TraderStore`, without editing either production module. Freeze16 eligible
+paired weather contracts from already captured metadata before subscribing; no
+new HTTP discovery polling. Own source IDs carry capture database/session identity.
+No source collector is reconfigured. Bound raw capture100MB/run500MBtotal/free1GB;
+stop on budget and preserve evidence. Persistent activation still needs approval.
+Observed61s smoke had five abrupt disconnects, so continuous readiness remains
+DEGRADED. The small immediate-PING diagnostic did not establish a fix; do not
+change the stable shared stream adapter or pretend continuity exists.

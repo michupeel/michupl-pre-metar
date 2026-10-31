@@ -15,12 +15,14 @@ unchanged. All local tasks get explicit source, interface, constraints and tests
 | I3 | QWEN_IMPLEMENT | Deterministic control matching and pending attribution, no future selection | Qwen/Codex |
 | I4 | QWEN_IMPLEMENT | Small additive Polish dashboard panel, safe DOM, replay cutoff | Qwen/Codex |
 | I5 | QWEN_IMPLEMENT | Auxiliary behavior tests for clocks/ring/features/controls | Qwen/Codex |
+| I6 | QWEN_IMPLEMENT | After measured snapshot gap: absolute-level replacement utility | Qwen/Codex |
 | A1 | QWEN_ANALYZE | Isolated independent implementation review | Qwen/Codex |
 | C1 | CODEX_ONLY | Reader/runner, immutable provenance, source protection and restart correctness | Codex |
+| C3 | CODEX_ONLY | Separate bounded paired socket, raw-first integration, frozen manifest and budget | Codex |
 | D1 | DETERMINISTIC | Baseline tests, source coverage counts, bounded smoke, report generation | Tools/Codex |
 | C2 | CODEX_ONLY | Interpretation, economic uncertainty, final diff/review and release | Codex |
 
-Local-eligible tasks: PROBE-A, PROBE-P, R1, I1-I5, A1 (nine); all will be offered
+Local-eligible tasks: PROBE-A, PROBE-P, R1, I1-I6, A1 (ten); all will be offered
 locally where service remains usable. This is a task-count target, not evidence
 of 80–90% code ownership or measured speedup. Retries do not increase task count.
 
