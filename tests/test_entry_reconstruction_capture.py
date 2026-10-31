@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -83,6 +84,7 @@ async def test_bounded_capture_is_raw_first_and_leaves_source_untouched(tmp_path
     result = await capture(1, tmp_path / "capture", source, tmp_path / "absent-weather")
     assert result["counts"]["BOOK"] == 1 and result["error_class"] is None
     assert result["integrity"] == "ok"
+    assert result["pid"] == os.getpid()
     assert hashlib.sha256(source.read_bytes()).hexdigest() == digest
     events = read_events(next((tmp_path / "capture/books").glob("*.sqlite3")), limit=100)
     assert [e["kind"] for e in events] == ["RUN", "STREAMHEALTH", "WS_RAW", "BOOK", "STOP"]

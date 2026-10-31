@@ -125,3 +125,7 @@ stop on budget and preserve evidence. Persistent activation still needs approval
 Observed61s smoke had five abrupt disconnects, so continuous readiness remains
 DEGRADED. The small immediate-PING diagnostic did not establish a fix; do not
 change the stable shared stream adapter or pretend continuity exists.
+
+Implementation budgets clarification: controls are capped3perentry and100pending
+(initial candidates remain in the immutable journal). This replaces the provisional
+20/cycle plan bound; source reads remain1000rows/cycle and work is bounded by it.

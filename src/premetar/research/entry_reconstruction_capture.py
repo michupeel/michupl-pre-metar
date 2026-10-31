@@ -9,6 +9,7 @@ import asyncio
 import contextlib
 import hashlib
 import json
+import os
 import shutil
 import sqlite3
 import time
@@ -140,6 +141,7 @@ async def capture(
         # A new socket has a different coverage epoch. Never fill its missing past.
         monitor.state.pop("shutdown_at", None)
         monitor.state["started_at"] = at.isoformat()
+        monitor.state["pid"] = os.getpid()
         monitor.state["capture_id"] = capture_id
         # Start wallet tail now, never replay older trades as observed in this run.
         monitor.cursors["source"] = cursor
@@ -148,6 +150,7 @@ async def capture(
         manifest = dict(
             policy=POLICY,
             capture_id=capture_id,
+            pid=os.getpid(),
             created_at=at.isoformat(),
             duration=duration,
             source_max_id=cursor,
@@ -244,6 +247,7 @@ async def capture(
             monitor.state, monitor.cursors = journal.restore()
         result = dict(
             capture_id=capture_id,
+            pid=os.getpid(),
             policy=POLICY,
             started_at=at.isoformat(),
             ended_at=ended.isoformat(),
