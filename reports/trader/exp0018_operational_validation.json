@@ -1,0 +1,80 @@
+{
+  "checked_at": "2026-10-31T22:20:27.410390+00:00",
+  "research_databases": [
+    {
+      "path": "data\\research\\exp0018\\live\\battle-000001.sqlite3",
+      "integrity": "ok",
+      "bytes": 811008
+    },
+    {
+      "path": "data\\research\\exp0018\\live\\books\\20261031T221337Z-885e472d38af43018720cb97d78f88fd.sqlite3",
+      "integrity": "ok",
+      "bytes": 1044480
+    }
+  ],
+  "live_capture": {
+    "actual_duration_seconds": 61.03200000000652,
+    "books_database": "D:\\metar-execution-lab\\michupl-pre-metar\\data\\research\\exp0018\\live\\books\\20261031T221337Z-885e472d38af43018720cb97d78f88fd.sqlite3",
+    "capture_id": "885e472d38af43018720cb97d78f88fd",
+    "contracts": 16,
+    "counts": {
+      "BOOK": 192,
+      "STREAMHEALTH": 12,
+      "WS_DELTA": 203,
+      "WS_RAW": 209
+    },
+    "ended_at": "2026-10-31T22:14:39.233701+00:00",
+    "error_class": null,
+    "integrity": "ok",
+    "persistent_activation": "NOT_AUTHORIZED_NOT_INSTALLED",
+    "policy": "EXP0018-FROZEN-PAIRS-NO090099-HASH-v1",
+    "reconstruction_counts": {
+      "book_snapshots": 192,
+      "coverage_resets": 12,
+      "delta_packets": 203,
+      "delta_packets_with_valid_seed_and_bbo": 203,
+      "invalid_source_clock": 0
+    },
+    "source_max_id_end": 7450481,
+    "source_max_id_start": 7448810,
+    "started_at": "2026-10-31T22:13:37.746220+00:00",
+    "tokens": 32
+  },
+  "stream_reconnects": 5,
+  "weather_latest": [
+    [
+      "EPWA",
+      "awc",
+      "METAR",
+      "2026-10-31T22:00:00Z",
+      "2026-10-31T22:02:46.613975Z"
+    ],
+    [
+      "EHAM",
+      "awc",
+      "METAR",
+      "2026-10-31T21:55:00Z",
+      "2026-10-31T21:57:43.322008Z"
+    ],
+    [
+      "EDDM",
+      "awc",
+      "METAR",
+      "2026-10-31T21:50:00Z",
+      "2026-10-31T21:54:38.790742Z"
+    ],
+    [
+      "EGLL",
+      "awc",
+      "METAR",
+      "2026-10-31T21:50:00Z",
+      "2026-10-31T21:54:38.790742Z"
+    ]
+  ],
+  "weather_quick_check": "ok",
+  "trader_latest": [
+    7454245,
+    "WS_RAW",
+    "2026-10-31T22:20:46.975757+00:00"
+  ]
+}

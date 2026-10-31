@@ -1,5 +1,16 @@
 # Local Qwen development workflow
 
+## EXP0018 update — 31 October 2026
+
+Existing local_worker/local_research MCPs reused with actual
+`unsloth/Qwen3.6-35B-A3B-GGUF`, profile `qwen3.6-35b-a3b`, non-thinking verified.
+Ten bounded eligible tasks delegated, eight patch proposals, six partially adapted.
+Two flawed ring attempts triggered Codex takeover; both independent local analyses
+were rejected. Profile/server/credentials unchanged. Actual call metrics and
+accept/reject reasons: `reports/research/exp0018_qwen_delegation.{md,jsonl}`.
+Known tokens25,448 (including health); research token counts/review timing unknown.
+No measured acceleration claim. No LLM dependency in any collector.
+
 ## Actual milestone use
 
 The installed `local_worker` connector was discovered and reused. Its DPAPI-backed

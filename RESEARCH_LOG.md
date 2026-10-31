@@ -753,6 +753,38 @@ Verification:817testsPASS28.65s (plus focused checks after report replay support
 Next: keep frozen prospective capture, improve supported execution evidence and evaluate complete matched settlement days. No strategy promotion. Reports:reports/trader/exp0015_simple_limit99_vs_weather.md, exp0015_events.csv, exp0015_portfolios.csv, exp0015_summary.json and reports/research/exp0014_15_live_verification.json. Independent study has no24hour stop; storage limits remain, and reboot autostart was not installed.
 
 
+## EXP-0018 — Entry-trigger reconstruction (OPEN)
+
+31 October 2026. Hypothesis: pre-entry paired books and actual information receipts
+distinguish wallet entries from comparable no-entry windows. Baseline6d2c9e8;
+plan frozen in fc3d7e2 before implementation. Existing processes unchanged.
+
+Data/method: immutable source ID slice (5937602,7437602],30Oct23:07:30 to
+31Oct22:03:33UTC. Twelve NO BUYs0.90–0.99 with original prospective capture,
+replayed retrospectively. Full snapshots compared with optional same-epoch,
+BBO-checked delta reconstruction; source RAW kept, no future nearest matching.
+
+Observed: eleven/twelve had no earlier NO full snapshot in the source slice.
+Wellington NZWN had real one-sided pre-entry books; NO bid rose0.10→0.99 at
+08:58:29.863130UTC, Data API trade timestamp08:58:33, detection08:58:35.148661,
+BUY VWAP0.9434998556. This may be the trade's effect before later reporting,
+not an identified trigger. MidpointNULL does not mean missing book. No complete
+five-minute paired coverage, no valid matched controls or promoted trigger.
+
+Conditional FIFO11closed/oneopen in the12-entry sample; fee/net copy economics
+unknown. Separate bounded paired socket froze16markets/32tokens before prospective
+observations:61.032s,192BOOK,203delta,zero new wallet entries, five disconnects.
+Capture DEGRADED; persistent activation needs explicit approval and stability work.
+
+Limitations: unknown placement/matching time, global official publication receipts,
+forecast/PWS as-of coverage, fees, queue position, incomplete control confounders.
+Decision: accept tested infrastructure/observed gaps, strategy identification
+INCONCLUSIVE. Next: stable prospective paired coverage, future independent
+settlement-day controls, then predeclared EXP0019 trigger tests. No real orders.
+Artifacts: docs/research/EXP0018_{PLAN,TASKS,OPERATIONS}.md and
+reports/trader/exp0018_entry_trigger_reconstruction.md; genuine local Qwen audit
+reports/research/exp0018_qwen_delegation.md (high review overhead, no speedup claim).
+
 ## EXP-0017 — HighTempTation METAR entry timing
 
 30 October 2026; descriptive result, causal hypotheses remain OPEN. Frozen EXP0012 + separate compact snapshot, exact contract metadata for4540conditions/50stations. Main NO0.90–0.99 sample4136, aligned recurring nominal candidates3977;81.37%after, median+73s, ±60s24.52%. EPWA33main entries,32after, median+125s; EHAM11/11before, median−143s. No contemporaneous local first METAR receipts for those historical entries; execution is not order placement. IEM hourly/nonhourly classification defect corrected in research parser only; all299240unprefixed raw reports remain ICAO-type-unknown, strict type-verified history insufficient. Uniform-phase contrast4.89 is not matched activity significance or causality. Exact0.98 occurs across all24localhours; local-day-end subset57/892, not universal settlement timing. Conditional FIFO, unknown opening inventory/costs and missing pre-entry depth prevent profit/strategy conclusions. Separate observer recorded11genuineentries by30Oct12:22UTC; runtime consumes existing local feed only. Existing weather/trader/dashboard PIDs unchanged; only new EXP0017 observer upgraded gracefully. D1foundstoppedexit1, not restarted. Actual reports, limitations and next discriminating measurements in docs/research/EXP0017_RESULTS.md and reports/trader/exp0017_hightemptation_metar_entry_timing.md. No real trading or production rule changes.

@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-31T22:16:03.260037+00:00",
+  "test": "BOUNDED_PUBLIC_TWO_TOKEN_CONNECTION_DIAGNOSTIC_NOT_TRADE_OBSERVATIONS",
+  "results": [
+    {
+      "immediate_ping": false,
+      "duration_seconds": 19.64100000000326,
+      "messages": 1,
+      "pongs": 0,
+      "close": null
+    },
+    {
+      "immediate_ping": true,
+      "duration_seconds": 6.780999999988126,
+      "messages": 2,
+      "pongs": 1,
+      "close": {
+        "received_code": null,
+        "sent_code": null,
+        "class": "ConnectionClosedError"
+      }
+    }
+  ]
+}
