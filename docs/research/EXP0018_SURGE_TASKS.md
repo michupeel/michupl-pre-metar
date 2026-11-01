@@ -19,3 +19,5 @@ contributions subject to review, not just offered. Each prompt supplies exact co
 signature, inputs/outputs, allowed file and behavior tests. Audit actual accepted
 lines/changes and corrections; no cloud-subagent replacement of local worker.
 No audit or dataset from previous experiments is overwritten.
+
+Completion addendum: S11 exact raw transaction-hash join helper was delegated as an eighth eligible task after the forensic gap was identified. Seven of eight tasks produced useful accepted contributions; S6/S7 required scope reduction. See the new surge Qwen audit, preserving the original plan and older audits.
