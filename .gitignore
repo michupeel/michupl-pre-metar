@@ -15,3 +15,5 @@ dist/
 logs/
 src/premetar/dashboard/static/entry_timing_live.json
 src/premetar/dashboard/static/entry_timing_live.json.*.tmp
+src/premetar/dashboard/static/surge_hunter_live.json
+src/premetar/dashboard/static/surge_hunter_live.tmp

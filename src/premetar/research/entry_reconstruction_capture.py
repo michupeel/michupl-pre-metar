@@ -13,6 +13,7 @@ import os
 import shutil
 import sqlite3
 import time
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -114,6 +115,8 @@ async def capture(
     source: Path = TRADER,
     weather: Path = WEATHER,
     max_contracts: int = 16,
+    observer_factory: Callable[[BattleStore, Path], Reconstruction] | None = None,
+    stream_factory: Callable[..., Any] | None = None,
 ) -> dict[str, Any]:
     if not 1 <= duration <= 3600:
         raise ValueError("Only bounded 1..3600 second shadow capture authorized")
@@ -128,6 +131,7 @@ async def capture(
         at = datetime.now(UTC)
         cursor, metadata = metadata_rows(source, at)
         selected = select_watchlist(metadata, at, max_contracts)
+        del metadata
         if not selected:
             raise ValueError("No eligible frozen paired watchlist in bounded recent metadata")
         capture_id = uuid4().hex
@@ -136,7 +140,11 @@ async def capture(
         path = captures / f"{at.strftime('%Y%m%dT%H%M%SZ')}-{capture_id}.sqlite3"
         raw = TraderStore(path)
         journal = BattleStore(directory, max_segment_bytes=50_000_000, max_total_bytes=500_000_000)
-        monitor = Reconstruction(journal, weather, experimental_deltas=True)
+        monitor = (
+            observer_factory(journal, weather)
+            if observer_factory
+            else Reconstruction(journal, weather, experimental_deltas=True)
+        )
         baseline_counts = dict(monitor.state["reconstruction_counts"])
         # A new socket has a different coverage epoch. Never fill its missing past.
         monitor.state.pop("shutdown_at", None)
@@ -177,7 +185,7 @@ async def capture(
             # Existing stream commits WS_RAW before normalization invokes us again.
             if error_class:
                 return
-            started_callback = time.monotonic()
+            started_callback = time.perf_counter_ns()
             try:
                 total = sum(p.stat().st_size for p in captures.glob("*.sqlite3*"))
                 if (
@@ -192,7 +200,11 @@ async def capture(
                 if kind == "STREAMHEALTH":
                     state = "STREAM_STATE_" + str(payload.get("state") or "UNKNOWN")
                     counts[state] = counts.get(state, 0) + 1
-                if kind in {"BOOK", "WS_DELTA", "STREAMHEALTH", "COVERAGE_GAP"}:
+                if (
+                    kind in {"BOOK", "WS_DELTA", "STREAMHEALTH", "COVERAGE_GAP"}
+                    or observer_factory
+                    and kind == "WS_TRADE"
+                ):
                     row = dict(
                         id=identity,
                         kind=kind,
@@ -207,7 +219,7 @@ async def capture(
                 error_class = type(error).__name__
                 stop.set()
             finally:
-                callback_durations.append((time.monotonic() - started_callback) * 1000)
+                callback_durations.append((time.perf_counter_ns() - started_callback) / 1_000_000)
                 del callback_durations[:-512]
 
         async def tail() -> None:
@@ -222,8 +234,13 @@ async def capture(
                             events.extend(monitor.ingest(row, datetime.now(UTC)))
                     monitor.cursors["source"] = next_cursor
                     current = datetime.now(UTC)
+                    if observer_factory:
+                        events.extend(monitor.followups(current))
                     monitor.state.update(heartbeat=current.isoformat())
                     journal.commit(events, monitor.state, monitor.cursors, current)
+                    publisher = getattr(monitor, "publish", None)
+                    if observer_factory and callable(publisher):
+                        publisher(current)
                 except (OSError, ValueError, sqlite3.Error, StorageLimit) as error:
                     error_class = type(error).__name__
                     stop.set()
@@ -233,7 +250,7 @@ async def capture(
                     pass
 
         started = time.monotonic()
-        worker = asyncio.create_task(stream_market(lambda: tokens, emit, stop))
+        worker = asyncio.create_task((stream_factory or stream_market)(lambda: tokens, emit, stop))
         wallet = asyncio.create_task(tail())
         try:
             await asyncio.wait_for(stop.wait(), duration)
@@ -284,7 +301,28 @@ async def capture(
             monitor.cursors,
             ended,
         )
+        publisher = getattr(monitor, "publish", None)
+        if observer_factory and callable(publisher):
+            publisher(ended)
         return result
+    except asyncio.CancelledError:
+        if journal:
+            state, cursors = journal.restore()
+            interrupted = datetime.now(UTC)
+            state["shutdown_at"] = interrupted.isoformat()
+            journal.commit(
+                [
+                    dict(
+                        kind="CAPTURE_INTERRUPTED",
+                        at=interrupted.isoformat(),
+                        payload=dict(reason="CANCELLED_SIGNAL_OR_TASK", coverage_gap=True),
+                    )
+                ],
+                state,
+                cursors,
+                interrupted,
+            )
+        raise
     finally:
         if raw:
             raw.close()

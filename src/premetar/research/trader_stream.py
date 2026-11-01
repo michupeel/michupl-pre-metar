@@ -70,6 +70,7 @@ def _normalize_message(text: str, connection_id: str, received: datetime, emit: 
                     "side": message.get("side"),
                     "wallet_attribution": "UNAVAILABLE",
                     "order_role": "UNKNOWN",
+                    "transaction_hash": message.get("transaction_hash"),
                 },
                 received,
                 None,
@@ -101,7 +102,9 @@ async def _pause(stop: asyncio.Event, seconds: float) -> None:
         await asyncio.wait_for(stop.wait(), timeout=seconds)
 
 
-async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyncio.Event) -> None:
+async def _stream_market(
+    tokens: Callable[[], list[str]], emit: Emit, stop: asyncio.Event, stable_seconds: float = 0
+) -> None:
     """Reconnect conservatively; bounded websockets queue applies backpressure without dropping."""
     backoff = 3.0
     run_start = time.monotonic()
@@ -111,6 +114,7 @@ async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyn
             await _pause(stop, 1)
             continue
         connection_id = uuid4().hex
+        connected_at = None
         ping_task: asyncio.Task[None] | None = None
         try:
             async with connect(
@@ -134,7 +138,9 @@ async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyn
                     None,
                 )
                 ping_task = asyncio.create_task(_ping(socket, stop))
-                backoff = 3.0
+                connected_at = time.monotonic()
+                if stable_seconds == 0:
+                    backoff = 3.0
                 while not stop.is_set():
                     latest = sorted(set(tokens()))
                     if latest != selected:
@@ -195,6 +201,9 @@ async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyn
         except asyncio.CancelledError:
             raise
         except Exception as error:
+            session_seconds = time.monotonic() - connected_at if connected_at is not None else None
+            if stable_seconds and session_seconds is not None and session_seconds >= stable_seconds:
+                backoff = 3.0
             emit(
                 "STREAMHEALTH",
                 {
@@ -202,6 +211,9 @@ async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyn
                     "connection_id": connection_id,
                     "error_class": type(error).__name__,
                     "backoff_seconds": backoff,
+                    "session_seconds": session_seconds,
+                    "received_close_code": getattr(getattr(error, "rcvd", None), "code", None),
+                    "sent_close_code": getattr(getattr(error, "sent", None), "code", None),
                 },
                 datetime.now(UTC),
                 None,
@@ -215,9 +227,11 @@ async def _stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyn
                     await ping_task
 
 
-async def stream_market(tokens: Callable[[], list[str]], emit: Emit, stop: asyncio.Event) -> None:
+async def stream_market(
+    tokens: Callable[[], list[str]], emit: Emit, stop: asyncio.Event, *, stable_seconds: float = 0
+) -> None:
     """Interrupt even a pending handshake when shutdown is requested."""
-    worker = asyncio.create_task(_stream_market(tokens, emit, stop))
+    worker = asyncio.create_task(_stream_market(tokens, emit, stop, stable_seconds))
     stopping = asyncio.create_task(stop.wait())
     try:
         done, _ = await asyncio.wait({worker, stopping}, return_when=asyncio.FIRST_COMPLETED)
